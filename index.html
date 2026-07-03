@@ -1,303 +1,207 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hawkins Twin Platform</title>
-  <meta name="description" content="A publishable overview of the Hawkins digital twin platform for dealer operations, warranty intelligence, fleet maintenance, recycling, and applied R&D." />
-  <meta property="og:title" content="Hawkins Twin Platform" />
-  <meta property="og:description" content="Public overview of a dealer-grade digital twin platform aligned to PACCAR, Peterbilt, warranty, maintenance, recycling, and telemetry." />
-  <meta property="og:type" content="website" />
-  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=zodiak@400,500,700&display=swap" rel="stylesheet">
-  <style>
-    :root, [data-theme="light"] {
-      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
-      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
-      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
-      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
-      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
-      --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
-      --text-3xl: clamp(2.5rem, 1rem + 4vw, 5rem);
-      --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem; --space-12: 3rem; --space-16: 4rem; --space-20: 5rem; --space-24: 6rem;
-      --color-bg:#f7f6f2; --color-surface:#f9f8f5; --color-surface-2:#fbfbf9; --color-surface-offset:#f3f0ec; --color-surface-dynamic:#e6e4df; --color-divider:#dcd9d5; --color-border:#d4d1ca;
-      --color-text:#28251d; --color-text-muted:#66635d; --color-text-faint:#9e9a93; --color-text-inverse:#f9f8f4;
-      --color-primary:#01696f; --color-primary-hover:#0c4e54; --color-blue:#006494; --color-success:#437a22; --color-warning:#964219;
-      --radius-sm:.375rem; --radius-md:.5rem; --radius-lg:.75rem; --radius-xl:1rem; --radius-full:9999px;
-      --shadow-sm:0 1px 2px oklch(0.2 0.01 80 / .06); --shadow-md:0 4px 12px oklch(0.2 0.01 80 / .08); --shadow-lg:0 12px 32px oklch(0.2 0.01 80 / .12);
-      --content-default:1100px; --content-wide:1280px;
-      --font-body:'Satoshi','Inter',sans-serif; --font-display:'Zodiak','Georgia',serif;
-    }
-    [data-theme="dark"] {
-      --color-bg:#171614; --color-surface:#1c1b19; --color-surface-2:#201f1d; --color-surface-offset:#1d1c1a; --color-surface-dynamic:#2d2c2a; --color-divider:#262523; --color-border:#393836;
-      --color-text:#cdccca; --color-text-muted:#979591; --color-text-faint:#6b6966; --color-text-inverse:#2b2a28;
-      --color-primary:#4f98a3; --color-primary-hover:#227f8b; --color-blue:#5591c7; --color-success:#6daa45; --color-warning:#bb653b;
-      --shadow-sm:0 1px 2px oklch(0 0 0 / .2); --shadow-md:0 4px 12px oklch(0 0 0 / .3); --shadow-lg:0 12px 32px oklch(0 0 0 / .4);
-    }
-    *,:before,:after{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:var(--font-body);font-size:var(--text-base);line-height:1.6;background:var(--color-bg);color:var(--color-text)} img,svg{display:block;max-width:100%;height:auto}
-    a{color:inherit;text-decoration:none} button{font:inherit} .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-    .skip-link{position:absolute;left:var(--space-4);top:-100px;background:var(--color-primary);color:var(--color-text-inverse);padding:var(--space-3) var(--space-4);border-radius:var(--radius-md);z-index:100}.skip-link:focus{top:var(--space-4)}
-    .container{width:min(calc(100% - 2rem),var(--content-default));margin:0 auto}.wide{width:min(calc(100% - 2rem),var(--content-wide));margin:0 auto}
-    .site-header{position:sticky;top:0;z-index:40;background:color-mix(in oklab,var(--color-bg) 88%, transparent);backdrop-filter:blur(12px);border-bottom:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)}
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);padding:var(--space-4) 0}.nav-links{display:flex;gap:var(--space-4);flex-wrap:wrap}.nav-links a{font-size:var(--text-sm);color:var(--color-text-muted)}
-    .brand{display:flex;align-items:center;gap:var(--space-3);font-weight:700}.brand svg{width:34px;height:34px;color:var(--color-primary)}
-    .header-actions{display:flex;align-items:center;gap:var(--space-3)} .theme-toggle,.boss-link{border:1px solid color-mix(in oklab,var(--color-text) 12%, transparent);background:var(--color-surface);color:var(--color-text);border-radius:var(--radius-full);padding:.7rem .95rem;display:inline-flex;align-items:center;gap:.55rem;cursor:pointer}
-    .boss-link{font-size:var(--text-sm)}
-    .hero{padding:clamp(var(--space-12),10vw,var(--space-24)) 0 var(--space-16)} .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:var(--space-10);align-items:end}
-    .eyebrow{font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.18em;color:var(--color-primary);font-weight:700;margin-bottom:var(--space-4)}
-    h1,h2,h3{line-height:1.08;margin:0 0 var(--space-4)} h1{font-family:var(--font-display);font-size:var(--text-3xl);max-width:12ch} h2{font-family:var(--font-display);font-size:var(--text-xl)} h3{font-size:var(--text-lg)}
-    .hero p{max-width:64ch;color:var(--color-text-muted)} .lede{font-size:var(--text-lg);max-width:38ch;color:var(--color-text)}
-    .hero-card,.panel,.metric,.boss-panel,.feature-card,.quote-card{background:var(--color-surface);border:1px solid color-mix(in oklab,var(--color-text) 10%, transparent);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm)}
-    .hero-card{padding:var(--space-8);display:grid;gap:var(--space-5);background:linear-gradient(180deg,var(--color-surface-2),var(--color-surface-offset))}
-    .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4)} .stat strong{display:block;font-size:var(--text-xl);line-height:1;font-family:var(--font-display)} .stat span{display:block;color:var(--color-text-muted);font-size:var(--text-sm);margin-top:var(--space-2)}
-    .cta-row{display:flex;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-6)} .btn{display:inline-flex;align-items:center;justify-content:center;border-radius:var(--radius-full);padding:.95rem 1.2rem;border:1px solid transparent;font-size:var(--text-sm);font-weight:700;cursor:pointer}.btn-primary{background:var(--color-primary);color:var(--color-text-inverse)} .btn-secondary{background:var(--color-surface);border-color:color-mix(in oklab,var(--color-text) 12%, transparent)}
-    section{padding:var(--space-12) 0} .section-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-8)}
-    .feature-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:var(--space-4)} .feature-card{padding:var(--space-6)} .feature-card.large{padding:var(--space-8);background:var(--color-surface-offset)}
-    .feature-card p,.panel p,.quote-card p,.boss-panel p{color:var(--color-text-muted)}
-    .two-col{display:grid;grid-template-columns:.92fr 1.08fr;gap:var(--space-8);align-items:start}
-    .bullet-list{display:grid;gap:var(--space-3);padding:0;margin:0;list-style:none}.bullet-list li{padding-left:1.2rem;position:relative}.bullet-list li::before{content:"";position:absolute;left:0;top:.72rem;width:.45rem;height:.45rem;border-radius:50%;background:var(--color-primary)}
-    .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-4)} .metric{padding:var(--space-5)} .metric .label{font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--color-text-muted)} .metric .value{font-size:var(--text-xl);font-family:var(--font-display);margin-top:var(--space-2)}
-    .quote-card{padding:var(--space-8);background:var(--color-surface-offset)} .quote-card blockquote{margin:0;font-family:var(--font-display);font-size:var(--text-xl);max-width:22ch}
-    .boss-shell{display:grid;grid-template-columns:1fr auto;gap:var(--space-4);align-items:center;padding:var(--space-5) var(--space-6)} .boss-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.16em;color:var(--color-warning);font-weight:700}
-    .boss-panel{padding:var(--space-6);display:none;margin-top:var(--space-4)} .boss-panel.open{display:block}
-    .footer{padding:var(--space-10) 0 var(--space-16);border-top:1px solid color-mix(in oklab,var(--color-text) 10%, transparent)} .footer-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:var(--space-8)} .muted{color:var(--color-text-muted)}
-    .tiny{font-size:var(--text-xs);color:var(--color-text-faint)}
-    @media (max-width: 980px){.hero-grid,.section-grid,.two-col,.feature-grid,.footer-grid,.metric-grid{grid-template-columns:1fr}.stat-row{grid-template-columns:1fr 1fr}.nav-links{display:none}}
-    @media (max-width: 640px){h1{font-size:var(--text-2xl)} .cta-row{flex-direction:column}.stat-row{grid-template-columns:1fr}.boss-shell{grid-template-columns:1fr}}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Hawkins Twin Platform — Peterbilt Atlantic</title>
+<meta name="description" content="Dealer-grade digital twin platform aligned to Peterbilt, PACCAR, warranty, maintenance, financing, and recycling. Anchored at Hawkins Truck Mart." />
+<style>
+  :root {
+    --ink: #111418;
+    --paper: #fbfaf7;
+    --line: #e6e2d9;
+    --accent: #7a1f1f;
+    --muted: #5a5f66;
+    --card: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: Georgia, "Iowan Old Style", "Times New Roman", serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 40px 24px 96px; }
+  header.top {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+  }
+  .eyebrow {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+  h1 {
+    font-size: 34px;
+    line-height: 1.2;
+    margin: 0 0 8px;
+    font-weight: 600;
+  }
+  .lede {
+    font-size: 17px;
+    color: var(--muted);
+    margin: 0;
+    max-width: 640px;
+  }
+  section { margin: 36px 0; }
+  h2 {
+    font-size: 20px;
+    margin: 0 0 10px;
+    font-weight: 600;
+    border-left: 3px solid var(--accent);
+    padding-left: 10px;
+  }
+  p { margin: 8px 0 14px; }
+  ul { padding-left: 20px; margin: 8px 0 14px; }
+  li { margin: 4px 0; }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 14px;
+  }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 16px 18px;
+  }
+  .card h3 {
+    font-size: 15px;
+    margin: 0 0 6px;
+    font-weight: 700;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: 0.02em;
+  }
+  .card p { font-size: 14px; color: var(--muted); margin: 0; }
+  .access {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 20px;
+    margin-top: 12px;
+  }
+  .access .btn {
+    display: inline-block;
+    background: var(--ink);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+  .access .btn.secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    margin-left: 8px;
+  }
+  footer {
+    margin-top: 56px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  a { color: var(--accent); }
+  code {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13px;
+    background: #f2efe8;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+</style>
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header">
-    <div class="container nav">
-      <div class="brand" aria-label="Hawkins Twin Platform">
-        <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
-          <rect x="8" y="10" width="48" height="44" rx="10"></rect>
-          <path d="M20 24h24M20 32h24M20 40h14"></path>
-          <path d="M44 18v28"></path>
-        </svg>
-        <span>Hawkins Twin Platform</span>
-      </div>
-      <nav class="nav-links" aria-label="Primary">
-        <a href="#platform">Platform</a>
-        <a href="#uses">Applications</a>
-        <a href="#stack">Stack</a>
-        <a href="#your-stack">Your stack</a>
-        <a href="#access">Access</a>
-      </nav>
-      <div class="header-actions">
-        <button class="theme-toggle" data-theme-toggle aria-label="Switch theme">
-          <span aria-hidden="true">◐</span>
-        </button>
-        <button class="boss-link" data-boss-toggle aria-expanded="false" aria-controls="boss-panel">
-          <span aria-hidden="true">◆</span>
-          <span>Tim VIP</span>
-        </button>
-      </div>
-    </div>
+<div class="wrap">
+
+  <header class="top">
+    <p class="eyebrow">Peterbilt Atlantic · Hawkins Truck Mart</p>
+    <h1>Hawkins Twin Platform</h1>
+    <p class="lede">Single surface in front. Durable repositories underneath. A dealer-grade digital twin aligned to Peterbilt, PACCAR, warranty, maintenance, financing, and recycling — anchored where the work actually happens.</p>
   </header>
 
-  <main id="main">
-    <section class="hero">
-      <div class="wide hero-grid">
-        <div>
-          <div class="eyebrow">Published public overview</div>
-          <h1>A digital twin platform for dealer operations, maintenance, warranty, and recycling.</h1>
-          <p class="lede">This is a public surface for the Hawkins platform: enough detail to understand the asset, the direction, and the operating model — without exposing the strategic interior.</p>
-          <p>The platform mirrors real dealer activity into durable repositories, aligns to established enterprise systems, and creates a scalable operating layer for service, warranty, telemetry, financing, and regulated waste workflows. Public material stays open; strategic detail stays behind a second level of access.</p>
-          <div class="cta-row">
-            <a class="btn btn-primary" href="#platform">Explore the platform</a>
-            <a class="btn btn-secondary" href="#access">See access model</a>
-          </div>
-        </div>
-        <aside class="hero-card" aria-label="Platform summary">
-          <div>
-            <div class="eyebrow" style="margin-bottom:var(--space-3)">What this is</div>
-            <p style="margin:0;color:var(--color-text)">A publishable front door for people who just need a link, not a repo checkout.</p>
-          </div>
-          <div class="stat-row">
-            <div class="stat"><strong>Public</strong><span>Open overview, plain language, externally shareable.</span></div>
-            <div class="stat"><strong>Tim VIP</strong><span>Second-level area for Tim-specific or strategic material.</span></div>
-            <div class="stat"><strong>Repo</strong><span>Asset layer reserved for internal commercialization and governance.</span></div>
-          </div>
-        </aside>
-      </div>
-    </section>
+  <section>
+    <h2>What it is</h2>
+    <p>The public experience is intentionally simple: one link, one explanation, one place to understand what the platform is for. Underneath that surface, the asset is structured as twin repositories that represent equipment, vehicles, warranty actions, maintenance flows, financing events, and recycling obligations in a durable form.</p>
+    <p>The framing is dealer-anchored on purpose. The dealer sits at the intersection of the vehicle, the warranty, the parts economy, and the recycling obligation — every one of those is a durable relationship no OEM can replicate directly. That is the honest place to represent them.</p>
+  </section>
 
-    <section id="platform">
-      <div class="wide feature-grid">
-        <article class="feature-card large">
-          <div class="eyebrow">Platform idea</div>
-          <h2>Single surface in front. Durable repositories underneath.</h2>
-          <p>The public experience is intentionally simple: one link, one explanation, one place to understand what the platform is for. Underneath that surface, the asset is structured as twin repositories that can represent equipment, vehicles, warranty actions, maintenance flows, financing events, and recycling obligations in a durable form.</p>
-        </article>
-        <article class="feature-card">
-          <h3>Dealer-grade twin</h3>
-          <p>Capture what the business is actually doing — service, claims, diagnostics, approvals, compliance, and recovery workflows — in a format that can survive beyond any single SaaS tool.</p>
-        </article>
-        <article class="feature-card">
-          <h3>Scalable asset</h3>
-          <p>Start with Hawkins, then replicate the same operating pattern across dealer groups, adjacent operators, and other industrial or public-service domains when the timing is right.</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="uses">
-      <div class="wide two-col">
-        <div>
-          <div class="eyebrow">Current applications</div>
-          <h2>Built around real dealer work.</h2>
-          <ul class="bullet-list">
-            <li>Fleet maintenance and service coordination using connected truck diagnostics and service events.</li>
-            <li>Warranty and extended-coverage workflows that align operations, claims, and customer visibility.</li>
-            <li>Recycling and regulated waste tracking, including used-oil and cradle-to-grave documentation expectations.</li>
-            <li>Commercialization paths for Luke and the business team without exposing the strategic core to the public surface.</li>
-          </ul>
-        </div>
-        <div class="panel" style="padding:var(--space-8)">
-          <div class="eyebrow">Why now</div>
-          <p>Peterbilt and PACCAR already operate connected-service and warranty ecosystems through PACCAR Solutions and SmartLINQ. Public sources show SmartLINQ continuously monitors hundreds of diagnostic codes and exposes alerts, warranty information, and service prioritization through the PACCAR Solutions portal, while Peterbilt and PACCAR Financial also connect warranty programs to financing and dealer workflows. Used fluids such as oil and antifreeze also require documented cradle-to-grave handling and on-site records retention, which makes recycling and compliance a natural part of the same twin. [web:66][web:67][web:78]</p>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="wide metric-grid">
-        <article class="metric">
-          <div class="label">Connected services</div>
-          <div class="value">800+</div>
-          <p class="muted">Public descriptions of SmartLINQ state that the system monitors more than 800 engine and emissions system codes. [web:66][web:70]</p>
-        </article>
-        <article class="metric">
-          <div class="label">Warranty visibility</div>
-          <div class="value">Dealer-facing</div>
-          <p class="muted">PACCAR Solutions surfaces warranty information and service-priority notifications alongside diagnostic context. [web:66]</p>
-        </article>
-        <article class="metric">
-          <div class="label">Waste compliance</div>
-          <div class="value">3 years</div>
-          <p class="muted">Used-fluid disposal records generally need to be maintained on-site for three years to preserve the paper trail. [web:78]</p>
-        </article>
-        <article class="metric">
-          <div class="label">Twin potential</div>
-          <div class="value">Predictive</div>
-          <p class="muted">Public fleet twin descriptions emphasize continuously updated vehicle models that forecast maintenance issues before they become operational failures. [web:72][web:75]</p>
-        </article>
-      </div>
-    </section>
-
-    <section id="stack">
-      <div class="wide section-grid">
-        <div class="quote-card">
-          <div class="eyebrow">Operating principle</div>
-          <blockquote>Public material should be simple enough to share as a link. Strategic material should be present, but quiet.</blockquote>
-        </div>
-        <div>
-          <div class="eyebrow">Public stack view</div>
-          <h2>What the outside world needs to know.</h2>
-          <p>This platform combines a public-facing information layer with a deeper operational twin. The public layer explains direction, domain fit, and value. The internal layer carries the strategic detail: repository structures, commercialization logic, research patterns, and any Tim-specific or sensitive planning reserved for authorized access.</p>
-          <p class="muted">That split keeps the outside surface easy to understand while still signaling that there is a governed interior.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="your-stack">
-      <div class="wide">
-        <div class="eyebrow">Your stack, already in the twin</div>
-        <h2>Sixteen systems. One surface. One week to first proof.</h2>
-        <p style="max-width:70ch;color:var(--color-text-muted)">The Peterbilt Atlantic operational stack &mdash; as it runs today &mdash; is already reflected in the twin substrate. Every system below has a stub in the public-source repository with owner, extract path, twin binding, and sovereignty exit. Source of record: Craig Allen, Director of Sales &amp; Marketing.</p>
-
-        <div class="feature-grid" style="grid-template-columns:repeat(4,1fr);gap:var(--space-4);margin-top:var(--space-6)">
-          <article class="feature-card"><div class="eyebrow">DMS</div><h3 style="font-size:var(--text-base)">CDK Drive</h3><p class="tiny">Deals, ROs, parts, accounting.</p></article>
-          <article class="feature-card"><div class="eyebrow">Sales &amp; inventory</div><h3 style="font-size:var(--text-base)">CDK Sales Overdrive</h3><p class="tiny"><strong>Week-1 proof anchor.</strong> Inventory + sales activity.</p></article>
-          <article class="feature-card"><div class="eyebrow">Website</div><h3 style="font-size:var(--text-base)">Dealerspike</h3><p class="tiny">Web inventory feed and lead capture.</p></article>
-          <article class="feature-card"><div class="eyebrow">Web traffic</div><h3 style="font-size:var(--text-base)">Lead Forensics</h3><p class="tiny">Identified-visitor stream.</p></article>
-          <article class="feature-card"><div class="eyebrow">Lead CRM</div><h3 style="font-size:var(--text-base)">Salesforce Starter</h3><p class="tiny">Leads, accounts, opportunities.</p></article>
-          <article class="feature-card"><div class="eyebrow">Email marketing</div><h3 style="font-size:var(--text-base)">ActiveCampaign</h3><p class="tiny">Audience segments; engagement telemetry.</p></article>
-          <article class="feature-card"><div class="eyebrow">OEM &mdash; PACCAR</div><h3 style="font-size:var(--text-base)">PACCAR ePortal</h3><p class="tiny">Warranty, orders, factory. OEM rail.</p></article>
-          <article class="feature-card"><div class="eyebrow">OEM &mdash; PACCAR</div><h3 style="font-size:var(--text-base)">PACCAR Solutions</h3><p class="tiny">SmartLINQ / connected truck telemetry.</p></article>
-          <article class="feature-card"><div class="eyebrow">Office</div><h3 style="font-size:var(--text-base)">Microsoft 365</h3><p class="tiny">Mail, calendar, docs, Teams, SharePoint.</p></article>
-          <article class="feature-card"><div class="eyebrow">Social</div><h3 style="font-size:var(--text-base)">Meta &mdash; Facebook</h3><p class="tiny">Reach, engagement, inbound DMs.</p></article>
-          <article class="feature-card"><div class="eyebrow">Social</div><h3 style="font-size:var(--text-base)">Instagram (Meta)</h3><p class="tiny">Reach, engagement, DMs.</p></article>
-          <article class="feature-card"><div class="eyebrow">Social</div><h3 style="font-size:var(--text-base)">TikTok Business</h3><p class="tiny">Reach and engagement.</p></article>
-          <article class="feature-card" style="background:var(--color-surface-offset);border-color:var(--color-primary)"><div class="eyebrow" style="color:var(--color-primary)">AI &mdash; single surface</div><h3 style="font-size:var(--text-base)">Claude</h3><p class="tiny">Twin consumption UI. One place to ask.</p></article>
-          <article class="feature-card"><div class="eyebrow">AI</div><h3 style="font-size:var(--text-base)">ChatGPT</h3><p class="tiny">Present today; consolidating into Claude.</p></article>
-          <article class="feature-card"><div class="eyebrow">Web chat</div><h3 style="font-size:var(--text-base)">Podium</h3><p class="tiny">Inbound conversations; review requests.</p></article>
-          <article class="feature-card"><div class="eyebrow">Customer engagement</div><h3 style="font-size:var(--text-base)">PROKeep</h3><p class="tiny">Parts / service messaging.</p></article>
-        </div>
-
-        <div class="two-col" style="margin-top:var(--space-8)">
-          <div class="panel" style="padding:var(--space-8)">
-            <div class="eyebrow">Week 1 &mdash; what you can use immediately</div>
-            <h3>CDK Sales Overdrive, through Claude.</h3>
-            <p>You export from Overdrive the way you already do. You drop it into Claude. Claude reads it against the twin binding in the repository and returns an answer you cannot get from the Overdrive UI alone. No new login. No new UI. No one has to switch tools.</p>
-            <p class="muted">Same Claude window becomes the single surface for the other fifteen systems as the twin binds to each, one at a time.</p>
-          </div>
-          <div class="panel" style="padding:var(--space-8)">
-            <div class="eyebrow">Sovereignty posture</div>
-            <h3>Nothing gets locked away.</h3>
-            <p>Each of the sixteen system stubs carries an explicit sovereignty-exit field: what you keep if the vendor is replaced, what the contract says, what the extract path is. The PACCAR rails (ePortal, Solutions) are treated as OEM-governed and mirrored read-only &mdash; not renegotiated at the SaaS layer.</p>
-            <p class="muted">The twin is the durable asset. The vendors are replaceable.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="access">
-      <div class="wide">
-        <div class="boss-shell hero-card">
-          <div>
-            <div class="boss-tag">Restricted area present</div>
-            <h3 style="margin-top:var(--space-3)">There is a second-level access path for non-public material.</h3>
-            <p class="muted" style="margin:0">It is intentionally understated on the public page. The public gets the overview; authorized users get the strategic detail.</p>
-          </div>
-          <button class="btn btn-secondary" data-boss-toggle aria-expanded="false" aria-controls="boss-panel">Reveal subtle details</button>
-        </div>
-        <div id="boss-panel" class="boss-panel" aria-live="polite">
-          <h3>Tim VIP pattern</h3>
-          <p>Tim VIP is the reserved route for Tim Hawkins-specific and strategic content. In production, that route can be tied to Tim Hawkins’s email and a second authorization step, while the public front page remains openly shareable as a standalone published link.</p>
-          <p class="tiny">This demo page intentionally shows the pattern without exposing any actual sensitive content or live authentication wiring.</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="wide footer-grid">
-      <div>
-        <div class="brand" style="margin-bottom:var(--space-3)">
-          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
-            <rect x="8" y="10" width="48" height="44" rx="10"></rect>
-            <path d="M20 24h24M20 32h24M20 40h14"></path>
-            <path d="M44 18v28"></path>
-          </svg>
-          <span>Hawkins Twin Platform</span>
-        </div>
-        <p class="muted">A public, link-first overview of the platform direction: dealer operations, warranty, maintenance, telemetry, recycling, and governed access.</p>
-      </div>
-      <div>
-        <p class="tiny">Public claims on this page reference publicly available Peterbilt, PACCAR, and fleet/waste-management materials only. [web:66][web:67][web:72][web:75][web:78]</p>
-      </div>
+  <section>
+    <h2>Platform</h2>
+    <div class="grid">
+      <div class="card"><h3>Equipment &amp; vehicles</h3><p>Peterbilt units, PACCAR powertrains, dealer-anchored records that survive resale and re-registration.</p></div>
+      <div class="card"><h3>Warranty actions</h3><p>Claim history, PACCAR Solutions integration, warranty exposure held at the dealer surface.</p></div>
+      <div class="card"><h3>Maintenance flows</h3><p>SmartLINQ-informed service intervals, parts fitment, technician assignment — twin-tracked against the physical unit.</p></div>
+      <div class="card"><h3>Financing events</h3><p>Origination, refinance, trade-in, and end-of-lease represented as events on the same vehicle twin.</p></div>
+      <div class="card"><h3>Recycling &amp; end-of-life</h3><p>Second-life battery routing, parts recovery, end-of-life documentation. A revenue and stewardship layer, not an afterthought.</p></div>
+      <div class="card"><h3>Charging &amp; infrastructure</h3><p>Depot charging, corridor MCS sites, second-life stationary storage — natural extensions of the dealer footprint.</p></div>
     </div>
+  </section>
+
+  <section>
+    <h2>Applications</h2>
+    <ul>
+      <li>Dealer-anchored twin for Peterbilt / PACCAR equipment lifecycle.</li>
+      <li>Warranty and service history that stays with the unit, not the paperwork.</li>
+      <li>Recycling and second-life battery workflows integrated with the service bay.</li>
+      <li>Handoff surface for logistics resilience research, corridor buildout notes, and freight electrification reference material.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Stack</h2>
+    <p>Static public surface on GitHub Pages. Durable repositories underneath: research, notes, canon (naming and framing conventions), and handoff materials. The site is a doorway; the repository is the substance.</p>
+    <p>Technical transformation is centred on <strong>Luke Weatherbie</strong>. Tim Hawkins holds the framing — betterment-driven, artist-first, oriented toward the people around the work.</p>
+  </section>
+
+  <section>
+    <h2>Access</h2>
+
+    <div class="access">
+      <h3 style="margin-top:0;font-size:15px;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:0.02em;">Public surface</h3>
+      <p>Everyone who lands here sees this page and can browse the repository at their own pace. No login. No pressure.</p>
+      <a class="btn secondary" href="https://github.com/EVEglyphDesign/hawkins-twin-platform">Browse the repository</a>
+    </div>
+
+    <div class="access" style="margin-top:14px;">
+      <h3 style="margin-top:0;font-size:15px;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:0.02em;">Tim VIP</h3>
+      <p>Second-level entry point held for Tim. The materials landing here are drafted with the framing directive and naming convention in the canon folder. Light poke, not a joke about authority.</p>
+      <a class="btn" href="./tim-vip.html">Tim VIP</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>What's in the repository right now</h2>
+    <ul>
+      <li><a href="./research/peterbilt_atlantic_public_source/">research/peterbilt_atlantic_public_source/</a> — public-source pack on Tim, Luke, Craig, the company, and the telemetry appendix.</li>
+      <li><a href="./research/logistics_and_electrification.md">research/logistics_and_electrification.md</a> — freight resilience, charging, corridor buildout, swap-model economics.</li>
+      <li><a href="./notes/Hawkins-Truck-Mart-briefing-note.md">notes/Hawkins-Truck-Mart-briefing-note.md</a> — briefing note.</li>
+      <li><a href="./notes/strategic-vision.md">notes/strategic-vision.md</a> — systems-thinking framing, integration, and the nuclear horizon.</li>
+      <li><a href="./handoff/note-to-tim-luke.md">handoff/note-to-tim-luke.md</a> — the "cards on the table" note to Tim and Luke.</li>
+      <li><a href="./handoff/team_introduction.md">handoff/team_introduction.md</a> — team introduction.</li>
+      <li><a href="./handoff/For_Luke_How_To_Work_With_The_Repo.pdf">handoff/For_Luke_How_To_Work_With_The_Repo.pdf</a> — Luke's repo-onboarding guide.</li>
+      <li><a href="./handoff/A_Note_For_The_Team.pdf">handoff/A_Note_For_The_Team.pdf</a> — team note (PDF).</li>
+      <li><a href="./canon/naming.md">canon/naming.md</a> and <a href="./canon/framing.md">canon/framing.md</a> — naming and framing conventions.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Hawkins Twin Platform · Peterbilt Atlantic · Anchored at Hawkins Truck Mart. Cards on the table.</p>
   </footer>
 
-  <script>
-    (function(){
-      const root=document.documentElement;
-      const toggle=document.querySelector('[data-theme-toggle]');
-      const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
-      root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-      toggle?.addEventListener('click',()=>{
-        const next=root.getAttribute('data-theme')==='dark'?'light':'dark';
-        root.setAttribute('data-theme',next);
-      });
-
-      const bossToggles=document.querySelectorAll('[data-boss-toggle]');
-      const panel=document.getElementById('boss-panel');
-      bossToggles.forEach(btn=>btn.addEventListener('click',()=>{
-        const open=panel.classList.toggle('open');
-        bossToggles.forEach(b=>b.setAttribute('aria-expanded',String(open)));
-      }));
-    })();
-  </script>
+</div>
 </body>
 </html>
