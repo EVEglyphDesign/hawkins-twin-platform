@@ -38,6 +38,8 @@
 
 6. **The Hawkins overlay does not narrow the gate.** `hawkins/canon/entrance-gate.md` (a copy of this file) is Hawkins-scoped only in that Hawkins is one scope this gate serves. The rule itself is global to Dany's managed scopes.
 
+7. **A sin file is not a fix.** When a sin is filed against an active, still-running mechanism (cron, script, integration, deployed URL, connector), the mechanism is stopped or corrected in the same turn as the sin. Not deferred. Not queued. Not "documented for future work." Documentation without action is a second-order sin filed on top of the first. This rule was added in response to the orphaned drainer cron that ran for four hours after its flaw was documented; see `ledger/sins/2026-07-20-sin-documented-not-fixed-orphaned-cron.md`.
+
 ## Governance
 
 - New sin entries and drift entries against this gate are read by Dany before candidates are ever sent through. A gate with unresolved sins is not shipped to a candidate.
