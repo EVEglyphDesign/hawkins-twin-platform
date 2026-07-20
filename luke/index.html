@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome, Luke — Hawkins Twin</title>
-  <meta name="description" content="Module 1 landing page for Luke Weatherby. Compliance first." />
-  <meta property="og:title" content="Welcome, Luke — Hawkins Twin" />
-  <meta property="og:description" content="One page. Three steps. Start here." />
+  <title>Welcome, Luke — Hawkins Twin, Module 1</title>
+  <meta name="description" content="Peterbilt Atlantic systems register. Luke Weatherby, Module 1." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* EVE Glyph canon — cream, ink, line + warm register accents. No teal. No cool primary. */
+      /* EVE Glyph canon — cream, ink, line, warm register accents. */
       --cream:      #fdfaf4;
       --cream-2:    #f7f2e6;
       --ink:        #1a1a1a;
@@ -21,11 +19,10 @@
       --line-soft:  #efe9db;
       --muted:      #6b6558;
       --faint:      #9c9585;
-      /* Register accents — warm, print-like, no blues/teals */
-      --past:       #7a5c3a;   /* umber */
-      --future:     #b8823a;   /* ochre */
-      --hcp:        #8a3a2a;   /* iron oxide */
-      --di:         #3d5a3a;   /* olive */
+      --past:       #7a5c3a;   /* umber — for lede accents */
+      --future:     #b8823a;   /* ochre — for OEM / paired-system tag */
+      --hcp:        #8a3a2a;   /* iron oxide — for compliance / restricted */
+      --di:         #3d5a3a;   /* olive — for own-notes safe path */
 
       --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
       --font-body:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -34,10 +31,8 @@
       --space-6:1.5rem; --space-8:2rem; --space-10:2.5rem; --space-12:3rem;
       --space-16:4rem; --space-20:5rem; --space-24:6rem; --space-32:8rem;
 
-      --radius-sm:.375rem; --radius-md:.5rem; --radius-lg:.75rem;
-
       --content:720px;
-      --wide:960px;
+      --wide:1040px;
     }
     *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
     html { scroll-behavior:smooth; }
@@ -58,7 +53,6 @@
     .container { width: min(calc(100% - 2rem), var(--content)); margin: 0 auto; }
     .wide { width: min(calc(100% - 2rem), var(--wide)); margin: 0 auto; }
 
-    /* Header — quiet, print-like masthead */
     header.masthead {
       border-bottom: 1px solid var(--line);
       padding: var(--space-6) 0;
@@ -80,8 +74,7 @@
       color: var(--muted);
     }
 
-    /* Hero */
-    .hero { padding: var(--space-24) 0 var(--space-16); }
+    .hero { padding: var(--space-20) 0 var(--space-12); }
     .kicker {
       font-size: 12px;
       font-weight: 500;
@@ -93,11 +86,11 @@
     h1 {
       font-family: var(--font-display);
       font-weight: 400;
-      font-size: clamp(40px, 5vw, 64px);
+      font-size: clamp(40px, 5vw, 60px);
       line-height: 1.05;
       letter-spacing: -0.02em;
-      margin-bottom: var(--space-8);
-      max-width: 14ch;
+      margin-bottom: var(--space-6);
+      max-width: 18ch;
     }
     h1 em {
       font-style: italic;
@@ -107,11 +100,11 @@
     .lede {
       font-family: var(--font-display);
       font-weight: 300;
-      font-size: 22px;
+      font-size: 21px;
       line-height: 1.5;
       color: var(--ink);
-      margin-bottom: var(--space-6);
-      max-width: 30em;
+      margin-bottom: var(--space-4);
+      max-width: 32em;
     }
     .hero p {
       font-size: 17px;
@@ -121,26 +114,25 @@
       max-width: 32em;
     }
 
-    /* Section rules */
     .rule {
       border: none;
       border-top: 1px solid var(--line);
-      margin: var(--space-20) 0 var(--space-12);
+      margin: var(--space-16) 0 var(--space-10);
     }
     h2 {
       font-family: var(--font-display);
       font-weight: 400;
-      font-size: 34px;
+      font-size: 32px;
       line-height: 1.15;
       letter-spacing: -0.01em;
       margin-bottom: var(--space-8);
-      max-width: 20ch;
+      max-width: 24ch;
     }
     h2 em { font-style: italic; color: var(--past); font-weight: 400; }
     h3 {
       font-family: var(--font-display);
       font-weight: 500;
-      font-size: 22px;
+      font-size: 20px;
       line-height: 1.25;
       letter-spacing: -0.005em;
       margin-bottom: var(--space-3);
@@ -151,37 +143,75 @@
       margin-bottom: var(--space-4);
     }
 
-    /* Steps — editorial column, not cards */
-    .steps { margin-top: var(--space-8); }
-    .step {
-      display: grid;
-      grid-template-columns: 88px 1fr;
-      gap: var(--space-8);
-      align-items: baseline;
-      padding: var(--space-8) 0;
-      border-top: 1px solid var(--line);
+    /* Register — the sixteen systems */
+    .register {
+      margin: var(--space-8) 0 var(--space-12);
     }
-    .step:last-child { border-bottom: 1px solid var(--line); }
-    .step-num {
+    .register-caption {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: var(--space-4);
+    }
+    .register-group {
+      margin-bottom: var(--space-10);
+    }
+    .register-group h3 {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid var(--line);
+    }
+    .system {
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: var(--space-4);
+      align-items: baseline;
+      padding: var(--space-5) 0;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .system:last-child { border-bottom: none; }
+    .system-num {
       font-family: var(--font-display);
-      font-style: italic;
       font-weight: 400;
-      font-size: 56px;
-      color: var(--past);
+      font-style: italic;
+      font-size: 22px;
+      color: var(--faint);
       line-height: 1;
     }
-    .step-body h3 { margin-bottom: var(--space-3); }
-    .step-body p { color: var(--ink-soft); max-width: 34em; margin-bottom: var(--space-3); }
-    .step-body .aside {
+    .system-name {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 20px;
+      color: var(--ink);
+      line-height: 1.25;
+    }
+    .system-note {
       font-size: 14px;
       color: var(--muted);
-      font-style: italic;
-      max-width: 34em;
+      margin-top: 2px;
     }
+    .system-tag {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+      padding-top: 4px;
+    }
+    .system-tag.paired { color: var(--future); }
+    .system-tag.oem { color: var(--future); }
+    .system-tag.own { color: var(--di); }
 
     /* Pullquote */
     .pullquote {
-      margin: var(--space-20) 0;
+      margin: var(--space-16) 0;
       padding: var(--space-10) 0;
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
@@ -190,10 +220,10 @@
       font-family: var(--font-display);
       font-weight: 300;
       font-style: italic;
-      font-size: 28px;
+      font-size: 26px;
       line-height: 1.35;
       color: var(--ink);
-      max-width: 24ch;
+      max-width: 26ch;
     }
     .pullquote .attr {
       font-family: var(--font-body);
@@ -204,13 +234,41 @@
       margin-top: var(--space-4);
     }
 
-    /* Contact — column of people, editorial */
-    .people-list { margin-top: var(--space-6); }
+    /* Steps — editorial column */
+    .steps { margin-top: var(--space-6); }
+    .step {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: var(--space-6);
+      align-items: baseline;
+      padding: var(--space-6) 0;
+      border-top: 1px solid var(--line);
+    }
+    .step:last-child { border-bottom: 1px solid var(--line); }
+    .step-num {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 44px;
+      color: var(--past);
+      line-height: 1;
+    }
+    .step-body h3 { margin-bottom: var(--space-2); font-size: 20px; }
+    .step-body p { color: var(--ink-soft); max-width: 34em; margin-bottom: var(--space-2); }
+    .step-body .aside {
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+      max-width: 34em;
+    }
+
+    /* Contact list */
+    .people-list { margin-top: var(--space-4); }
     .person {
       display: grid;
       grid-template-columns: 200px 1fr;
       gap: var(--space-8);
-      padding: var(--space-6) 0;
+      padding: var(--space-5) 0;
       border-top: 1px solid var(--line);
       align-items: baseline;
     }
@@ -225,6 +283,7 @@
       font-family: var(--font-display);
       font-weight: 500;
       font-size: 20px;
+      margin-top: var(--space-2);
       margin-bottom: var(--space-2);
     }
     .person .detail {
@@ -238,46 +297,45 @@
     }
     .person a:hover { border-bottom-color: var(--past); }
 
-    /* Vault mention — understated, no cards */
-    .vault {
-      margin-top: var(--space-16);
-      padding-top: var(--space-8);
+    /* Restricted note */
+    .restricted {
+      margin-top: var(--space-12);
+      padding-top: var(--space-6);
       border-top: 1px solid var(--line);
     }
-    .vault-tag {
+    .restricted-tag {
       font-size: 12px;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--hcp);
       margin-bottom: var(--space-3);
     }
-    .vault h3 { max-width: 24ch; }
-    .vault p { color: var(--ink-soft); max-width: 34em; }
-    .vault-reveal {
+    .restricted h3 { max-width: 26ch; }
+    .restricted p { color: var(--ink-soft); max-width: 34em; margin-bottom: var(--space-3); }
+    .reveal-btn {
       background: none;
       border: none;
       padding: 0;
-      margin-top: var(--space-3);
+      margin-top: var(--space-2);
       font-family: var(--font-body);
       font-size: 15px;
       color: var(--past);
       border-bottom: 1px solid var(--past);
       padding-bottom: 2px;
     }
-    .vault-reveal:hover { color: var(--ink); border-bottom-color: var(--ink); }
-    .vault-detail {
+    .reveal-btn:hover { color: var(--ink); border-bottom-color: var(--ink); }
+    .reveal-detail {
       display: none;
       margin-top: var(--space-6);
-      padding: var(--space-6) 0 0;
+      padding: var(--space-5) 0 0;
       border-top: 1px dashed var(--line);
     }
-    .vault-detail.open { display: block; }
-    .vault-detail p { margin-bottom: var(--space-3); }
-    .vault-detail p:last-child { font-size: 13px; color: var(--faint); font-style: italic; }
+    .reveal-detail.open { display: block; }
+    .reveal-detail p { margin-bottom: var(--space-3); }
+    .reveal-detail p:last-child { font-size: 13px; color: var(--faint); font-style: italic; }
 
-    /* Footer — masthead-mirror colophon */
     footer.colophon {
-      margin-top: var(--space-24);
+      margin-top: var(--space-20);
       padding: var(--space-10) 0 var(--space-16);
       border-top: 1px solid var(--line);
     }
@@ -301,12 +359,14 @@
 
     @media (max-width: 640px) {
       body { font-size: 16px; }
-      .hero { padding: var(--space-16) 0 var(--space-12); }
-      h1 { font-size: 40px; }
+      .hero { padding: var(--space-12) 0 var(--space-8); }
+      h1 { font-size: 38px; }
       .lede { font-size: 19px; }
-      h2 { font-size: 28px; }
-      .step { grid-template-columns: 56px 1fr; gap: var(--space-4); padding: var(--space-6) 0; }
-      .step-num { font-size: 40px; }
+      h2 { font-size: 26px; }
+      .system { grid-template-columns: 28px 1fr; row-gap: var(--space-2); }
+      .system-tag { grid-column: 2; padding-top: 0; }
+      .step { grid-template-columns: 48px 1fr; gap: var(--space-4); padding: var(--space-5) 0; }
+      .step-num { font-size: 32px; }
       .person { grid-template-columns: 1fr; gap: var(--space-2); }
       .colophon-row { flex-direction: column; align-items: flex-start; }
     }
@@ -315,7 +375,7 @@
 <body>
 
   <header class="masthead">
-    <div class="container masthead-row">
+    <div class="wide masthead-row">
       <div class="masthead-title">Hawkins Twin · Module 1</div>
       <div class="masthead-meta">Peterbilt Atlantic · MMXXVI</div>
     </div>
@@ -325,45 +385,171 @@
 
     <section class="hero">
       <div class="kicker">For Luke Weatherby</div>
-      <h1>Welcome, <em>Luke</em>.</h1>
-      <p class="lede">You've been asked to help mirror the systems that run Peterbilt Atlantic. Before any of the technical work begins, one thing comes first — and it's simple.</p>
-      <p>You will never be asked to do anything you are not already allowed to do. To make sure of that, we start by putting the paperwork on the table. Once we've read what governs your access, we write you a plain-English page telling you exactly what you can help with. Then the real work begins.</p>
+      <h1>Sixteen systems. <em>One dealership.</em></h1>
+      <p class="lede">This is the working list of every system Peterbilt Atlantic runs on today, as documented by Craig Allen. Your Module 1 job is to help us mirror them — cleanly, compliantly, one at a time.</p>
+      <p>Before any of the technical work begins, one thing comes first. You will never be asked to do anything you are not already allowed to do. So we start by putting the paperwork on the table. Once we've read what governs your access, we write you a plain-English page telling you exactly what you can help with. Then we open the register below and work through it.</p>
     </section>
 
     <hr class="rule">
 
     <section>
-      <h2>Three steps, <em>in order</em>. Nothing more.</h2>
+      <h2>The Peterbilt Atlantic <em>systems register</em>.</h2>
+      <p class="body">Sixteen systems, grouped by function. This is Craig's list, held as canon. Nothing gets touched, mirrored, or exported until Step 1 sign-off names which one — and how.</p>
 
-      <div class="steps">
+      <div class="register">
+        <div class="register-caption">Source · Craig Allen, Director of Sales &amp; Marketing, Peterbilt Atlantic</div>
 
-        <article class="step">
-          <div class="step-num">i</div>
-          <div class="step-body">
-            <h3>Gather your agreements</h3>
-            <p>The papers you signed for CDK, for Hawkins, for BRP, and for Peterbilt. Phone photos are fine. If you can't find one, tell Craig — he'll point you to the right person.</p>
-            <p class="aside">Employment paperwork, IT acceptable-use, CDK training terms, BRP dealer terms, PACCAR dealer portal terms.</p>
+        <div class="register-group">
+          <h3>Dealer operations</h3>
+          <div class="system">
+            <div class="system-num">i</div>
+            <div>
+              <div class="system-name">CDK Drive</div>
+              <div class="system-note">Dealer Management System — the operational core.</div>
+            </div>
+            <div class="system-tag paired">Paired with ii</div>
           </div>
-        </article>
-
-        <article class="step">
-          <div class="step-num">ii</div>
-          <div class="step-body">
-            <h3>Send them in</h3>
-            <p>Email them to Dany at <a href="mailto:dany@silvatrading.com" style="color:var(--past); border-bottom:1px solid var(--line);">dany@silvatrading.com</a>. One at a time or all at once — whatever's easiest.</p>
-            <p class="aside">If a document feels sensitive, black out the parts you'd rather not share. That's fine.</p>
+          <div class="system">
+            <div class="system-num">ii</div>
+            <div>
+              <div class="system-name">CDK Sales Overdrive</div>
+              <div class="system-note">Sales and inventory workflow layered on top of CDK Drive.</div>
+            </div>
+            <div class="system-tag paired">Paired with i</div>
           </div>
-        </article>
+        </div>
 
-        <article class="step">
-          <div class="step-num">iii</div>
-          <div class="step-body">
-            <h3>Wait for the green light</h3>
-            <p>Dany and Tim Hawkins will read what you sent and write you a plain-English page telling you exactly what you can help with.</p>
-            <p class="aside">Then Module 1 begins. Not before.</p>
+        <div class="register-group">
+          <h3>OEM &amp; parts</h3>
+          <div class="system">
+            <div class="system-num">iii</div>
+            <div>
+              <div class="system-name">PACCAR ePortal</div>
+              <div class="system-note">Dealer-facing PACCAR/Peterbilt portal — orders, warranty, parts.</div>
+            </div>
+            <div class="system-tag oem">OEM · paired</div>
           </div>
-        </article>
+          <div class="system">
+            <div class="system-num">iv</div>
+            <div>
+              <div class="system-name">PACCAR Solutions</div>
+              <div class="system-note">PACCAR telematics and connected-truck platform.</div>
+            </div>
+            <div class="system-tag oem">OEM · paired</div>
+          </div>
+        </div>
 
+        <div class="register-group">
+          <h3>Web &amp; lead capture</h3>
+          <div class="system">
+            <div class="system-num">v</div>
+            <div>
+              <div class="system-name">Dealer Spike</div>
+              <div class="system-note">peterbiltatlantic.com — public website and inventory feed.</div>
+            </div>
+            <div class="system-tag">Public surface</div>
+          </div>
+          <div class="system">
+            <div class="system-num">vi</div>
+            <div>
+              <div class="system-name">Lead Forensics</div>
+              <div class="system-note">Anonymous web-visitor identification.</div>
+            </div>
+            <div class="system-tag">3rd-party</div>
+          </div>
+          <div class="system">
+            <div class="system-num">vii</div>
+            <div>
+              <div class="system-name">Podium</div>
+              <div class="system-note">Web chat and customer messaging on the public site.</div>
+            </div>
+            <div class="system-tag">3rd-party</div>
+          </div>
+        </div>
+
+        <div class="register-group">
+          <h3>Sales &amp; customer engagement</h3>
+          <div class="system">
+            <div class="system-num">viii</div>
+            <div>
+              <div class="system-name">Salesforce Starter</div>
+              <div class="system-note">Lead and pipeline CRM.</div>
+            </div>
+            <div class="system-tag">CRM</div>
+          </div>
+          <div class="system">
+            <div class="system-num">ix</div>
+            <div>
+              <div class="system-name">ActiveCampaign</div>
+              <div class="system-note">Email marketing and automation.</div>
+            </div>
+            <div class="system-tag">Marketing</div>
+          </div>
+          <div class="system">
+            <div class="system-num">x</div>
+            <div>
+              <div class="system-name">PROKeep</div>
+              <div class="system-note">Customer text and messaging for parts and service.</div>
+            </div>
+            <div class="system-tag">3rd-party</div>
+          </div>
+        </div>
+
+        <div class="register-group">
+          <h3>Social &amp; brand</h3>
+          <div class="system">
+            <div class="system-num">xi</div>
+            <div>
+              <div class="system-name">Meta Business Suite (Facebook)</div>
+              <div class="system-note">Company Facebook presence and ads console.</div>
+            </div>
+            <div class="system-tag">Social</div>
+          </div>
+          <div class="system">
+            <div class="system-num">xii</div>
+            <div>
+              <div class="system-name">Instagram (via Meta)</div>
+              <div class="system-note">Managed under the Meta Business Suite login.</div>
+            </div>
+            <div class="system-tag">Social</div>
+          </div>
+          <div class="system">
+            <div class="system-num">xiii</div>
+            <div>
+              <div class="system-name">TikTok Business Center</div>
+              <div class="system-note">TikTok content and paid social.</div>
+            </div>
+            <div class="system-tag">Social</div>
+          </div>
+        </div>
+
+        <div class="register-group">
+          <h3>Office &amp; AI</h3>
+          <div class="system">
+            <div class="system-num">xiv</div>
+            <div>
+              <div class="system-name">Microsoft 365</div>
+              <div class="system-note">Email, calendar, files — the office substrate.</div>
+            </div>
+            <div class="system-tag">Office</div>
+          </div>
+          <div class="system">
+            <div class="system-num">xv</div>
+            <div>
+              <div class="system-name">Claude</div>
+              <div class="system-note">Assistive AI in day-to-day marketing and sales work.</div>
+            </div>
+            <div class="system-tag">AI</div>
+          </div>
+          <div class="system">
+            <div class="system-num">xvi</div>
+            <div>
+              <div class="system-name">ChatGPT</div>
+              <div class="system-note">Assistive AI in day-to-day marketing and sales work.</div>
+            </div>
+            <div class="system-tag">AI</div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -373,9 +559,38 @@
     </div>
 
     <section>
-      <h2>While you <em>wait</em>.</h2>
-      <p class="body">Your CDK training continues as normal. Keep notes — paper, phone, whatever you already use. Your own words about your own work are always yours to keep.</p>
-      <p class="body">What matters most: anything you see that feels like it might touch a rule. Write it down even if you're not sure. Better logged than forgotten.</p>
+      <h2>Your Module 1, <em>in order</em>.</h2>
+      <p class="body">Your CDK Drive certification continues in parallel. Module 1 focuses first on the two paired systems you use every day — CDK Drive and CDK Sales Overdrive — and on the paired PACCAR portals that sit next to them. The rest of the register is scoped as you go, one system at a time.</p>
+
+      <div class="steps">
+
+        <article class="step">
+          <div class="step-num">i</div>
+          <div class="step-body">
+            <h3>Gather your agreements</h3>
+            <p>The papers you signed for CDK, Hawkins, BRP, and PACCAR — plus any acceptable-use policy that covers the systems in the register. Phone photos are fine.</p>
+            <p class="aside">If you can't find one, tell Craig — he'll point you to the right person at Hawkins IT.</p>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-num">ii</div>
+          <div class="step-body">
+            <h3>Send them in</h3>
+            <p>Email them to Dany at <a href="mailto:dany@silvatrading.com" style="color:var(--past); border-bottom:1px solid var(--line);">dany@silvatrading.com</a>. One at a time or all at once. Redact anything you'd rather not share — that's fine.</p>
+          </div>
+        </article>
+
+        <article class="step">
+          <div class="step-num">iii</div>
+          <div class="step-body">
+            <h3>Wait for the green light</h3>
+            <p>Dany and Tim Hawkins read what you sent and write you a plain-English page telling you exactly which of the sixteen systems you can help mirror, and how.</p>
+            <p class="aside">Module 1 begins with CDK Drive plus CDK Sales Overdrive as a bundle. PACCAR ePortal and PACCAR Solutions come next, on a PACCAR-governed path.</p>
+          </div>
+        </article>
+
+      </div>
     </section>
 
     <hr class="rule">
@@ -387,44 +602,44 @@
         <div class="person">
           <div>
             <div class="role">Program lead</div>
-            <div class="name" style="margin-top:var(--space-2)">Dany Theriault</div>
+            <div class="name">Dany Theriault</div>
           </div>
-          <div class="detail">Reads your agreements. Writes your green-light page. Runs the program. <a href="mailto:dany@silvatrading.com">dany@silvatrading.com</a></div>
+          <div class="detail">Reads your agreements. Writes your green-light page. Owns the systems register. <a href="mailto:dany@silvatrading.com">dany@silvatrading.com</a></div>
         </div>
 
         <div class="person">
           <div>
             <div class="role">Hawkins authority</div>
-            <div class="name" style="margin-top:var(--space-2)">Tim Hawkins</div>
+            <div class="name">Tim Hawkins</div>
           </div>
           <div class="detail">Co-signs your green-light page. The Hawkins-side voice on what stays inside and what goes out.</div>
         </div>
 
         <div class="person">
           <div>
-            <div class="role">If you get stuck</div>
-            <div class="name" style="margin-top:var(--space-2)">Craig Allen</div>
+            <div class="role">Register source</div>
+            <div class="name">Craig Allen</div>
           </div>
-          <div class="detail">Director of Sales &amp; Marketing, Peterbilt Atlantic. Can point you to the right person at Hawkins IT if you're missing paperwork.</div>
+          <div class="detail">Director of Sales &amp; Marketing, Peterbilt Atlantic. Author of the sixteen-system list above. Your first call if you can't find an agreement.</div>
         </div>
       </div>
     </section>
 
-    <section class="vault">
-      <div class="vault-tag">Restricted area present</div>
-      <h3>There is a private vault where your agreements land.</h3>
-      <p>Only Dany and Tim see it. You don't need to touch it — sending your paperwork by email is enough.</p>
-      <button class="vault-reveal" data-vault-toggle aria-expanded="false" aria-controls="vault-detail">Reveal details</button>
-      <div id="vault-detail" class="vault-detail" aria-live="polite">
-        <p>Anything you send to <a href="mailto:dany@silvatrading.com" style="color:var(--past);border-bottom:1px solid var(--line);">dany@silvatrading.com</a> lands in a private repository only Dany and Tim can read. Nothing about you goes to a public page without a signed green-light document naming exactly what's shared and what isn't.</p>
-        <p>The vault is intentionally understated on the public page. The public gets the overview; authorized reviewers get the strategic detail.</p>
+    <section class="restricted">
+      <div class="restricted-tag">Restricted area present</div>
+      <h3>A private vault sits behind this page.</h3>
+      <p>Only Dany and Tim see it. You don't need to touch it — sending your paperwork by email is enough. The vault is where your agreements live and where the per-system sign-offs get written.</p>
+      <button class="reveal-btn" data-reveal-toggle aria-expanded="false" aria-controls="reveal-detail">Reveal details</button>
+      <div id="reveal-detail" class="reveal-detail" aria-live="polite">
+        <p>Anything you send to <a href="mailto:dany@silvatrading.com" style="color:var(--past);border-bottom:1px solid var(--line);">dany@silvatrading.com</a> lands in a private repository only Dany and Tim can read. Nothing about you or Hawkins goes onto a public page without a signed green-light document naming exactly which system is in scope, what's shared, and what isn't.</p>
+        <p>The register on this page is intentionally public: it declares the scope and the source. The per-system detail — owner, extract path, contract terms, sovereignty-exit, twin binding — lives in the vault, one folder per system.</p>
       </div>
     </section>
 
   </main>
 
   <footer class="colophon">
-    <div class="container colophon-row">
+    <div class="wide colophon-row">
       <div class="colophon-mark">Pour le bien-être du peuple</div>
       <div class="colophon-meta">EVE Glyph Design · Hawkins Twin</div>
     </div>
@@ -432,8 +647,8 @@
 
   <script>
     (function(){
-      const btn = document.querySelector('[data-vault-toggle]');
-      const detail = document.getElementById('vault-detail');
+      const btn = document.querySelector('[data-reveal-toggle]');
+      const detail = document.getElementById('reveal-detail');
       btn?.addEventListener('click', () => {
         const open = detail.classList.toggle('open');
         btn.setAttribute('aria-expanded', String(open));
