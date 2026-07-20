@@ -34,7 +34,7 @@ He was right. Craig Allen is not the president of Peterbilt Atlantic. Luke Weath
 Callsigns filed at Dany's direction this turn:
 
 - **Luke Weatherbie [Skywalker]**
-- **Craig Allen [Mr. Market]**
+- **Craig Allen [Mr. Marketing]**
 
 These are used exactly as filed \u2014 in square brackets, after the name, only where Dany has assigned one. No callsigns for Tim, Angela, or anyone else unless Dany assigns them.
 

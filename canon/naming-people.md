@@ -11,7 +11,7 @@ Canonical spellings for people named in EVE Glyph and Hawkins twin work. Use the
 
 - **Luke Weatherbie** — with `-bie`. Not "Weatherby." Callsign in brackets on public surfaces: **[Skywalker]**. The `-by` spelling belongs to a different person (Joseph Weatherby of Colonel Gray HS, Charlottetown) and must not be conflated.
 - **Tim Hawkins** — Peterbilt Atlantic. Standard spelling. Title deliberately not recorded here — titles change and inventing them is a documented sin (see `ledger/sins/2026-07-20-invented-titles-for-craig-allen-and-luke-weatherbie.md`).
-- **Craig Allen** — Peterbilt Atlantic. Standard spelling. Callsign in brackets on public surfaces: **[Mr. Market]**. Title deliberately not recorded — do not invent one.
+- **Craig Allen** — Peterbilt Atlantic. Standard spelling. Callsign in brackets on public surfaces: **[Mr. Marketing]**. Title deliberately not recorded — do not invent one.
 - **Angela Gowans** — Peterbilt Atlantic. Standard spelling. Title deliberately not recorded — do not invent one.
 
 ## EVE Glyph
