@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hawkins Twin Intake — For Craig Allen & Luke Weatherbie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --cream: #f6f1e7;
+    --cream-2: #ede6d6;
+    --ink: #1b1a17;
+    --ink-2: #3a3833;
+    --rule: #c9c0ad;
+    --accent: #7a2e1f;
+    --ok: #2f5d3a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 96px; }
+  .kicker {
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 500;
+    font-size: 44px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+  }
+  .lede {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.4;
+    color: var(--ink-2);
+    margin: 0 0 40px;
+  }
+  h2 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 500;
+    font-size: 26px;
+    margin: 48px 0 12px;
+    letter-spacing: -0.005em;
+  }
+  h3 {
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin: 28px 0 8px;
+  }
+  p { margin: 0 0 14px; }
+  .rule { height: 1px; background: var(--rule); border: 0; margin: 40px 0; }
+  .card {
+    background: var(--cream-2);
+    border: 1px solid var(--rule);
+    padding: 22px 24px;
+    margin: 20px 0;
+  }
+  .card h2 { margin-top: 0; }
+  ol, ul { padding-left: 22px; margin: 0 0 14px; }
+  ol li, ul li { margin-bottom: 8px; }
+  code, .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: rgba(27,26,23,0.06);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 0.92em;
+  }
+  a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  a:hover { text-decoration-thickness: 2px; }
+  .systems {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin: 12px 0 8px;
+  }
+  @media (min-width: 560px) {
+    .systems { grid-template-columns: 1fr 1fr; }
+  }
+  .system {
+    padding: 10px 12px;
+    border: 1px solid var(--rule);
+    background: rgba(255,255,255,0.5);
+    font-size: 14px;
+  }
+  .system .name {
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .system .hint {
+    color: var(--ink-2);
+    font-size: 12px;
+    margin-top: 2px;
+  }
+  .callout {
+    border-left: 3px solid var(--accent);
+    padding: 4px 0 4px 16px;
+    margin: 20px 0;
+    color: var(--ink-2);
+    font-style: italic;
+  }
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+  footer p { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Hawkins Twin · Compliance Vault Intake</div>
+  <h1>Sixteen systems, one intake.</h1>
+  <p class="lede">For Craig Allen (President) and Luke Weatherbie (Systems). This page tells you exactly what to send, where to send it, and what happens after.</p>
+
+  <hr class="rule" />
+
+  <h2>What we need from each of you</h2>
+  <p>Two artifacts per system, for each of the sixteen systems below:</p>
+  <ol>
+    <li><strong>The signed user agreement PDF</strong> — the terms of use you've each accepted for that system.</li>
+    <li><strong>The public link</strong> — the URL where the vendor's current terms live publicly, so we can diff future changes against the version you signed.</li>
+  </ol>
+
+  <div class="callout">You do not need to send both at once. Send what you have, when you have it. The archive is the record.</div>
+
+  <h2>How to send</h2>
+  <div class="card">
+    <h3>Email</h3>
+    <p>Send to: <a href="mailto:dany@silvatrading.com?subject=Hawkins%20intake%20%E2%80%94%20"><strong>dany@silvatrading.com</strong></a></p>
+    <p>Subject line format:</p>
+    <p><span class="mono">Hawkins intake — [system name] — [agreement | link | both]</span></p>
+    <p>Example: <span class="mono">Hawkins intake — CDK Drive — agreement</span></p>
+    <p>Body: paste the public link if applicable; attach the signed PDF if applicable. One system per email keeps the archive clean; if that's a nuisance, batch them and label clearly.</p>
+  </div>
+
+  <h2>The sixteen systems</h2>
+  <div class="systems">
+    <div class="system"><div class="name">CDK Drive (DMS)</div><div class="hint">Dealer management system</div></div>
+    <div class="system"><div class="name">CDK Sales Overdrive</div><div class="hint">Sales workflow</div></div>
+    <div class="system"><div class="name">PACCAR ePortal</div><div class="hint">OEM portal</div></div>
+    <div class="system"><div class="name">PACCAR Solutions</div><div class="hint">Telematics</div></div>
+    <div class="system"><div class="name">Dealer Spike</div><div class="hint">Public website</div></div>
+    <div class="system"><div class="name">Lead Forensics</div><div class="hint">Visitor attribution</div></div>
+    <div class="system"><div class="name">Podium</div><div class="hint">SMS / reviews</div></div>
+    <div class="system"><div class="name">Salesforce Starter</div><div class="hint">CRM</div></div>
+    <div class="system"><div class="name">ActiveCampaign</div><div class="hint">Marketing automation</div></div>
+    <div class="system"><div class="name">Prokeep</div><div class="hint">Parts messaging</div></div>
+    <div class="system"><div class="name">Meta Business</div><div class="hint">Facebook / ads</div></div>
+    <div class="system"><div class="name">Instagram</div><div class="hint">Business account</div></div>
+    <div class="system"><div class="name">TikTok Business</div><div class="hint">Business account</div></div>
+    <div class="system"><div class="name">Microsoft 365</div><div class="hint">Productivity / mail</div></div>
+    <div class="system"><div class="name">Claude AI</div><div class="hint">Anthropic account</div></div>
+    <div class="system"><div class="name">ChatGPT</div><div class="hint">OpenAI account</div></div>
+  </div>
+
+  <h2>What happens after you send</h2>
+  <ol>
+    <li>Each artifact is filed into the private compliance vault at <span class="mono">EVEglyphDesign/hawkins-twin-compliance-vault</span>. The repository is the archive of record.</li>
+    <li>You are copied on the archive confirmation so you have a receipt in your inbox.</li>
+    <li>When all sixteen are in, Dany closes the intake and moves to the next phase (twin build, public disclosure, and audit posture).</li>
+  </ol>
+
+  <h2>Why the repository — and not a portal</h2>
+  <p>This intake is deliberately low-tech. A PDF and a URL sent by email, filed to a repository you can inspect, is defensible in a way that a fancy form is not. The point is that the archive is honest, complete, and yours to audit. Nothing lives inside a chat window or a vendor's dashboard where it can be quietly changed.</p>
+
+  <h2>Questions</h2>
+  <p>Text Dany directly. He's expecting your messages and will answer faster there than through this page.</p>
+
+  <footer>
+    <p><strong>Hawkins Twin</strong> · Compliance Vault Intake · Silva Trading &amp; EVE Glyph Design</p>
+    <p>Repository of record: <span class="mono">EVEglyphDesign/hawkins-twin-compliance-vault</span> (private).</p>
+    <p>Safety first. Betterment second. Pour le bien-être du peuple.</p>
+  </footer>
+</div>
+</body>
+</html>
