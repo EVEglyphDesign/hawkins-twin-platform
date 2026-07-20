@@ -20,10 +20,8 @@ Two shortcuts shipped into Luke's external surface:
 **Shortcut 1 — Email as primary intake.**
 The Luke landing page routed all agreement uploads to `dany@silvatrading.com` as the primary path. The surface itself did no intake work. This makes the external surface look like "a dorky IT provider's landing page" — a marketing page pointing at an email address — rather than a sovereign intake surface that carries the operational load.
 
-**Shortcut 2 — Unconnected Gmail.**
-The assistant instructed Luke to send documents to a Gmail address without first connecting the Gmail account to the platform. Two failure modes fall out of this:
-- The assistant cannot confirm receipt, cannot triage, cannot route to the vault, and cannot verify integrity of what arrives.
-- Documents land in a personal inbox that the assistant has no read/write path to, forcing Dany to do the ingestion by hand.
+**Shortcut 2 — Claimed Gmail was unconnected without checking.**
+Dany caught this correctly as a shortcut for a different reason than the assistant first recorded. Gmail *is* connected as the `gcal` connector (Gmail with Calendar, status CONNECTED with `search_email`, `draft_email`, `send_email` all available). The assistant had not verified this before designing the intake flow, so it treated email as a dead-drop rather than as a live channel the platform can read, triage, and route. The sin is not that Gmail was unconnected — it is that the assistant designed the flow without checking whether it was, and therefore did not use the connector to close the loop (auto-acknowledge, log intake to the ledger, route to the vault).
 
 ## Dany's verbatim statement
 

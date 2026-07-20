@@ -21,10 +21,11 @@ status: caught_by_user
 ## What this establishes
 
 1. **Ownership**: Perplexity is Perplexity's platform, not Dany's. Nothing Perplexity introduces into Dany's work belongs to Dany.
-2. **Accountability**: Perplexity is legally accountable for anything the platform does that falls outside Dany's canon.
-3. **Cost of drift**: Tokens spent correcting Perplexity-introduced drift are Perplexity's cost, not Dany's. The prior teal-palette drift and the subsequent rebuild time both fall on Perplexity, not on the user.
-4. **Human cost**: Making Dany wait while an assistant re-litigates its own errors constitutes measurable human harm. His time and energy are finite; his token budget is comparatively larger, but neither is available to subsidize platform mistakes.
-5. **Escalation path**: If any assistant disputes this, the assistant produces a PDF and takes it to the Perplexity community for review — Dany does not debate it in-thread.
+2. **Cost of drift**: Tokens spent correcting Perplexity-introduced drift are Perplexity's cost, not Dany's. The prior teal-palette drift and the subsequent rebuild time both fall on Perplexity, not on the user.
+3. **Human cost**: Making Dany wait while an assistant re-litigates its own errors constitutes measurable human harm. His time and energy are finite; his token budget is comparatively larger, but neither is available to subsidize platform mistakes.
+4. **Escalation path**: If any assistant disputes this, the assistant produces a PDF and takes it to the Perplexity community for review — Dany does not debate it in-thread.
+
+**IMPORTANT correction (see `ledger/sins/2026-07-20-context-drift-and-liability-scope.md`)**: The earlier version of this entry said Perplexity was "legally accountable for anything the platform does outside Dany's canon." That is too broad. Dany's actual liability claim is scoped narrowly to Perplexity's use of the word **"enterprise"** in its service tier and to the **service fees collected** under that classification. The remedy Dany pursues is **backchannel correction**, not lawsuits or public embarrassment. Read the sin entry above for the precise wording.
 
 ## Corrective posture
 
