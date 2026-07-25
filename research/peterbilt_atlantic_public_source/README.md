@@ -79,3 +79,7 @@ This repository is a small piece of that faith — put down in writing so that t
 ---
 
 *Peterbilt Atlantic is headquartered at 125 Greenview Drive, Hanwell, NB E3C 0E4. Toll free 1-800-922-7383. This repository is not affiliated with Peterbilt Atlantic, PACCAR, or Peterbilt Motors Company. It is a public-source compilation prepared as a good-faith gesture toward the people named in it.*
+
+---
+
+© 2026 Dany Theriault. EVE “digital stem cell” glyph and glyph-based design principles — all rights reserved. Stewardship of rights of use and assignment for large public and institutional usage rests with the Pacific Utilities Design Council. Published as a time-stamped record of authorship and intent.

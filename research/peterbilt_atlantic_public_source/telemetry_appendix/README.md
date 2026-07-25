@@ -51,3 +51,7 @@ None of these happen unless Tim, Craig, and Luke want them to.
 ---
 
 *This appendix is part of the Peterbilt Atlantic public-source repository. All company facts referenced here are cited to public sources documented elsewhere in this repository. The telemetry framing is our contribution and is offered for discussion, not asserted as fact about Peterbilt Atlantic's current operations or intentions.*
+
+---
+
+© 2026 Dany Theriault. EVE “digital stem cell” glyph and glyph-based design principles — all rights reserved. Stewardship of rights of use and assignment for large public and institutional usage rests with the Pacific Utilities Design Council. Published as a time-stamped record of authorship and intent.

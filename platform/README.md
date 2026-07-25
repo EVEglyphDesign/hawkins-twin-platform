@@ -28,3 +28,7 @@ Same engine, audit trail, Teams experience, and security posture as the finance 
 ## Provenance
 
 Steel Cloud Solutions — *Reasoning Layer for Discovery* (SC-DISC-EXTRACT-2026-07) and *Revenue Leakage for Discovery* (SC-DISC-BRIEF-2026-07). Author: Tobias Polly, polly consulting e.U., 17 July 2026. Confidential.
+
+---
+
+© 2026 Dany Theriault. EVE “digital stem cell” glyph and glyph-based design principles — all rights reserved. Stewardship of rights of use and assignment for large public and institutional usage rests with the Pacific Utilities Design Council. Published as a time-stamped record of authorship and intent.

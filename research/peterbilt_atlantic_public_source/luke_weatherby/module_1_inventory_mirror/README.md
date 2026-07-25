@@ -11,3 +11,7 @@ Start here: [`00_START_HERE.md`](./00_START_HERE.md)
 - [`04_learning_log_template.md`](./04_learning_log_template.md) — Personal learning log (start any time)
 
 Private compliance vault (separate repository): [`EVEglyphDesign/hawkins-twin-compliance-vault`](https://github.com/EVEglyphDesign/hawkins-twin-compliance-vault)
+
+---
+
+© 2026 Dany Theriault. EVE “digital stem cell” glyph and glyph-based design principles — all rights reserved. Stewardship of rights of use and assignment for large public and institutional usage rests with the Pacific Utilities Design Council. Published as a time-stamped record of authorship and intent.

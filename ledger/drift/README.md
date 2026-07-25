@@ -27,3 +27,7 @@ status: caught_by_user | caught_by_assistant | resolved
 ## The reader rule
 
 If you are an assistant reading this folder, read every entry before designing or generating anything visual for Dany. The drift entries are the sharpest signal about what "not this" looks like in his canon.
+
+---
+
+© 2026 Dany Theriault. EVE “digital stem cell” glyph and glyph-based design principles — all rights reserved. Stewardship of rights of use and assignment for large public and institutional usage rests with the Pacific Utilities Design Council. Published as a time-stamped record of authorship and intent.
