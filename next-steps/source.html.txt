@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+@page {
+  size: Letter; margin: 15mm 16mm 14mm 16mm;
+  @bottom-left { content: "EVEglyphDesign · EgD-KEY-2026-07 · __HASH__"; font-family: Inter; font-size: 6.5pt; color: #6b665c; }
+  @bottom-right { content: "Page " counter(page) " of __PAGES__"; font-family: Inter; font-size: 6.5pt; color: #6b665c; }
+}
+body { font-family: Inter, sans-serif; color:#1a1a1a; background:#fdfaf4; font-size:9pt; line-height:1.42; }
+h1 { font-family: Fraunces, serif; font-size:22pt; line-height:1.12; margin:0 0 4px; font-weight:600; }
+h2 { font-family: Fraunces, serif; font-size:13.5pt; margin:15px 0 6px; font-weight:600; border-bottom:1px solid #e7e1d3; padding-bottom:4px; }
+h3 { font-family: Fraunces, serif; font-size:10.8pt; margin:11px 0 4px; font-weight:600; }
+.sub { font-family:Inter; font-size:9pt; color:#6b665c; margin:0 0 3px; }
+.rule { height:3px; background:#e87722; width:64px; margin:12px 0 16px; }
+table { width:100%; border-collapse:collapse; margin:6px 0 8px; font-size:8.1pt; }
+th { background:#f7f2e7; text-align:left; padding:5px 6px; border:1px solid #e7e1d3; font-weight:600; font-size:8.1pt; }
+tr { break-inside:avoid; }
+td { padding:5px 6px; border:1px solid #e7e1d3; vertical-align:top; }
+ul,ol { margin:5px 0 8px; padding-left:17px; }
+li { margin-bottom:3px; }
+a { color:#b8560f; text-decoration:none; }
+.box { background:#f7f2e7; border-left:3px solid #e87722; padding:9px 12px; margin:10px 0; font-size:8.8pt; }
+.tag { display:inline-block; background:#e87722; color:#fdfaf4; font-size:6.8pt; padding:1.5px 6px; border-radius:2px; letter-spacing:.5px; text-transform:uppercase; vertical-align:middle;}
+.g { color:#6b665c; }
+.foot { margin-top:14px; border-top:1px solid #e7e1d3; padding-top:8px; font-size:7.2pt; color:#6b665c; }
+.wm { position:fixed; top:44%; left:12%; font-family:Fraunces,serif; font-size:62pt; color:#e87722; opacity:.045; transform:rotate(-24deg); }
+.id { font-family:Inter; font-weight:600; font-size:7.8pt; color:#b8560f; white-space:nowrap; }
+.q { font-size:8.4pt; color:#6b665c; font-style:italic; border-left:2px solid #e7e1d3; padding-left:9px; margin:6px 0 8px; }
+.na { break-inside:avoid; }
+</style></head><body>
+<div class="wm">EVEglyph</div>
+
+<p class="sub">EVEglyphDesign · Peterbilt Atlantic / Hawkins Truck Mart · Working session of 27 July 2026</p>
+<h1>The Hawkins Twin<br><span style="font-size:14.5pt;font-weight:500">Next-steps register and the executive dashboard that carries it</span></h1>
+<div class="rule"></div>
+<p class="sub">Participants: Tim Hawkins, Luke Weatherbie, Dany Theriault · Named but absent: Tobias (development lead), Angela (Hawkins escalation), Craig Allen (systems)</p>
+<p class="sub">Repositories: <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform">hawkins-twin-platform</a> (public) ·
+<a href="https://github.com/EVEglyphDesign/eve-hawkins-truck-mart">eve-hawkins-truck-mart</a> (private commercial lane) ·
+Public surfaces: <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/demo/">sandbox demo</a> ·
+<a href="https://eveglyphdesign.github.io/hawkins-twin-platform/luke/">Luke intake</a> ·
+<a href="https://eveglyphdesign.github.io/hawkins-twin-platform/tim-vip.html">Tim entry</a></p>
+
+<h2>1. What was decided</h2>
+<table>
+<tr><th style="width:26%">Decision</th><th style="width:12%">Who</th><th>Substance</th></tr>
+<tr><td><b>Budget confirmed</b></td><td>Tim</td><td>$10K cap, agreed in writing beforehand and reconfirmed on the call. Developer time bills at $150/hr against that cap. Dany's own hours are not billed. No spend is dispatched to the developer until the mesh design is done first.</td></tr>
+<tr><td><b>The guinea pig is the phone system</b></td><td>Tim → Luke</td><td>Telus VoIP / call data — missed calls, who is not answering, by department — is the first live proof. Tim: <i>"Luke, I think that you should start with the phone system for our guinea pig with Dany."</i> Dany: buildable in hours, not billed.</td></tr>
+<tr><td><b>Dany gets a Hawkins identity</b></td><td>Tim → Luke</td><td>Luke sets up an email account so Dany can hold third-party user access in his own right. Hard constraint set by Tim and accepted by Dany: <b>Dany writes to nobody but Tim and Luke.</b> All outbound external mail goes out under Luke's name; Tim is copied on everything.</td></tr>
+<tr><td><b>Contract before login</b></td><td>Dany</td><td>Service and user agreements are loaded into the repository <i>before</i> any system is touched. What is unclear is turned into a written clarification request that Luke sends to the vendor; the reply goes straight back into the model. The legal protection is the deliverable, not a side effect.</td></tr>
+<tr><td><b>Everything lands in one repository</b></td><td>Dany</td><td>All Hawkins work goes under the Hawkins twin repository. The guarantee mechanism Tim asked for is direct control: Luke holds it. Tim can copy it and walk at any time.</td></tr>
+<tr><td><b>No agreement exists through Perplexity</b></td><td>Tim / Dany</td><td>Tim assumed the work sat under a Perplexity agreement. It does not. Dany offered to sign a direct contract. <b>This is open and unsigned.</b></td></tr>
+<tr><td><b>Payback before any further ask</b></td><td>Dany</td><td>The $10K is repaid by finding roughly $1,000/month of removable cost. No further money is requested until a funded model through Tobias is ready.</td></tr>
+<tr><td><b>Tobias demo</b></td><td>Luke</td><td>Luke attends a walkthrough of the EVEglyph Azure tenant with Tobias — offered for 7:00 a.m., timezone to be confirmed. Tim: <i>"good for Luke… to get a second talking to the actual person."</i></td></tr>
+<tr><td><b>The composite is the front door</b></td><td>Tim → Luke</td><td>Tim asked Luke to pull the ADA composite from the 20 Group site. Tim: <i>"That's what I want my team to be using… that is the stuff that digs in and tells me where I'm really doing bad and why."</i> Dany: <i>"that'll be your new dashboard."</i></td></tr>
+</table>
+
+<h2>2. Next-steps register</h2>
+<p>Every item below is traceable to the transcript. Owner is the person who cannot delegate it further. <b>Blocked</b> means it cannot start until its dependency clears.</p>
+<table>
+<tr><th style="width:6%">ID</th><th style="width:9%">Owner</th><th style="width:38%">Action</th><th style="width:20%">Depends on</th><th>When</th></tr>
+<tr><td class="id">HT-01</td><td>Luke</td><td><b>Pull the ADA composite.</b> Get access to the 20 Group site, copy the current composite (Tim: a new one, or the most recent available) and send it to Dany, plus a link or any public description of the site so Dany can research the schema from public sources.</td><td>Luke needs access granted — he does not have it today</td><td>This week</td></tr>
+<tr><td class="id">HT-02</td><td>Luke</td><td><b>Stand up the Hawkins email identity for Dany</b> and load the requested material into it.</td><td>Tim has approved it</td><td>This week</td></tr>
+<tr><td class="id">HT-03</td><td>Luke</td><td><b>Telus phone-system access.</b> Provide the agreement plus a third-party user ID on the VoIP/call-reporting account.</td><td>HT-02 preferred, not required</td><td>This week</td></tr>
+<tr><td class="id">HT-04</td><td>Dany</td><td><b>Ingest the call data into a repository</b> and stand up daily refresh, alerts, and reporting on missed calls by department and by person. Walk Luke through it, then hand the controls over. Not billed.</td><td>HT-03</td><td>Hours after access</td></tr>
+<tr><td class="id">HT-05</td><td>Luke</td><td><b>Collect service and user agreements:</b> CDK Global (DMS), Lightspeed, Telus, Bulletproof, PACCAR, BRP. Scope limit set by Dany: only the areas in play, not the whole filing cabinet.</td><td>—</td><td>This week</td></tr>
+<tr><td class="id">HT-06</td><td>Dany</td><td><b>Contract review pass.</b> Read each agreement, record what is already permitted, draft the clarification email for the ambiguous clauses. Luke sends it under his name.</td><td>HT-05</td><td>On receipt</td></tr>
+<tr><td class="id">HT-07</td><td>Luke</td><td><b>Attend the Tobias Azure-tenant demo.</b> See a running sovereign tenant before agreeing to build one.</td><td>Dany confirms the hour with Tobias and fixes the timezone</td><td>Next morning</td></tr>
+<tr><td class="id">HT-08</td><td>Tim</td><td><b>Send the Bulletproof monthly invoice</b> so the removable-cost analysis can start. Standing instruction to Luke: keep a running list of what can be dropped once the twin covers it.</td><td>—</td><td>This week</td></tr>
+<tr><td class="id">HT-09</td><td>Dany</td><td><b>Recap email to Tim and Luke</b> — the itemised pull list Luke asked for, the meeting recording link, and the open working-session link. Explicit instruction attached: do not forward it.</td><td>—</td><td>Immediately</td></tr>
+<tr><td class="id">HT-10</td><td>Dany + Luke</td><td><b>Recorded PACCAR-portal walkthrough.</b> A session with Luke on screen to map what can be pulled out of and pushed into the PACCAR portal. No credentials required — documentation and observation only. This becomes the wireframe input.</td><td>HT-05 (PACCAR agreement read first)</td><td>After HT-06</td></tr>
+<tr><td class="id">HT-11</td><td>Tobias</td><td><b>Wireframe the meaty R&amp;D artifact:</b> truck telemetry into PACCAR, predictive overnight maintenance, and the outbound conversation with the customer. This is the piece designed to be fundable, not the piece designed to be paid for.</td><td>HT-10</td><td>Following</td></tr>
+<tr><td class="id">HT-12</td><td>Tobias</td><td><b>Wireframe Tim's sovereign ERP</b> — the repository as system of record with custom stacks above it, on Hawkins' own Azure subscription, under Hawkins' name.</td><td>HT-01, HT-05</td><td>Following</td></tr>
+<tr><td class="id">HT-13</td><td>Tobias, coached by Dany</td><td><b>Funding applications:</b> SR&amp;ED on Hawkins' own expenses, PACCAR and BRP R&amp;D programs, export funding, and any grant the sovereignty test unlocks. Target stated on the call: turn the $10K into $20K of capacity.</td><td>HT-11 / HT-12 wireframes</td><td>After wireframes</td></tr>
+<tr><td class="id">HT-14</td><td>Dany</td><td><b>Draft the direct agreement.</b> Tim believed a Perplexity agreement governed this; none exists. One page: what Hawkins owns, what Dany may hold, what happens to the repository if either side walks.</td><td>—</td><td>Before more data moves</td></tr>
+<tr><td class="id">HT-15</td><td>Dany</td><td><b>Find $1,000/month of removable cost</b> to repay the $10K. First candidates named on the call: the Sales Overdrive bolt-on inside CDK, PowerGo for torque, and line items on the Bulletproof bill.</td><td>HT-08</td><td>Rolling</td></tr>
+<tr><td class="id">HT-16</td><td>Dany</td><td><b>Build the executive dashboard</b> against the composite (section 3). This is the artifact everything else reports into.</td><td>HT-01</td><td>On receipt of the composite</td></tr>
+</table>
+<div class="box"><b>Standing boundaries carried out of the meeting.</b> Craig's systems stay untouched for now — start with actual state. Bulletproof is not told what is being built. Nothing is copied from live systems; database structure comes from backup and recovery, so there is zero operating risk. Nothing sits outside Hawkins' own Azure subscription.</div>
+
+<h2>3. The executive dashboard — the ticket to scale</h2>
+<p>Tim already runs his business against a shared numeric language: the composite his 20 Group of Peterbilt dealers compares itself on, alongside the ratios PACCAR issues. He reads it, he trusts it, and he already talks to his peers in it. That makes it the only sensible front end for the twin.</p>
+<p class="q">"Tim knows what those numbers are and he's used to looking at them. He's already talking to his friends about them. So on the front end of whatever we propose, we need to take them from where they are to where they're going — and start with something he understands."</p>
+
+<h3>3.1 The design rule</h3>
+<p>The twin does not publish a new set of metrics. <b>It lands its output in the composite's own cells, under the composite's own names.</b> Every workstream in the register above must terminate in a line item Tim can point at in a room full of peers without translating anything. If a piece of work cannot be expressed as movement in a composite line, it is not yet a business outcome — it is still a technical output.</p>
+
+<h3>3.2 Structure</h3>
+<table>
+<tr><th style="width:20%">Layer</th><th style="width:38%">What it shows</th><th>Source</th></tr>
+<tr><td><b>Composite mirror</b></td><td>Tim's line items exactly as the 20 Group publishes them, current period against group average, group top quartile, and Hawkins' own trailing twelve months.</td><td>ADA composite export (HT-01) + PACCAR ratio pack</td></tr>
+<tr><td><b>Twin overlay</b></td><td>The same lines, restated from the twin's live data — so the composite stops being a monthly rear-view and becomes a running position.</td><td>CDK / Lightspeed structure mirror; inventory twin</td></tr>
+<tr><td><b>Gap and cause</b></td><td>For every line below group average: the drivers underneath it, ranked by the dollars they explain. This is the part the composite itself cannot do.</td><td>Twin reasoning layer</td></tr>
+<tr><td><b>Action queue</b></td><td>The specific, owned, dated moves that would close each gap — transfer this stock, chase this warranty claim, answer this call queue — with the projected line-item effect of each.</td><td>Twin recommendations, human-approved</td></tr>
+<tr><td><b>Provenance strip</b></td><td>For every number: where it came from, when it refreshed, and which contract permits reading it. This is what makes it defensible in front of peers and in front of vendors.</td><td>Contract register (HT-06) + ledger</td></tr>
+</table>
+
+<h3>3.3 What already reports into it</h3>
+<table>
+<tr><th style="width:30%">Workstream</th><th style="width:34%">Composite line it moves</th><th>Status</th></tr>
+<tr><td>Parts and VIN inventory twin (<a href="https://eveglyphdesign.github.io/hawkins-twin-platform/demo/">sandbox demo</a>, synthetic data)</td><td>Parts inventory turns · fill rate · obsolescence and aged stock · floor-plan carrying cost</td><td>Standing on synthetic data across nine notional centres; awaiting real structure</td></tr>
+<tr><td>Phone-system ingest (HT-04)</td><td>Absorption · service and parts gross · lost opportunity from unanswered demand · departmental productivity</td><td>Next to be built; first live proof</td></tr>
+<tr><td>Removable-cost analysis (HT-15)</td><td>Expense ratios · fixed overhead per unit</td><td>Blocked on the Bulletproof invoice</td></tr>
+<tr><td>PACCAR telemetry wireframe (HT-11)</td><td>Service throughput · technician efficiency · warranty recovery · customer retention</td><td>Wireframe stage, funding-directed</td></tr>
+<tr><td>Contract and access register (HT-06)</td><td>No composite line — it is the licence under which the others are lawful</td><td>Blocked on HT-05</td></tr>
+</table>
+<p class="g">The composite's exact line names and groupings are not yet known to EVEglyph. The mapping above is a working hypothesis and will be re-cut against the real export the moment HT-01 lands. Nothing here should be shown to a peer as final until that swap is done.</p>
+
+<h3>3.4 Why it is the ticket to scale</h3>
+<p>The 20 Group is a room of dealer principals comparing themselves on identical lines. A tool that speaks that language needs no explanation there — Tim's peers can see their own position in it on first sight. The path is therefore: Tim's own numbers first, understood by Tim, defended by Tim; then the same instrument offered to the peers, on their own sovereign tenants, under their own names. That is where the recurring economics live, and it is the position Salesforce currently occupies in dealer groups of that size.</p>
+
+<h2>4. Two directions at once</h2>
+<table>
+<tr><th style="width:16%">Direction</th><th style="width:42%">What it does</th><th>Proof it produces</th></tr>
+<tr><td><b>Top-down</b></td><td>Start at the composite. Mirror the numbers Tim already reports to his peers, then push causation and an action queue underneath them.</td><td>Tim can walk into the 20 Group with a live position rather than a monthly report. That conversation is the distribution channel.</td></tr>
+<tr><td><b>Bottom-up</b></td><td>Take the operational irritations that exist today — missed calls, stock sitting in the wrong centre, a bolt-on nobody uses — and solve them in the mesh, cheaply, one at a time.</td><td>Each one is evidence the mesh design works on real Hawkins conditions, not on a slide. Each one also funds itself by removing cost.</td></tr>
+</table>
+<p>They meet in the middle: every bottom-up fix is scored by which composite line it moved, and every top-down gap is worked by handing it to the mesh as a bottom-up problem. Neither direction is allowed to run without the other — top-down alone is a dashboard, bottom-up alone is a pile of scripts.</p>
+
+<h2>5. The Tobias lane — sovereign repository with custom stacks</h2>
+<p>The division of labour stated on the call: Dany moves the old world into the new one and handles the humans; Tobias structures the new world so it runs efficiently. Tobias's work is deliberately routed to the funding lane rather than the invoice, so it does not consume Tim's $10K.</p>
+<ul>
+<li><b>The shape.</b> A sovereign repository as the system of record, on Hawkins' Azure subscription, with custom stacks sitting on top of it. Tim's own read of it on the call: <i>"I could actually take this and build my own business system… within a week and I say goodbye to CDK."</i></li>
+<li><b>The funding logic.</b> Sovereignty is a precondition, not a preference. Work that rests on another vendor's IP does not qualify — that is precisely what blocked an earlier funding attempt built on an SAP product. Owning the model outright is what makes SR&amp;ED, OEM R&amp;D programmes and export funding reachable.</li>
+<li><b>The commercial position.</b> The subscription is inverted: priced against what the incumbent charges, reduced year over year, with paid work only for genuinely new custom stacks — and every custom stack built for one dealer becomes available to the rest. Hawkins owns the asset and resells it; the developer is back end, not owner.</li>
+<li><b>The channel.</b> Making the OEM-side SAP estate work better positions SAP as a channel into other Peterbilt dealerships rather than an obstacle. Salesforce is the displacement target, not SAP.</li>
+</ul>
+
+<h2>6. What gets caught in the mesh, and what gets written down</h2>
+<p>Anything not routed to Tobias is handled directly in the mesh — extracted, structured into the repository, and made queryable, fast and unbilled. The discipline that makes that safe is the record:</p>
+<ul>
+<li><b>Contracts first.</b> No system is touched before its agreement is in the repository and read. Ambiguity becomes a written question to the vendor, and the vendor's answer goes back into the model as evidence.</li>
+<li><b>Structure, not operations.</b> Database structure only, taken from backup and recovery systems. No live-system risk, no code copied, no copyright exposure.</li>
+<li><b>The ledger.</b> Every action, every access, every vendor answer, every failure — including EVEglyph's own — is logged with a timestamp and a source. Seven defects from a single day in July are already on file. The ledger exists so that if a platform, a vendor or a partner behaves badly, the record is contemporaneous, attributable and usable. It is an accountability instrument first and a legal instrument second.</li>
+<li><b>Exit.</b> Hawkins can copy the repository and leave at any moment, with everything. That is the guarantee Tim asked for, and it is structural rather than contractual.</li>
+</ul>
+
+<h2>7. Open and unresolved</h2>
+<table>
+<tr><th style="width:32%">Open item</th><th>Why it matters</th></tr>
+<tr><td>No signed agreement between Hawkins and EVEglyph</td><td>Tim believed one existed via Perplexity. It does not. Data should not move in volume until HT-14 is signed.</td></tr>
+<tr><td>Luke has no access to the 20 Group / ADA composite site</td><td>HT-01 and therefore the whole dashboard lane are blocked behind an access grant only Tim can authorise.</td></tr>
+<tr><td>Composite schema unknown</td><td>Section 3.3's mapping is a hypothesis until the real export arrives.</td></tr>
+<tr><td>Tobias demo hour and timezone unconfirmed</td><td>A 7:00 a.m. offer across a European timezone is the single easiest thing to get wrong.</td></tr>
+<tr><td>Salesforce / Sales Overdrive status unclear</td><td>Luke has no visibility. Tim suspects the CDK back end may run on it as a paid bolt-on — a live removable-cost candidate.</td></tr>
+<tr><td>Email-content analysis raised, not authorised</td><td>Discussed on the call and immediately bounded by Tim. Treat as out of scope until explicitly and separately approved in writing.</td></tr>
+</table>
+
+<h2>8. The next seventy-two hours</h2>
+<ol>
+<li><b>Dany</b> — send the recap and pull list to Tim and Luke; draft the one-page agreement (HT-09, HT-14).</li>
+<li><b>Dany</b> — confirm Tobias's hour in Luke's timezone and circulate the invitation (HT-07).</li>
+<li><b>Tim</b> — authorise Luke's access to the 20 Group site and send the Bulletproof invoice (HT-01, HT-08).</li>
+<li><b>Luke</b> — open the email account, pull the six agreements, request the Telus third-party ID (HT-02, HT-03, HT-05).</li>
+<li><b>Dany</b> — the moment the call data lands, build it and hand it back. First proof, no invoice (HT-04).</li>
+</ol>
+
+<h2>Appendix A — the pull list Luke asked for</h2>
+<p class="g">Luke's closing request: <i>"send me a quick recap of everything you need me to pull, just so it's nice and clear for me and I can tick, tick, tick."</i> This is that list, ready to go out as HT-09.</p>
+<table>
+<tr><th style="width:5%">✓</th><th style="width:30%">Item</th><th>Detail</th></tr>
+<tr><td>☐</td><td>ADA composite</td><td>Current period if you can get a fresh one; the most recent on file otherwise. Plus the site link or any public description of it.</td></tr>
+<tr><td>☐</td><td>Email account</td><td>A Hawkins address for Dany, used only for system access and for writing to Tim and Luke.</td></tr>
+<tr><td>☐</td><td>Telus phone system</td><td>The agreement, plus a third-party user ID on the VoIP / call-reporting account.</td></tr>
+<tr><td>☐</td><td>CDK Global</td><td>DMS service and user agreement. Note whether the Sales Overdrive bolt-on is a separate line.</td></tr>
+<tr><td>☐</td><td>Lightspeed</td><td>Service and user agreement.</td></tr>
+<tr><td>☐</td><td>Bulletproof</td><td>Agreement plus the most recent monthly invoice (Tim to release).</td></tr>
+<tr><td>☐</td><td>PACCAR</td><td>Dealer service agreement and any portal terms of use.</td></tr>
+<tr><td>☐</td><td>BRP</td><td>Dealer service agreement.</td></tr>
+<tr><td>☐</td><td>Tobias session</td><td>Confirm the hour in your timezone once Dany has it back from Tobias.</td></tr>
+</table>
+<p class="g">Also going out with it: the recording link and the open working-session link. Neither is to be forwarded beyond Tim and Luke.</p>
+
+<div class="foot">
+© 2026 EVEglyphDesign. All rights reserved. Controlled copy. Author: Dany Theriault. Derived from the recorded working session of 27 July 2026 and its transcript, held in the private commercial lane. EVE "digital stem cell" glyph and glyph-based design principles — all rights reserved. Stewardship of rights of use and assignment for large public and institutional usage rests with the Pacific Utilities Design Council.<br>
+Key ID EgD-KEY-2026-07 · Generated __TS__ · SHA-256 <code>__HASH__</code><br>
+<i>Pour le bien-être du peuple.</i>
+</div>
+</body></html>
