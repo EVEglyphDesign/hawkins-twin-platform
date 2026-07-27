@@ -5,6 +5,8 @@ Public surface: [hawkins-twin-platform.html](https://eveglyphdesign.github.io/ha
 Tim VIP: [tim-vip.html](https://eveglyphdesign.github.io/hawkins-twin-platform/tim-vip.html)
 
 
+Sample-data sandbox demo (synthetic data, no live systems): [Sample-Data Sandbox](https://eveglyphdesign.github.io/hawkins-twin-platform/demo/)
+
 Outline & functional map: [EVEglyphDesign_Hawkins_Twin_Outline_Functional_Map.pdf](https://eveglyphdesign.github.io/hawkins-twin-platform/outline/EVEglyphDesign_Hawkins_Twin_Outline_Functional_Map.pdf)
 
 Dealer-grade digital twin platform aligned to Peterbilt, PACCAR, warranty, maintenance, financing, and recycling. Anchored at Hawkins Truck Mart. Technical transformation centred on Luke Weatherbie.

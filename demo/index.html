@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hawkins Twin — Sample-Data Sandbox</title>
+<meta name="description" content="EVEglyphDesign — Hawkins inventory twin sandbox demo running on 100% synthetic parts and VIN data across nine notional centres. No live systems.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#fdfaf4; --cream2:#f7f2e7; --ink:#1a1a1a; --line:#e7e1d3;
+  --mute:#6b665c; --accent:#e87722; --accent-d:#b8560f;
+  --ok:#2f6b2f; --warn:#b8560f; --bad:#9a2b1e;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--accent-d)}
+.wrap{max-width:1240px;margin:0 auto;padding:0 22px}
+
+/* synthetic-data banner */
+.banner{background:var(--ink);color:var(--cream);font-size:12.5px;padding:9px 0;letter-spacing:.02em}
+.banner strong{color:var(--accent)}
+.banner .wrap{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+
+header{border-bottom:1px solid var(--line);background:var(--cream2)}
+header .wrap{padding:26px 22px 22px}
+.eyebrow{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin:0 0 8px}
+h1{font-family:Fraunces,Georgia,serif;font-size:clamp(28px,4.2vw,42px);line-height:1.08;margin:0 0 8px;font-weight:600}
+.lede{max-width:78ch;color:#3a362f;margin:0 0 14px}
+.hrule{height:3px;width:66px;background:var(--accent);margin:0 0 16px}
+.crumbs{display:flex;gap:8px;flex-wrap:wrap;font-size:13px}
+.crumbs a{display:inline-block;border:1px solid var(--line);background:var(--cream);padding:5px 11px;border-radius:3px;text-decoration:none}
+.crumbs a:hover{border-color:var(--accent);color:var(--accent-d)}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:12px;margin:26px 0 6px}
+.kpi{background:var(--cream2);border:1px solid var(--line);border-radius:4px;padding:14px 15px}
+.kpi .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
+.kpi .val{font-family:Fraunces,serif;font-size:27px;font-weight:600;line-height:1.05}
+.kpi .sub{font-size:12px;color:var(--mute);margin-top:4px}
+.kpi.hi{border-left:3px solid var(--accent)}
+.delta{color:var(--ok);font-weight:600}
+
+h2{font-family:Fraunces,serif;font-size:23px;font-weight:600;margin:38px 0 4px}
+h3{font-family:Fraunces,serif;font-size:17px;font-weight:600;margin:24px 0 6px}
+.note{color:var(--mute);font-size:13.5px;max-width:88ch;margin:0 0 14px}
+
+/* centres */
+.centres{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px}
+.centre{background:#fff;border:1px solid var(--line);border-radius:4px;padding:13px 14px;cursor:pointer;transition:.13s;text-align:left}
+.centre:hover{border-color:var(--accent);transform:translateY(-1px)}
+.centre.on{border-color:var(--accent);background:var(--cream2);box-shadow:inset 0 0 0 1px var(--accent)}
+.centre .cn{font-family:Fraunces,serif;font-weight:600;font-size:16px}
+.centre .cc{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mute)}
+.centre .role{font-size:11.5px;color:var(--mute);margin:3px 0 8px;min-height:2.4em}
+.centre dl{display:grid;grid-template-columns:1fr auto;gap:2px 8px;margin:0;font-size:12.5px}
+.centre dt{color:var(--mute)}
+.centre dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+
+/* tabs */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:30px 0 0;flex-wrap:wrap}
+.tab{border:1px solid var(--line);border-bottom:none;background:var(--cream2);color:var(--mute);
+  padding:9px 16px;font-size:13.5px;font-weight:500;cursor:pointer;border-radius:4px 4px 0 0;font-family:inherit}
+.tab.on{background:var(--cream);color:var(--ink);font-weight:600;box-shadow:inset 0 3px 0 var(--accent)}
+.panel{display:none;padding-top:18px}
+.panel.on{display:block}
+
+/* controls */
+.ctrl{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.ctrl input,.ctrl select{font-family:inherit;font-size:13px;padding:7px 9px;border:1px solid var(--line);
+  background:#fff;border-radius:3px;color:var(--ink)}
+.ctrl input{min-width:210px}
+.ctrl input[type=checkbox]{min-width:0;width:14px;height:14px;padding:0;accent-color:var(--accent)}
+.ctrl .spacer{flex:1}
+.count{font-size:12.5px;color:var(--mute);font-variant-numeric:tabular-nums}
+.btn{font-family:inherit;font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:3px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink)}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:var(--accent-d);border-color:var(--accent-d)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.45;cursor:default}
+
+/* tables */
+.tblwrap{border:1px solid var(--line);border-radius:4px;overflow:auto;max-height:560px;background:#fff}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{position:sticky;top:0;background:var(--cream2);text-align:left;padding:8px 9px;
+  border-bottom:1px solid var(--line);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--mute);white-space:nowrap;cursor:pointer;z-index:2}
+thead th:hover{color:var(--accent-d)}
+tbody td{padding:7px 9px;border-bottom:1px solid #f0ece1;vertical-align:middle}
+tbody tr:hover{background:var(--cream2)}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:12px}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;white-space:nowrap}
+.p-Healthy{background:#eaf2ea;color:var(--ok)}
+.p-Atrisk{background:#fdefe2;color:var(--warn)}
+.p-Stockout{background:#fae7e4;color:var(--bad)}
+.p-Overstock{background:#eeeae0;color:var(--mute)}
+.p-Agedfloorplan{background:#fae7e4;color:var(--bad)}
+.p-Watch{background:#fdefe2;color:var(--warn)}
+.p-Normal{background:#eaf2ea;color:var(--ok)}
+.p-critical{background:#fae7e4;color:var(--bad)}
+.p-high{background:#fdefe2;color:var(--warn)}
+.p-medium{background:#eeeae0;color:var(--mute)}
+.p-low{background:#f2f0ea;color:var(--mute)}
+.p-app{background:#eaf2ea;color:var(--ok)}
+.p-dec{background:#eeeae0;color:var(--mute)}
+.p-wait{background:#fdefe2;color:var(--warn)}
+.bar{height:5px;background:var(--line);border-radius:3px;overflow:hidden;min-width:56px}
+.bar i{display:block;height:100%;background:var(--accent)}
+
+/* tiers / audit */
+.grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:20px;align-items:start}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--cream2);border:1px solid var(--line);border-radius:4px;padding:16px 17px}
+.card h4{font-family:Fraunces,serif;font-size:15px;margin:0 0 8px;font-weight:600}
+.flow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.85;color:#3a362f;white-space:pre-wrap;margin:0}
+.audit{max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:4px;background:#fff}
+.ev{padding:10px 13px;border-bottom:1px solid #f0ece1;font-size:12.5px}
+.ev:last-child{border-bottom:none}
+.ev .t{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mute)}
+.ev .h{font-weight:600;margin:2px 0}
+.ev .d{color:#3a362f}
+.empty{padding:26px 16px;text-align:center;color:var(--mute);font-size:13px}
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:11px;margin-top:8px}
+.tier{border:1px solid var(--line);border-radius:4px;padding:13px 14px;background:#fff}
+.tier .tn{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-d);font-weight:600}
+.tier .tt{font-family:Fraunces,serif;font-size:15px;font-weight:600;margin:2px 0 5px}
+.tier p{margin:0;font-size:12.5px;color:#3a362f}
+.qbox{border-left:3px solid var(--accent);background:var(--cream2);padding:13px 16px;margin:14px 0;font-size:13.5px}
+ul.tight{margin:6px 0 0;padding-left:19px;font-size:13.5px}
+ul.tight li{margin-bottom:4px}
+footer{margin-top:52px;border-top:1px solid var(--line);background:var(--cream2)}
+footer .wrap{padding:20px 22px 28px;font-size:12px;color:var(--mute)}
+footer .sig{font-family:Fraunces,serif;font-style:italic;color:var(--accent-d);margin-top:6px}
+.loading{padding:60px 0;text-align:center;color:var(--mute)}
+</style>
+</head>
+<body>
+
+<div class="banner"><div class="wrap">
+  <span><strong>SYNTHETIC SANDBOX</strong> — every number on this page is invented by a seeded generator.</span>
+  <span>No Hawkins, Peterbilt Atlantic, PACCAR, BRP or CDK data. No live system access. No customer records.</span>
+</div></div>
+
+<header><div class="wrap">
+  <p class="eyebrow">EVEglyphDesign · Hawkins Inventory Twin · Demonstration build</p>
+  <h1>Sample-Data Sandbox</h1>
+  <div class="hrule"></div>
+  <p class="lede">This is the answer to Luke's second question — a working demonstration on sample data, not live systems. Synthetic parts and vehicle inventory across nine notional Atlantic-Canada centres, run through the twin's demand model, reorder logic, inter-centre transfer engine, and the governed approval path. The AI recommends. A human approves. The system of record posts through standard interfaces. Nothing here touches a real dealership.</p>
+  <div class="crumbs">
+    <a href="../">Hawkins twin platform</a>
+    <a href="../outline/EVEglyphDesign_Hawkins_Twin_Outline_Functional_Map.pdf">Outline &amp; functional map (PDF)</a>
+    <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform">Repository</a>
+    <a href="generate_sample_data.py">The generator that made this data</a>
+  </div>
+</div></header>
+
+<div class="wrap">
+  <div id="boot" class="loading">Loading synthetic dataset…</div>
+
+  <div id="app" style="display:none">
+    <div class="kpis" id="kpis"></div>
+    <p class="note" id="meta"></p>
+
+    <h2>Nine notional centres</h2>
+    <p class="note">Select a centre to scope every table below to it. Select again to clear. Hanwell is marked as the pilot centre because the spec proposes starting there with read access to a single centre's parts data.</p>
+    <div class="centres" id="centres"></div>
+
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-p="recs">Transfer recommendations</button>
+      <button class="tab" data-p="parts">Parts inventory</button>
+      <button class="tab" data-p="vins">Vehicle / VIN inventory</button>
+      <button class="tab" data-p="gov">Governed path &amp; audit trail</button>
+      <button class="tab" data-p="method">Method &amp; what this proves</button>
+    </div>
+
+    <!-- RECS -->
+    <section class="panel on" id="p-recs">
+      <h3>What the twin is recommending</h3>
+      <p class="note">Each row pairs a shortage at one centre with surplus at another. The twin proposes; nothing moves until someone approves. Approving here writes an entry to the audit trail and drafts a posting envelope — it does not write to any system of record, because in this sandbox there isn't one.</p>
+      <div class="ctrl">
+        <input id="q-recs" placeholder="Search part, class, centre…">
+        <select id="f-crit"><option value="">All criticality</option><option>critical</option><option>high</option><option>medium</option><option>low</option></select>
+        <select id="f-stat"><option value="">All statuses</option><option>Awaiting approval</option><option>Approved</option><option>Declined</option></select>
+        <span class="spacer"></span>
+        <button class="btn" id="btn-critical">Approve all critical</button>
+        <button class="btn ghost" id="btn-reset">Reset decisions</button>
+      </div>
+      <div class="count" id="c-recs"></div>
+      <div class="tblwrap"><table id="t-recs">
+        <thead><tr>
+          <th data-k="id">ID</th><th data-k="part_no">Part</th><th data-k="cls">Class</th>
+          <th data-k="crit">Crit.</th><th data-k="from">From</th><th data-k="to">To</th>
+          <th data-k="qty" class="num">Qty</th><th data-k="value" class="num">Value</th>
+          <th data-k="avoided" class="num">Avoided cost</th><th data-k="confidence">Confidence</th>
+          <th data-k="reason">Why</th><th data-k="status">Decision</th>
+        </tr></thead><tbody></tbody>
+      </table></div>
+    </section>
+
+    <!-- PARTS -->
+    <section class="panel" id="p-parts">
+      <h3>Parts inventory twin</h3>
+      <p class="note">One row per part number per centre. <b>Static ROP</b> is the lead-time-blind reorder point an incumbent system would hold. <b>Twin ROP</b> is lead-time aware and criticality weighted. Where the two diverge is where the twin earns its keep.</p>
+      <div class="ctrl">
+        <input id="q-parts" placeholder="Search part number or description…">
+        <select id="f-cls"><option value="">All classes</option></select>
+        <select id="f-risk"><option value="">All risk states</option><option>Stockout</option><option>At risk</option><option>Healthy</option><option>Overstock</option></select>
+        <label style="font-size:13px;color:var(--mute);display:inline-flex;align-items:center;gap:6px;white-space:nowrap"><input type="checkbox" id="f-aged" style="margin:0;width:14px;height:14px;flex:0 0 auto"><span>Aged only (&gt;270 days)</span></label>
+      </div>
+      <div class="count" id="c-parts"></div>
+      <div class="tblwrap"><table id="t-parts">
+        <thead><tr>
+          <th data-k="part_no">Part no.</th><th data-k="name">Description</th><th data-k="cls">Class</th>
+          <th data-k="crit">Crit.</th><th data-k="centre">Centre</th>
+          <th data-k="onhand" class="num">On hand</th><th data-k="demand_m" class="num">Dmd/mo</th>
+          <th data-k="mos" class="num">MoS</th><th data-k="lead_days" class="num">Lead</th>
+          <th data-k="static_rop" class="num">Static</th><th data-k="twin_rop" class="num">Twin</th>
+          <th data-k="turns" class="num">Turns</th><th data-k="days_since_move" class="num">Idle d.</th>
+          <th data-k="risk">State</th>
+        </tr></thead><tbody></tbody>
+      </table></div>
+    </section>
+
+    <!-- VINS -->
+    <section class="panel" id="p-vins">
+      <h3>Vehicle / unit inventory twin</h3>
+      <p class="note">VIN-level model with aging and floor-plan visibility. Every VIN below is a randomly generated string — it decodes to nothing and belongs to no vehicle.</p>
+      <div class="ctrl">
+        <input id="q-vins" placeholder="Search VIN, model, segment…">
+        <select id="f-model"><option value="">All models</option></select>
+        <select id="f-flag"><option value="">All aging flags</option><option>Aged floor plan</option><option>Watch</option><option>Normal</option></select>
+      </div>
+      <div class="count" id="c-vins"></div>
+      <div class="tblwrap"><table id="t-vins">
+        <thead><tr>
+          <th data-k="vin">VIN (synthetic)</th><th data-k="year" class="num">Yr</th><th data-k="model">Model</th>
+          <th data-k="segment">Segment</th><th data-k="centre">Centre</th>
+          <th data-k="age_days" class="num">Days on lot</th><th data-k="floorplan" class="num">Floor plan</th>
+          <th data-k="status">Status</th><th data-k="flag">Aging</th>
+        </tr></thead><tbody></tbody>
+      </table></div>
+    </section>
+
+    <!-- GOV -->
+    <section class="panel" id="p-gov">
+      <h3>The governed path</h3>
+      <p class="note">This is the part that matters more than the dashboard. The twin never writes to the system of record. It drafts. A named human approves. The posting flows out through a standard interface and lands in an audit trail that reconciles.</p>
+      <div class="grid2">
+        <div>
+          <div class="card">
+            <h4>Write-back flow</h4>
+            <p class="flow">inventory event
+  │
+  ▼
+[ Tier 1 ]  twin reads · classifies · forecasts
+  │         proposes transfer TR-nnnn
+  ▼
+[ approval ]  named human accepts or declines
+  │           ── declined ⇒ nothing is posted
+  ▼
+[ envelope ]  standard interface payload drafted
+  │           OData / BAPI / EDI · no direct DB write
+  ▼
+[ Tier 2 ]  system of record posts · returns doc no.
+  │
+  ▼
+[ audit ]  event, actor, before → after, reconciled
+  │
+  ▼
+[ Tier 3 ]  analytics · turns · fill rate · aged stock</p>
+          </div>
+          <h3>Latest posting envelope</h3>
+          <p class="note">Drafted when you approve a recommendation. In the sandbox it is displayed, not sent.</p>
+          <div class="card"><p class="flow" id="envelope">No approval yet. Approve a transfer recommendation to draft an envelope.</p></div>
+        </div>
+        <div>
+          <h3 style="margin-top:0">Audit trail</h3>
+          <p class="note">Every decision, in order, with actor and reconciliation state. <span id="audit-count"></span></p>
+          <div class="audit" id="audit"><div class="empty">No events yet. Approve or decline a recommendation.</div></div>
+        </div>
+      </div>
+      <h3>Three tiers, twinned from the MHC pattern</h3>
+      <div class="tiers">
+        <div class="tier"><div class="tn">Tier 1</div><div class="tt">Intelligent execution</div><p>The agent and operations console. Reads inventory events, classifies, forecasts demand, flags stockout and overstock, recommends inter-centre transfers. This is the surface you are looking at.</p></div>
+        <div class="tier"><div class="tn">Tier 2</div><div class="tt">System of record</div><p>The existing DMS or parts system plus governed middleware. Parts master, VIN records, stock levels, orders. The AI never writes directly — every posting flows through a validated, human-approved path.</p></div>
+        <div class="tier"><div class="tn">Tier 3</div><div class="tt">Analytics</div><p>Dashboards feeding a datalake. Inventory turns, fill rate, aged stock, inter-centre balancing, margin by part class. The KPI strip at the top of this page is the Tier 3 view.</p></div>
+      </div>
+    </section>
+
+    <!-- METHOD -->
+    <section class="panel" id="p-method">
+      <h3>What this demo does and does not prove</h3>
+      <div class="qbox"><b>It proves</b> that the twin's model, reorder logic, transfer engine, approval gate, and audit trail run end to end and produce legible operating decisions — without anyone at Hawkins granting a single system credential.</div>
+      <div class="qbox"><b>It does not prove</b> anything about Hawkins' actual fill rate, turns, or aged stock. Those numbers are unknowable until the twin reads real data from one centre. The sandbox is a demonstration of mechanism, not a measurement of the business.</div>
+
+      <h3>How the synthetic data was made</h3>
+      <ul class="tight">
+        <li>A single seeded Python generator — <a href="generate_sample_data.py">generate_sample_data.py</a>, seed <span class="mono">20260727</span> — committed beside this page. Re-run it and you get exactly this dataset.</li>
+        <li>Ten part classes with plausible unit-cost bands, base monthly demand, and criticality; nine centres with a size factor and a seasonal factor.</li>
+        <li>Months-of-supply on hand drawn from a mixed distribution: thin, tight, healthy, heavy. Risk state is derived, not assigned.</li>
+        <li>Static ROP = demand × 0.9, ignoring lead time. Twin ROP = demand × (lead time ÷ 30) × a criticality safety factor, plus a floor for critical lines.</li>
+        <li>Transfer recommendations are generated only where a genuine shortage at one centre coincides with genuine surplus at another for the same part number.</li>
+        <li>VINs are random 17-character strings. They decode to nothing.</li>
+      </ul>
+
+      <h3>The research questions this sandbox sets up</h3>
+      <ul class="tight">
+        <li>Can an open, vendor-independent twin meet the same intelligent asset-management requirements on live dealership inventory that incumbent platforms have not met, with a small team?</li>
+        <li>Can demand-pattern recognition across nine geographically distributed centres outperform static reorder points on fill rate and turns, under real seasonal and regional variance?</li>
+        <li>Can the governed AI → middleware → system-of-record path guarantee audit integrity and upgrade safety while operating with zero lock-in?</li>
+      </ul>
+      <p class="note">Each is a genuine "we do not know until we experiment" question — which is what makes the work qualifying R&amp;D rather than tool adoption.</p>
+
+      <h3>What the pilot would need, and what it would not</h3>
+      <div class="grid2">
+        <div class="card"><h4>Needed</h4><ul class="tight">
+          <li>Read access to parts and vehicle inventory data for one centre — Hanwell — to start.</li>
+          <li>A named operations owner for approvals during the pilot.</li>
+          <li>The existing system's interface details: DMS or parts system, and any PACCAR parts feed.</li>
+          <li>Luke as research-tool lead bridging Hawkins and the EVE AI team.</li>
+        </ul></div>
+        <div class="card"><h4>Not needed</h4><ul class="tight">
+          <li>No write access at pilot stage. The twin reads; postings stay manual until the governed path is signed off.</li>
+          <li>No change to how any staff member works. The existing dealer system keeps its operational role.</li>
+          <li>No proprietary connector, and nothing that holds the data hostage on exit.</li>
+          <li>No credential, export, or document that any vendor agreement does not already permit.</li>
+        </ul></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<footer><div class="wrap">
+  <div id="foot-meta"></div>
+  © 2026 EVEglyphDesign. All rights reserved. Controlled copy. Author: Dany Theriault. EVE “digital stem cell” glyph and glyph-based design principles — all rights reserved. Stewardship of rights of use and assignment for large public and institutional usage rests with the Pacific Utilities Design Council.
+  <div class="sig">Pour le bien-être du peuple.</div>
+</div></footer>
+
+<script>
+const F0 = n => n.toLocaleString('en-CA',{maximumFractionDigits:0});
+const M0 = n => '$'+Math.round(n).toLocaleString('en-CA');
+const Mk = n => n>=1e6 ? '$'+(n/1e6).toFixed(2)+'M' : n>=1e3 ? '$'+Math.round(n/1e3)+'k' : '$'+Math.round(n);
+const pillClass = v => 'p-'+String(v).replace(/\s+/g,'');
+let D=null, centre=null, decisions={}, audit=[], sort={recs:{k:'confidence',d:-1},parts:{k:'risk',d:1},vins:{k:'age_days',d:-1}};
+
+fetch('sample_data.json').then(r=>r.json()).then(d=>{D=d;init();})
+ .catch(e=>{document.getElementById('boot').textContent='Could not load sample_data.json — '+e;});
+
+function init(){
+  document.getElementById('boot').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('meta').innerHTML =
+    D.meta.notice+' Generated <span class="mono">'+D.meta.generated_at+'</span> · seed <span class="mono">'+D.meta.seed+
+    '</span> · dataset hash <span class="mono">'+(D.meta.content_hash||'—')+'</span>.';
+  document.getElementById('foot-meta').innerHTML =
+    'Synthetic dataset · seed <span class="mono">'+D.meta.seed+'</span> · generated <span class="mono">'+D.meta.generated_at+
+    '</span> · '+F0(D.parts.length)+' part-centre rows · '+F0(D.vins.length)+' units · Key ID <span class="mono">EgD-KEY-2026-07</span><br>';
+  D.recs.forEach(r=>decisions[r.id]='Awaiting approval');
+  fillSelect('f-cls', D.classes);
+  fillSelect('f-model', [...new Set(D.vins.map(v=>v.model))].sort());
+  drawKpis(); drawCentres(); wire(); redraw();
+}
+function fillSelect(id, vals){const s=document.getElementById(id);vals.forEach(v=>{const o=document.createElement('option');o.textContent=v;s.appendChild(o);});}
+
+function drawKpis(){
+  const k=D.kpi, gain=(k.fill_rate_twin-k.fill_rate_static).toFixed(1);
+  const t=[
+    ['Parts value on hand', Mk(k.parts_value), F0(k.parts_lines)+' part-centre rows', 0],
+    ['Fill rate — twin', k.fill_rate_twin+'%', '<span class="delta">+'+gain+' pts</span> vs modelled static ROP ('+k.fill_rate_static+'%)', 1],
+    ['Inventory turns', k.turns+'×', 'weighted mean across nine centres', 0],
+    ['Stockouts', F0(k.stockouts), F0(k.at_risk)+' more below twin reorder point', 0],
+    ['Overstock lines', F0(k.overstock), Mk(k.aged_value)+' sitting idle &gt;270 days', 0],
+    ['Unit floor plan', Mk(k.floorplan), F0(k.units)+' units · '+k.aged_units+' aged', 0],
+    ['Transfers proposed', F0(k.recs), Mk(k.recs_value)+' avoidable cost identified', 1],
+  ];
+  document.getElementById('kpis').innerHTML = t.map(([l,v,s,hi])=>
+    '<div class="kpi'+(hi?' hi':'')+'"><div class="lbl">'+l+'</div><div class="val">'+v+'</div><div class="sub">'+s+'</div></div>').join('');
+}
+
+function drawCentres(){
+  document.getElementById('centres').innerHTML = D.centres.map(c=>
+    '<button class="centre'+(centre===c.code?' on':'')+'" data-c="'+c.code+'">'+
+    '<div class="cn">'+c.name+' <span class="cc">'+c.prov+' · '+c.code+'</span></div>'+
+    '<div class="role">'+c.role+'</div><dl>'+
+    '<dt>Parts value</dt><dd>'+Mk(c.value)+'</dd>'+
+    '<dt>Fill rate</dt><dd>'+c.fill_rate+'%</dd>'+
+    '<dt>Turns</dt><dd>'+c.turns+'×</dd>'+
+    '<dt>Stockout / at risk</dt><dd>'+c.stockouts+' / '+c.at_risk+'</dd>'+
+    '<dt>Aged stock</dt><dd>'+Mk(c.aged_value)+'</dd>'+
+    '<dt>Units on lot</dt><dd>'+c.units+'</dd>'+
+    '</dl></button>').join('');
+  document.querySelectorAll('.centre').forEach(b=>b.onclick=()=>{
+    centre = centre===b.dataset.c ? null : b.dataset.c; drawCentres(); redraw();
+  });
+}
+
+function wire(){
+  document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on'); document.getElementById('p-'+t.dataset.p).classList.add('on');
+  });
+  ['q-recs','f-crit','f-stat','q-parts','f-cls','f-risk','f-aged','q-vins','f-model','f-flag']
+    .forEach(id=>{const e=document.getElementById(id);e.addEventListener('input',redraw);e.addEventListener('change',redraw);});
+  [['t-recs','recs'],['t-parts','parts'],['t-vins','vins']].forEach(([tid,key])=>{
+    document.querySelectorAll('#'+tid+' thead th').forEach(th=>th.onclick=()=>{
+      const k=th.dataset.k; if(!k) return;
+      sort[key] = {k, d: (sort[key].k===k ? -sort[key].d : (['id','part_no','name','cls','from','to','vin','model','segment','centre','risk','status','flag','crit'].includes(k)?1:-1))};
+      redraw();
+    });
+  });
+  document.getElementById('btn-critical').onclick=()=>{
+    const rows=D.recs.filter(r=>r.crit==='critical'&&decisions[r.id]==='Awaiting approval');
+    if(!rows.length) return; rows.forEach(r=>decide(r,'Approved',true)); redraw(); drawAudit();
+  };
+  document.getElementById('btn-reset').onclick=()=>{
+    D.recs.forEach(r=>decisions[r.id]='Awaiting approval'); audit=[];
+    document.getElementById('envelope').textContent='No approval yet. Approve a transfer recommendation to draft an envelope.';
+    redraw(); drawAudit();
+  };
+}
+
+function decide(r, verdict, batch){
+  decisions[r.id]=verdict;
+  const ts=new Date().toISOString().replace('T',' ').slice(0,19)+'Z';
+  audit.unshift({ts, id:r.id, verdict, r, batch:!!batch});
+  if(verdict==='Approved') drawEnvelope(r, ts);
+}
+
+function drawEnvelope(r, ts){
+  const doc='SO-'+String(Math.abs(hash(r.id))%900000+100000);
+  document.getElementById('envelope').textContent =
+`--- TRANSFER POSTING ENVELOPE (DRAFT · SANDBOX) ---
+interface     : STOCK_TRANSFER / standard (OData or BAPI equivalent)
+recommendation: ${r.id}
+part          : ${r.part_no} · ${r.name}
+class         : ${r.cls} · criticality ${r.crit}
+from_centre   : ${r.from}
+to_centre     : ${r.to}
+quantity      : ${r.qty}
+stock_value   : ${M0(r.value)}
+avoided_cost  : ${M0(r.avoided)}  (modelled)
+twin_conf     : ${(r.confidence*100).toFixed(0)}%
+approved_by   : operations owner (demo actor)
+approved_at   : ${ts}
+target_doc_no : ${doc} (simulated — nothing was posted)
+write_mode    : GOVERNED · human-approved · reversible
+direct_db     : DENIED by design
+--- END ENVELOPE ---`;
+}
+function hash(s){let h=0;for(let i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))|0;}return h;}
+
+function drawAudit(){
+  const el=document.getElementById('audit');
+  document.getElementById('audit-count').textContent = audit.length ? audit.length+' event'+(audit.length>1?'s':'')+' recorded.' : '';
+  if(!audit.length){el.innerHTML='<div class="empty">No events yet. Approve or decline a recommendation.</div>';return;}
+  el.innerHTML = audit.map(a=>
+    '<div class="ev"><div class="t">'+a.ts+' · '+a.id+(a.batch?' · batch action':'')+'</div>'+
+    '<div class="h">'+a.verdict+' — '+a.r.part_no+' ×'+a.r.qty+' · '+a.r.from+' → '+a.r.to+'</div>'+
+    '<div class="d">'+(a.verdict==='Approved'
+      ? 'Envelope drafted for a governed posting. On-hand at '+a.r.to+' would rise by '+a.r.qty+
+        ', at '+a.r.from+' fall by '+a.r.qty+'. Reconciliation state: balanced. Nothing was written — sandbox.'
+      : 'Declined by the approver. No envelope drafted, no posting attempted, recommendation retained for the learning log.')+
+    '</div></div>').join('');
+}
+
+function cmp(a,b,k,d){
+  let x=a[k],y=b[k];
+  if(k==='status'){x=decisions[a.id];y=decisions[b.id];}
+  if(k==='risk'){const o={Stockout:0,'At risk':1,Overstock:2,Healthy:3};x=o[x];y=o[y];}
+  if(k==='crit'){const o={critical:0,high:1,medium:2,low:3};x=o[x];y=o[y];}
+  if(k==='flag'){const o={'Aged floor plan':0,Watch:1,Normal:2};x=o[x];y=o[y];}
+  if(typeof x==='string') return d*x.localeCompare(y);
+  return d*((x>y)-(x<y));
+}
+
+function redraw(){
+  // recs
+  const q=document.getElementById('q-recs').value.toLowerCase(),
+        fc=document.getElementById('f-crit').value, fs=document.getElementById('f-stat').value;
+  let rr=D.recs.filter(r=>(!centre||r.from===centre||r.to===centre)
+      &&(!fc||r.crit===fc)&&(!fs||decisions[r.id]===fs)
+      &&(!q||(r.part_no+' '+r.name+' '+r.cls+' '+r.from+' '+r.to+' '+r.id).toLowerCase().includes(q)));
+  rr.sort((a,b)=>cmp(a,b,sort.recs.k,sort.recs.d));
+  const pend=rr.filter(r=>decisions[r.id]==='Awaiting approval').length;
+  document.getElementById('c-recs').textContent =
+    rr.length+' recommendation'+(rr.length===1?'':'s')+(centre?' touching '+centre:'')+' · '+pend+' awaiting approval · '
+    + Mk(rr.reduce((s,r)=>s+r.avoided,0))+' avoidable cost in view';
+  document.querySelector('#t-recs tbody').innerHTML = rr.length? rr.map(r=>{
+    const st=decisions[r.id], sc=st==='Approved'?'p-app':st==='Declined'?'p-dec':'p-wait';
+    return '<tr><td class="mono">'+r.id+'</td><td class="mono">'+r.part_no+'</td><td>'+r.name+
+      '<div style="font-size:11.5px;color:var(--mute)">'+r.cls+'</div></td>'+
+      '<td><span class="pill p-'+r.crit+'">'+r.crit+'</span></td>'+
+      '<td class="mono">'+r.from+'</td><td class="mono">'+r.to+'</td>'+
+      '<td class="num">'+r.qty+'</td><td class="num">'+M0(r.value)+'</td><td class="num">'+M0(r.avoided)+'</td>'+
+      '<td><div class="bar"><i style="width:'+Math.round(r.confidence*100)+'%"></i></div>'+
+      '<span style="font-size:11.5px;color:var(--mute)">'+Math.round(r.confidence*100)+'%</span></td>'+
+      '<td style="font-size:12px;color:#3a362f;max-width:210px">'+r.reason+'</td>'+
+      '<td>'+(st==='Awaiting approval'
+        ? '<button class="btn primary" data-a="ok" data-id="'+r.id+'">Approve</button> '+
+          '<button class="btn" data-a="no" data-id="'+r.id+'">Decline</button>'
+        : '<span class="pill '+sc+'">'+st+'</span>')+'</td></tr>';
+  }).join('') : '<tr><td colspan="12"><div class="empty">No recommendations match these filters.</div></td></tr>';
+  document.querySelectorAll('#t-recs button[data-id]').forEach(b=>b.onclick=()=>{
+    const r=D.recs.find(x=>x.id===b.dataset.id);
+    decide(r, b.dataset.a==='ok'?'Approved':'Declined'); redraw(); drawAudit();
+  });
+
+  // parts
+  const pq=document.getElementById('q-parts').value.toLowerCase(),
+        pc=document.getElementById('f-cls').value, pr=document.getElementById('f-risk').value,
+        pa=document.getElementById('f-aged').checked;
+  let pp=D.parts.filter(p=>(!centre||p.centre===centre)&&(!pc||p.cls===pc)&&(!pr||p.risk===pr)&&(!pa||p.aged)
+      &&(!pq||(p.part_no+' '+p.name).toLowerCase().includes(pq)));
+  pp.sort((a,b)=>cmp(a,b,sort.parts.k,sort.parts.d));
+  document.getElementById('c-parts').textContent =
+    F0(pp.length)+' rows'+(centre?' at '+centre:'')+' · '+Mk(pp.reduce((s,p)=>s+p.onhand*p.unit_cost,0))+' on hand · '+
+    pp.filter(p=>p.risk==='Stockout').length+' stockouts · '+pp.filter(p=>p.aged).length+' aged';
+  const cap=pp.slice(0,400);
+  document.querySelector('#t-parts tbody').innerHTML = cap.length? cap.map(p=>
+    '<tr><td class="mono">'+p.part_no+'</td><td>'+p.name+'</td><td style="font-size:12px">'+p.cls+'</td>'+
+    '<td><span class="pill p-'+p.crit+'">'+p.crit+'</span></td><td class="mono">'+p.centre+'</td>'+
+    '<td class="num">'+p.onhand+'</td><td class="num">'+p.demand_m+'</td><td class="num">'+p.mos+'</td>'+
+    '<td class="num">'+p.lead_days+'</td><td class="num" style="color:var(--mute)">'+p.static_rop+'</td>'+
+    '<td class="num" style="font-weight:600">'+p.twin_rop+'</td><td class="num">'+(p.onhand===0?'—':p.turns+'×')+'</td>'+
+    '<td class="num'+(p.aged?'" style="color:var(--warn);font-weight:600':'')+'">'+p.days_since_move+'</td>'+
+    '<td><span class="pill '+pillClass(p.risk)+'">'+p.risk+'</span></td></tr>').join('')
+    : '<tr><td colspan="14"><div class="empty">No parts match these filters.</div></td></tr>';
+  if(pp.length>400) document.getElementById('c-parts').textContent += ' · showing first 400';
+
+  // vins
+  const vq=document.getElementById('q-vins').value.toLowerCase(),
+        vm=document.getElementById('f-model').value, vf=document.getElementById('f-flag').value;
+  let vv=D.vins.filter(v=>(!centre||v.centre===centre)&&(!vm||v.model===vm)&&(!vf||v.flag===vf)
+      &&(!vq||(v.vin+' '+v.model+' '+v.segment).toLowerCase().includes(vq)));
+  vv.sort((a,b)=>cmp(a,b,sort.vins.k,sort.vins.d));
+  document.getElementById('c-vins').textContent =
+    vv.length+' units'+(centre?' at '+centre:'')+' · '+Mk(vv.reduce((s,v)=>s+v.floorplan,0))+' floor plan · '+
+    vv.filter(v=>v.flag==='Aged floor plan').length+' aged';
+  document.querySelector('#t-vins tbody').innerHTML = vv.length? vv.map(v=>
+    '<tr><td class="mono">'+v.vin+'</td><td class="num">'+v.year+'</td><td>'+v.model+'</td>'+
+    '<td style="font-size:12px;color:var(--mute)">'+v.segment+'</td><td class="mono">'+v.centre+'</td>'+
+    '<td class="num'+(v.flag==='Aged floor plan'?'" style="color:var(--warn);font-weight:600':'')+'">'+v.age_days+'</td>'+
+    '<td class="num">'+M0(v.floorplan)+'</td><td style="font-size:12px">'+v.status+'</td>'+
+    '<td><span class="pill '+pillClass(v.flag)+'">'+v.flag+'</span></td></tr>').join('')
+    : '<tr><td colspan="9"><div class="empty">No units match these filters.</div></td></tr>';
+}
+</script>
+</body></html>
