@@ -47,13 +47,24 @@ footer{border-top:1px solid var(--line);margin-top:48px;padding-top:18px;font-si
     <p style="padding:20px">Your browser cannot display the PDF inline. <a href="EVEglyphDesign_Peterbilt_Atlantic_Phase1_SideCar_Architecture.pdf">Download the architecture PDF</a>.</p>
   </object>
 
-  <h2>The five layers</h2>
+  <h2>Two lanes off one database</h2>
   <div class="grid">
-    <div class="card"><h3>1 · Systems of record</h3><p>CDK dealer management, the legacy ASCII database, and the PACCAR ePortal carrying parts, warranty, logistics and production feeds. All read-only, all untouched.</p></div>
-    <div class="card"><h3>2 · Backup replication</h3><p>The CDK backup set is replicated into a restore we control. Repeatable and disposable. Zero production risk, and no dependency on a live integration window. A three month historical archive sits alongside it, with financial reporting keyed to the middle month so the boundary months cannot distort it.</p></div>
-    <div class="card"><h3>3 · Landing and extraction</h3><p>A Postgres mirror on the ASCII-safe schema already modelled at field level: 21 objects, 443 confidence-tagged fields, generated DDL and a preflight validator. From it, the 20 Group performance report is extracted as a defined metric set.</p></div>
-    <div class="card"><h3>4 · Model and decision support</h3><p>An Azure-hosted open-source model with pinned weights and a versioned prompt set, chosen so the output does not drift between runs and so cost and performance stay predictable. It drives variance against 20 Group peer numbers and an urgency by strategy ranking that can always explain why an item ranks where it ranks.</p></div>
-    <div class="card"><h3>5 · The 20 Group performance surface</h3><p>One dashboard, with the structured data underneath it, plus prioritised work lists delivered as reference material. Write-back into CDK stays out of scope: that is Phase 2 and it is gated.</p></div>
+    <div class="card"><h3>Lane A · Backup set</h3><p>A full restore of the CDK backup into an environment the dealer controls, then delta-only refreshes. It exposes structure the API never will — table inventory, keys, code tables, the application dictionary itself. Complete, trusted, lagging.</p></div>
+    <div class="card"><h3>Lane B · Fortellis API</h3><p>OAuth 2.0 against CDK Drive, on the platform's own Setup → Bulk → Delta pattern. Current, partial, entitlement-bound. The ledger cannot be reached here at all: chart of accounts, accounting schedules, department master, vendor master, warranty claim, purchase and receipt are all unavailable on Fortellis and can only come from Lane A or a file export.</p></div>
+    <div class="card"><h3>Delta refresh</h3><p>Seed once, then refresh only what changed. A refresh job's cost must be proportional to the volume of change, never to the size of the database. Native delta where CDK exposes one; a three-tier utility of our own where it does not.</p></div>
+    <div class="card"><h3>Data mart library</h3><p>Structure harvested from the application's own metadata rather than hand-drawn, then shaped to the SAP model — MARA, MARC, MARD, MBEW, MATDOC, MVKE and the FI/CO analogues — so a PACCAR SAP payload maps one to one and the dealer's model outlives any DMS vendor. Blanks in the API-derived structure are filled from Lane A.</p></div>
+    <div class="card"><h3>reconcile()</h3><p>An executable function, called on demand rather than run on a timer. The API may overwrite a backup value within its authoritative scope, never silently; a later change showing variance against what was previously reconciled is logged as an exception rather than quietly winning.</p></div>
+    <div class="card"><h3>The 20 Group surface, and the work list</h3><p>One dashboard, and two prioritised lists — one by urgency, one by strategy, deliberately not merged. A click composes a draft email; nothing is sent, and nothing is written back to CDK. Work is still entered by hand, exactly as it is today.</p></div>
+  </div>
+
+  <h2>Specifications</h2>
+  <div class="grid">
+    <div class="card"><h3><a href="DELTA-REFRESH-ARCHITECTURE.md">Delta refresh architecture</a></h3><p>The scalability rule, the questions the CDK administrator can answer yes or no, and the three-tier fallback utility with its cost guard and delta ledger.</p></div>
+    <div class="card"><h3><a href="RECONCILIATION-CONTRACT.md">Reconciliation contract</a></h3><p>The reconcile function's signature and guarantees, the grains of comparison, precedence and overwrite, the exception taxonomy, and tolerances by field class.</p></div>
+    <div class="card"><h3><a href="DATA-MART-LIBRARY.md">Data mart library</a></h3><p>The metadata harvest, SAP pattern reuse, the star schemas, and how a blank, a genuine null and a not-entitled field are kept three different things.</p></div>
+    <div class="card"><h3><a href="WORKLIST-DISPATCH.md">Work-list dispatch</a></h3><p>Two lists, draft-only dispatch, the friction gate, bilingual drafts, and measures that are deliberately not "emails sent".</p></div>
+    <div class="card"><h3><a href="PACCAR-PERSPECTIVE.md">PACCAR perspective</a></h3><p>What PACCAR plausibly wants, read from the systems it has actually built; the win-wins; the SAP argument; and what we would ask a named counterpart for.</p></div>
+    <div class="card"><h3><a href="20-GROUP-DATA-CONTRACT.md">20 Group data contract</a></h3><p>The metric set, the restore and landing contracts, the gates, and the questions still open.</p></div>
   </div>
 
   <h2>Why the backup, and not the system</h2>
@@ -75,7 +86,7 @@ footer{border-top:1px solid var(--line);margin-top:48px;padding-top:18px;font-si
 
   <hr>
   <h2>Provenance</h2>
-  <p>Transcribed from the operator's hand sketch of 29 July 2026 and reconciled against the held Peterbilt Atlantic Digital Twin record: the Luke reset defining a narrow read-only sidecar, the variance-worksheet intake covering spare parts and PACCAR ePortal integration, the CDK extraction sequence and field-level dictionary, the TELUS service-identity decision, and the agreement and access gates. The architecture was revised on 29 July 2026 from a second working sketch adding the 20 Group performance single surface and an investment perspective. Related repository: <a href="https://github.com/EVEglyphDesign/eve-hawkins-truck-mart">eve-hawkins-truck-mart</a>.</p>
+  <p>Transcribed from the operator's hand sketch of 29 July 2026 and reconciled against the held Peterbilt Atlantic Digital Twin record: the Luke reset defining a narrow read-only sidecar, the variance-worksheet intake covering spare parts and PACCAR ePortal integration, the CDK extraction sequence and field-level dictionary, the TELUS service-identity decision, and the agreement and access gates. The architecture was revised on 29 July 2026 from a second working sketch adding the 20 Group performance single surface and an investment perspective, and revised again the same day to v3: two independent acquisition lanes off one Postgres database, delta-only refresh, a data mart library built from harvested application metadata and shaped to the SAP model, reconciliation as an on-demand executable function, draft-only work-list dispatch, and a partner perspective on PACCAR. Lane detail is drawn from the held CDK and parts twin repositories: <a href="https://github.com/EVEglyphDesign/eve-hawkins-cdk-twin">eve-hawkins-cdk-twin</a> and <a href="https://github.com/EVEglyphDesign/eve-dealer-parts-twin">eve-dealer-parts-twin</a>. Related repository: <a href="https://github.com/EVEglyphDesign/eve-hawkins-truck-mart">eve-hawkins-truck-mart</a>.</p>
 
   <footer>
     © 2026 EVEglyphDesign. All rights reserved. Controlled copy. · Key ID EgD-KEY-2026-07 · <span id="ts">2026-07-29</span><br>
