@@ -719,6 +719,6 @@ function render() {
   if (sw) sw.onchange = e => { S.view = e.target.value; location.hash = hashFor(); };
 }
 
-window.addEventListener("hashchange", () => { applyHash(); render(); });
+window.addEventListener("hashchange", () => { applyHash(); render(); window.scrollTo(0, 0); });
 applyHash();
 render();
