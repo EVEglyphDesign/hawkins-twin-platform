@@ -9,7 +9,7 @@ Sample-data sandbox demo (synthetic data, no live systems): [Sample-Data Sandbox
 
 Outline & functional map: [EVEglyphDesign_Hawkins_Twin_Outline_Functional_Map.pdf](https://eveglyphdesign.github.io/hawkins-twin-platform/outline/EVEglyphDesign_Hawkins_Twin_Outline_Functional_Map.pdf)
 
-Customer sphere design: [Customer 360 combined schema](https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/customer-sphere/CUSTOMER-SPHERE-DESIGN.md) · Strategic direction: [interaction records](https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/interactions/README.md)
+Customer sphere design for Tim and Luke: [EVEglyphDesign_Hawkins_Twin_Customer_Sphere_Design.pdf](https://eveglyphdesign.github.io/hawkins-twin-platform/customer-sphere/EVEglyphDesign_Hawkins_Twin_Customer_Sphere_Design.pdf) · [source Markdown](https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/customer-sphere/CUSTOMER-SPHERE-DESIGN.md) · Strategic direction: [interaction records](https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/interactions/README.md)
 
 Dealer-grade digital twin platform aligned to Peterbilt, PACCAR, warranty, maintenance, financing, and recycling. Anchored at Hawkins Truck Mart. Technical transformation centred on Luke Weatherbie.
 
@@ -28,7 +28,9 @@ Dealer-grade digital twin platform aligned to Peterbilt, PACCAR, warranty, maint
 │   ├── A_Note_For_The_Team.pdf
 │   └── For_Luke_How_To_Work_With_The_Repo.pdf
 ├── customer-sphere/
-│   └── CUSTOMER-SPHERE-DESIGN.md   Customer 360 combined schema, identity, metadata/data split
+│   ├── CUSTOMER-SPHERE-DESIGN.md   Customer 360 combined schema, identity, metadata/data split
+│   ├── EVEglyphDesign_Hawkins_Twin_Customer_Sphere_Design.pdf   Controlled copy for Tim & Luke
+│   └── build_pdf.py                Two-pass canon PDF builder for the above
 ├── interactions/
 │   ├── README.md                   Strategic-direction interaction records
 │   └── 2026-08-01-customer-360-and-reference-model.md
