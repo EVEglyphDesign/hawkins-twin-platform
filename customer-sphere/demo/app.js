@@ -20,7 +20,13 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;",
 const acct = id => ACCOUNTS.find(a => a.id === id);
 const struc = id => STRUCTURAL.find(x => x.id === id);
 const viewObj = () => VIEWS.find(v => v.id === S.view);
-const valNum = a => { const m = a.value.match(/([\d.]+)M/); return m ? parseFloat(m[1]) : parseFloat(a.value.replace(/[^\d.]/g, "")) / 1000; };
+/* account value expressed in millions, from strings like "CAD 1.24M ..." or "CAD 640,000 ..." */
+const valNum = a => {
+  const m = a.value.match(/([\d,]+(?:\.\d+)?)\s*(M)?/);
+  if (!m) return 0;
+  const n = parseFloat(m[1].replace(/,/g, ""));
+  return m[2] ? n : n / 1e6;
+};
 const topGap = a => Math.max(...Object.values(a.vectors).map(v => v.gap));
 const weight = a => (topGap(a) / 100) * valNum(a);
 
@@ -34,9 +40,15 @@ function queueFor(v) {
   let list;
   if (v === "tim") list = ACCOUNTS.slice();
   else if (v === "craig") list = ACCOUNTS.filter(a => ["marketing", "relationship"].includes(driverFace(a)) && a.vectors.marketing.gap > 0);
-  else list = ACCOUNTS.filter(a => a.vectors.finance.gap > 0 || a.vectors.warranty.gap > 0);
+  else list = ACCOUNTS.filter(a => a.vectors.warranty.gap > 0);
   return list.filter(a => !S.dispatched[a.id]).sort((x, y) => weight(y) - weight(x));
 }
+
+const SCOPE = {
+  tim: "This list is scoped to every account with an open gap.",
+  luke: "This list is scoped to accounts breaching a target that is declared and versioned in the index — currently the thirty-day warranty claim age.",
+  craig: "This list is scoped to accounts whose widest gap is a marketing or relationship face, which is where the systems register and identity resolution decide the answer."
+};
 
 function go(screen, opts) { S.screen = screen; Object.assign(S, opts || {}); render(); window.scrollTo(0, 0); }
 
@@ -154,7 +166,8 @@ function home() {
       <span class="count">${q.length} account${q.length === 1 ? "" : "s"}${done ? ` &middot; ${done} dispatched` : ""}</span>
     </div>
     <p class="blocknote">Ranked by the widest gap between current and target, weighted by account value.
-       Prioritisation is not a rule somebody maintains — it falls out of the geometry (&sect;6.3).</p>
+       Prioritisation is not a rule somebody maintains — it falls out of the geometry (&sect;6.3).
+       ${esc(SCOPE[S.view])}</p>
     ${queue}
   </div>
 
