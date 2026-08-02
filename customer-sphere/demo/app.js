@@ -111,6 +111,34 @@ function applyHash() {
 
 /* ---------------- navigation chrome ---------------- */
 
+/* One rule for backing out: every screen knows its parent, so the back control is
+   never a guess and never absent. The browser back button also works, because every
+   screen has an address. */
+function parentOf() {
+  const q = S.view === "tim" ? "" : "?v=" + S.view;
+  const a = S.acct ? acct(S.acct) : null;
+  switch (S.screen) {
+    case "sphere":     return { label: "the worklist", href: "#/" + q };
+    case "face":
+    case "gate":
+    case "record":     return { label: a.short, href: `#/a/${a.id}${q}` };
+    case "structural": return { label: "the worklist", href: "#/" + q };
+    case "identity":   return { label: "the worklist", href: "#/" + q };
+    case "indexcard":
+      if (a && S.face) return { label: FACES.find(f => f.id === S.face).label, href: `#/a/${a.id}/f/${S.face}${q}` };
+      if (a)           return { label: a.short, href: `#/a/${a.id}${q}` };
+      return { label: "the worklist", href: "#/" + q };
+    default:           return null;
+  }
+}
+
+function backControl() {
+  const p = parentOf();
+  if (!p) return `<span class="backbtn start">You are at the start</span>`;
+  return `<a class="backbtn" href="${p.href}">&larr;&nbsp; Back to ${esc(p.label)}</a>`;
+}
+
+
 function navBar() {
   const here = sectionOf(S.screen);
   const target = {
@@ -126,7 +154,13 @@ function navBar() {
     return `<li class="${on ? "on" : ""}"><a href="${target[s.id]() + q}"${on ? ' aria-current="page"' : ""}>${
       on ? `<strong>${esc(s.label)}</strong>` : esc(s.label)}</a></li>`;
   }).join("");
-  return `<nav class="svcnav" aria-label="Sections"><ul>${items}</ul></nav>`;
+  return `<div class="rail">
+    <div class="railrow">
+      ${backControl()}
+      <nav class="svcnav" aria-label="Sections"><ul>${items}</ul></nav>
+    </div>
+    ${crumbs()}
+  </div>`;
 }
 
 function crumbs() {
@@ -147,7 +181,7 @@ function crumbs() {
     }
     case "identity":  c.push(["Stewardship queue", null]); break;
     case "indexcard": c.push(["Index", null], [S.card, null]); break;
-    default: return "";
+    default: c[0][1] = null; break;
   }
   return `<nav class="crumbs" aria-label="Breadcrumb">` + c.map(([label, href], i) => {
     const last = i === c.length - 1;
@@ -192,7 +226,6 @@ function chrome() {
     <span>${SOURCES.filter(s => s.state === "current").length} of ${SOURCES.length} sources current</span>
     ${SOURCES.map(s => `<span class="src"${s.state !== "current" ? ' style="border-color:#e0b48a"' : ""}>${esc(s.short)} ${esc(s.landed)}</span>`).join("")}
   </div>
-  ${crumbs()}
   ${acctStrip()}
   <div class="note warn" style="margin-top:12px">
     <strong>No dealership data has moved.</strong> ${esc(META.agreement)}

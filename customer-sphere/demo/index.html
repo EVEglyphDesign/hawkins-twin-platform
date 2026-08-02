@@ -27,6 +27,18 @@
   <div id="app"></div>
 </div>
 
+<script>
+/* keep the sticky rail flush under the black bar, whatever height it wraps to */
+(function () {
+  function h() {
+    var b = document.querySelector(".bar");
+    if (b) document.documentElement.style.setProperty("--barh", b.offsetHeight + "px");
+  }
+  window.addEventListener("resize", h);
+  window.addEventListener("load", h);
+  document.addEventListener("DOMContentLoaded", h);
+})();
+</script>
 <script src="data.js"></script>
 <script src="app.js"></script>
 </body>

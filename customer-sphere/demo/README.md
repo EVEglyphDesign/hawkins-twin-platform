@@ -26,13 +26,25 @@ Three list recipients are selectable. Names appear without titles, per
 
 Every screen has an address, so the browser back and forward buttons work and any screen
 can be linked to directly — `#/a/CS-0002/f/finance` is the finance face of Restigouche
-Aggregate Co, and it will still be there tomorrow. Three things are always on the page:
+Aggregate Co, and it will still be there tomorrow.
 
+The navigation rail is **fixed to the top of the window**. It does not scroll away, so
+there is no screen and no scroll position from which the way out is off-stage. It carries
+three things:
+
+- a **back control**, always the first thing on the rail, always naming where it goes —
+  "Back to Restigouche", not "Back". Every screen has a declared parent, so the control is
+  never a guess and never missing. On the worklist it reads "You are at the start" and
+  holds its place rather than vanishing;
 - a **section bar** of five items with the current one marked, following the
   [GOV.UK service navigation pattern](https://design-system.service.gov.uk/components/service-navigation/);
-- a **breadcrumb** whose every earlier segment is a link;
-- an **account strip**, so moving sideways from one account to another never requires
-  going back to the worklist first. A dispatched account keeps its tick.
+- a **breadcrumb** whose every earlier segment is a link.
+
+Below the rail, an **account strip** means moving sideways from one account to another
+never requires going back to the worklist first. A dispatched account keeps its tick.
+
+Backing out is tested rather than asserted: every one of the 153 addresses is walked to
+its parent repeatedly, and every path terminates at the worklist.
 
 Changing the list recipient keeps you on the screen you are reading rather than
 returning you to the worklist.

@@ -21,6 +21,7 @@ code,.mono{font-family:var(--mono); font-size:.88em}
 
 /* ---------- chrome ---------- */
 .bar{
+  position:sticky; top:0; z-index:60;
   background:var(--ink); color:var(--cream); padding:10px 22px;
   display:flex; gap:16px; align-items:center; flex-wrap:wrap;
   font-size:12.5px; letter-spacing:.02em;
@@ -188,23 +189,42 @@ footer.app p{margin:0 0 5px}
   .tl .e{width:auto}
 }
 
-/* ---- navigation: one bar, always the same, current item marked ---- */
-.svcnav{border-bottom:1px solid var(--line); margin:0 0 20px}
+/* ---- navigation: fixed to the top, one back control, five sections ---- */
+.rail{
+  position:sticky; top:var(--barh,40px); z-index:50;
+  background:var(--cream); border-bottom:1px solid var(--line);
+  margin:0 -22px 20px; padding:0 22px;
+  box-shadow:0 6px 14px -12px rgba(26,26,26,.45);
+}
+.railrow{display:flex; align-items:center; gap:18px; flex-wrap:wrap; padding:9px 0 0}
+
+.backbtn{
+  display:inline-flex; align-items:center; white-space:nowrap;
+  font-size:14.5px; font-weight:600; color:var(--ink); text-decoration:none;
+  background:#fff; border:1.5px solid var(--ink); border-bottom:1.5px solid var(--ink);
+  border-radius:3px; padding:8px 15px; line-height:1.2;
+}
+.backbtn:hover{background:var(--accent); border-color:var(--accent); color:#fff}
+.backbtn.start{
+  background:transparent; border:1.5px dashed var(--line); color:var(--mute);
+  font-weight:400; cursor:default;
+}
+
+.svcnav{border:0; margin:0}
 .svcnav ul{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:0}
 .svcnav li{margin:0}
 .svcnav a{
-  display:block; padding:11px 16px 10px; font-size:14px; color:var(--mute);
+  display:block; padding:9px 15px 8px; font-size:14px; color:var(--mute);
   text-decoration:none; border:0; border-bottom:3px solid transparent;
 }
 .svcnav a:hover{color:var(--ink); background:var(--cream2)}
-.svcnav li:first-child a{padding-left:0}
 .svcnav li.on a{color:var(--ink); border-bottom-color:var(--accent)}
 .svcnav li.on strong{font-weight:600}
 
-.crumbs{font-size:13px; color:var(--mute); margin:14px 0 0; line-height:1.7}
+.crumbs{font-size:12.5px; color:var(--mute); margin:0; padding:0 0 8px; line-height:1.6}
 .crumbs a{color:var(--mute); border-bottom:1px solid var(--line)}
 .crumbs a:hover{color:var(--ink); border-bottom-color:var(--accent)}
-.crumbs .sep{margin:0 8px; color:#c9c2b2}
+.crumbs .sep{margin:0 7px; color:#c9c2b2}
 .crumbs [aria-current]{color:var(--ink); font-weight:600}
 
 .strip{display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:12px 0 0}
@@ -217,7 +237,11 @@ footer.app p{margin:0 0 5px}
 .strip a.on{color:var(--ink); background:#fff; border-color:var(--accent); font-weight:600}
 .strip .tick{color:var(--accent)}
 
-@media (max-width:640px){
-  .svcnav a{padding:10px 11px; font-size:13px}
-  .crumbs{font-size:12px}
+@media (max-width:700px){
+  .bar{position:static}
+  .rail{top:0}
+  .railrow{gap:10px; padding-top:8px}
+  .backbtn{font-size:13.5px; padding:7px 12px; width:100%; justify-content:center}
+  .svcnav a{padding:8px 10px; font-size:13px}
+  .crumbs{font-size:11.5px}
 }
