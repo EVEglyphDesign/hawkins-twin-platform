@@ -96,7 +96,7 @@ function applyHash() {
     S.acct = p[1];
     if (p[2] === "f" && FACES.some(f => f.id === p[3])) { S.face = p[3]; S.screen = "face"; }
     else if (p[2] === "gate")   { S.face = null; S.screen = "gate"; }
-    else if (p[2] === "record") { S.face = null; S.screen = "record"; }
+    else if (p[2] === "record") { S.face = null; S.screen = S.dispatched[S.acct] ? "record" : "gate"; }
     else                        { S.face = null; S.screen = "sphere"; }
   } else if (p[0] === "root" && struc(p[1])) {
     S.struct = p[1]; S.screen = "structural";
