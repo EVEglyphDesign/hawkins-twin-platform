@@ -194,9 +194,7 @@ footer.app p{margin:0 0 5px}
   position:sticky; top:var(--barh,40px); z-index:50;
   background:var(--cream); border-bottom:1px solid var(--line);
   margin:0 -22px 20px; padding:0 22px;
-  /* paint the band edge to edge without adding a millimetre of layout width */
-  box-shadow:0 0 0 100vmax var(--cream), 0 6px 14px -12px rgba(26,26,26,.45);
-  clip-path:inset(0 -100vmax -22px -100vmax);
+  box-shadow:0 8px 16px -14px rgba(26,26,26,.5);
 }
 .railrow{display:flex; align-items:center; gap:18px; flex-wrap:wrap; padding:9px 0 0}
 
