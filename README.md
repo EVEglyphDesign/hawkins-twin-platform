@@ -11,6 +11,8 @@ Outline & functional map: [EVEglyphDesign_Hawkins_Twin_Outline_Functional_Map.pd
 
 Customer sphere design for Tim and Luke: [EVEglyphDesign_Hawkins_Twin_Customer_Sphere_Design.pdf](https://eveglyphdesign.github.io/hawkins-twin-platform/customer-sphere/EVEglyphDesign_Hawkins_Twin_Customer_Sphere_Design.pdf) · [source Markdown](https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/customer-sphere/CUSTOMER-SPHERE-DESIGN.md) · Strategic direction: [interaction records](https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/interactions/README.md)
 
+Customer sphere demonstration surface (synthetic data, no live systems): [Customer Sphere demo](https://eveglyphdesign.github.io/hawkins-twin-platform/customer-sphere/demo/) — the sphere, the worklist, the stewardship queue, the index cards and the gate, all clickable.
+
 Dealer-grade digital twin platform aligned to Peterbilt, PACCAR, warranty, maintenance, financing, and recycling. Anchored at Hawkins Truck Mart. Technical transformation centred on Luke Weatherbie.
 
 ## Layout
