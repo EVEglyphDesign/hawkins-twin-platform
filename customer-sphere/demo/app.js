@@ -107,24 +107,28 @@ function sphereSVG(a) {
     const lx = cx + Math.cos(ang) * LR, ly = cy + Math.sin(ang) * LR;
     const hot = v.gap >= 70, warm = v.gap >= 30 && v.gap < 70;
     const col = hot ? "#e87722" : warm ? "#1a1a1a" : "#b9b2a3";
+    spokes += `<g style="cursor:pointer" onclick="go('face',{face:'${f.id}'})" role="button" tabindex="0" aria-label="Open the ${esc(f.label)} face">`;
+    spokes += `<line x1="${cx}" y1="${cy}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="transparent" stroke-width="26"/>`;
     spokes += `<line x1="${cx}" y1="${cy}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#e7e1d3" stroke-width="1"/>`;
     spokes += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${col}" stroke-width="${hot ? 3.5 : 2.5}"/>`;
     spokes += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${hot ? 5 : 4}" fill="${col}"/>`;
+    spokes += `</g>`;
     const c = Math.cos(ang);
     const anchor = c > 0.25 ? "start" : c < -0.25 ? "end" : "middle";
     const dy = Math.sin(ang) > 0.7 ? 12 : Math.sin(ang) < -0.7 ? -6 : 4;
+    labels += `<g style="cursor:pointer" onclick="go('face',{face:'${f.id}'})"><rect x="${(lx - (anchor === "start" ? 2 : anchor === "end" ? 86 : 44)).toFixed(1)}" y="${(ly + dy - 12).toFixed(1)}" width="88" height="30" fill="transparent"/>`;
     labels += `<text x="${lx.toFixed(1)}" y="${(ly + dy).toFixed(1)}" text-anchor="${anchor}" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#1a1a1a">${esc(f.label)}</text>`;
-    labels += `<text x="${lx.toFixed(1)}" y="${(ly + dy + 13).toFixed(1)}" text-anchor="${anchor}" font-family="IBM Plex Mono,monospace" font-size="10" fill="${col}">gap ${v.gap}</text>`;
+    labels += `<text x="${lx.toFixed(1)}" y="${(ly + dy + 13).toFixed(1)}" text-anchor="${anchor}" font-family="IBM Plex Mono,monospace" font-size="10" fill="${col}">gap ${v.gap}</text></g>`;
   });
   return `<svg viewBox="0 0 520 320" width="100%" style="max-width:520px;display:block;margin:0 auto" role="img"
-      aria-label="Seven face vectors from the customer at the centre, drawn at a length proportional to the gap between current and target.">
+      aria-label="Seven face vectors, each clickable from the customer at the centre, drawn at a length proportional to the gap between current and target.">
     <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#e7e1d3" stroke-width="1" stroke-dasharray="3 4"/>
     <circle cx="${cx}" cy="${cy}" r="${R * 0.5}" fill="none" stroke="#f0ebdd" stroke-width="1"/>
     ${spokes}
     <circle cx="${cx}" cy="${cy}" r="6" fill="#1a1a1a"/>
     ${labels}
     <text x="${cx}" y="${cy + 26}" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#6b665c">the customer</text>
-    <text x="${cx}" y="308" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#6b665c">dashed ring = the declared target on every face</text>
+    <text x="${cx}" y="308" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#6b665c">dashed ring = the declared target on every face &middot; click a spoke to open that face</text>
   </svg>`;
 }
 
