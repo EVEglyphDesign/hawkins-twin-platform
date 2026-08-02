@@ -187,10 +187,13 @@ WM_CSS = """
 ABSTRACT = (
     "Hawkins Truck Mart's customer records live in a dealer management system, a call "
     "platform, and the systems Craig Allen runs day to day. This design resolves all of "
-    "them onto one customer, in one combined schema, with one key. The description of that "
-    "schema is published and portable. The data itself stays inside Peterbilt Atlantic's "
-    "own Azure tenant and never leaves it. That split is the whole design, and it is what "
-    "puts the dealership — not a vendor — in the reference-model position for its industry."
+    "them onto one customer, in one combined schema, with one key. It is built as an index "
+    "repository inside the wider enterprise reference model, extending the existing ACDOCA "
+    "standard at the edges rather than replacing it, with every face of the customer "
+    "carried as a vector against a declared target. The description of the model is "
+    "published and portable. The data itself stays inside Peterbilt Atlantic's own Azure "
+    "tenant and never leaves it. That split is the whole design, and it is what puts the "
+    "dealership \u2014 not a vendor \u2014 in the reference-model position for its industry."
 )
 
 RECIPIENTS = "Tim Hawkins &nbsp;·&nbsp; Luke Weatherbie"
@@ -204,7 +207,7 @@ def render(pages_label: str, out_path: pathlib.Path) -> int:
   <div class="cover-band">
     <p class="mark">EVEglyphDesign · Peterbilt Atlantic Digital Twin</p>
     <h1>Customer Sphere Design</h1>
-    <p class="sub">HawkinsTwin Customer 360 — one customer, one schema, data that stays yours</p>
+    <p class="sub">HawkinsTwin Customer 360 — an indexed, ACDOCA-aligned sphere of vectored targets</p>
   </div>
   <div class="cover-body">
     <p class="for">Prepared for</p>

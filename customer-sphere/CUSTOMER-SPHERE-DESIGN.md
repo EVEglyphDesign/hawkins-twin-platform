@@ -30,10 +30,10 @@ confidence, and the sphere records disagreement rather than averaging it away.
 
 This is the governing constraint of the design and every other decision is subordinate to it.
 
-| | **Metadata repository** | **Business data store** |
+| | **Index repository** | **Business data store** |
 |---|---|---|
-| **What** | Schema, field dictionary, identity rules, lineage, model definitions, DDL, validators, tests, change history | Actual customer, sales, service, parts, finance and call records |
-| **Where** | GitHub — `HawkinsTwin` Customer 360 metadata repository | Postgres, inside Hawkins's own Azure tenant |
+| **What** | Registry of what exists, field dictionary across every vocabulary, identity rules, declared targets, lineage, model definitions, DDL, validators, tests, change history — pointers, never payload | Actual customer, sales, service, parts, finance and call records |
+| **Where** | GitHub — `HawkinsTwin` Customer 360 index repository | Postgres, inside Hawkins's own Azure tenant |
 | **Custody** | EVEglyphDesign authors, Hawkins owns; readable by any party that needs to understand the model | Hawkins alone. EVEglyphDesign holds no copy |
 | **Contains a customer record?** | **Never** | Yes, all of them |
 | **Portable?** | Yes, deliberately — it is the reference model | Yes, but it moves only on Hawkins's instruction |
@@ -45,15 +45,145 @@ already pays for and already controls. A vendor cannot hold the dealership hosta
 schema it refuses to document, and cannot hold it hostage with data it refuses to hand
 back, because it never had either.
 
-A secondary consequence matters for the commercial case in §7: because the metadata is
+What the GitHub side actually is, and how it routes, is §3. A secondary consequence matters for the commercial case in §11: because the index is
 complete enough to rebuild the model from scratch, the model is separable from the data.
 That is what makes it sellable as a reference model without selling anyone's customers.
 
-## 3. Sources into the sphere
+## 3. An index repository, not a data repository
+
+The GitHub side of the split is more precisely described than "metadata". It is an
+**index repository**, and it behaves the way every index in the EVEglyphDesign portfolio
+behaves: it is the entry point you consult *before* you touch anything, and it holds
+pointers, not payload.
+
+An index repository answers four questions and refuses to answer any others:
+
+- **What exists.** Every source, object, and field in the customer sphere, registered once
+  with an owner, an access route, and a confidence tag. If something is not in the index,
+  it is not in the sphere — and if it exists but cannot be reached, the index says so
+  rather than omitting it.
+- **What it is called, in every vocabulary it has.** The CDK name, the call-platform name,
+  the name Craig's system uses, the canonical name in the model, and the SAP-side term it
+  aligns to. One field, several names, one entry.
+- **Where the real thing lives.** A pointer into the Azure Postgres — schema, table,
+  column — never the value itself.
+- **What governs it.** Retention, personal-data classification, the gate that applies, and
+  the decision record that put it there.
+
+This matters operationally. Anyone — a developer at Hawkins, a PACCAR analyst, a future
+vendor, an agent doing work on the twin — starts at the index, is routed to the right
+definition and the right doctrine, and only then goes to the data. It is the same
+`START-HERE` discipline the rest of the portfolio runs on, applied to one dealership's
+customer estate. Navigation is a safety control: the index makes looking up the governing
+rule a hard gate rather than an optional search.
+
+It also makes the repository forkable in a way a data repository never is. An index has no
+custody risk. It can be published, read, audited, cited, and copied by another dealership
+without a single Hawkins record moving, which is exactly what §11 depends on.
+
+## 4. Where this sits in the enterprise model
+
+The customer sphere is not a standalone Hawkins artefact. It is one instance inside the
+larger EVEglyphDesign enterprise model, and it inherits from that model rather than
+inventing beside it.
+
+| Layer | What it is | Role here |
+|---|---|---|
+| **L0 — Portfolio index** | The canonical entry point and routing layer across all EVEglyphDesign repositories | Routes any agent or reader to the governing doctrine before work begins |
+| **Enterprise reference model** | [EVE Datasphere Sovereign](https://github.com/EVEglyphDesign/eve-datasphere-sovereign) — SAP-parity schemas with ACDOCA as the accounting spine, held in customer custody | Supplies the vocabulary, the ledger spine, and the custody doctrine |
+| **Industry instance** | The Peterbilt Atlantic digital twin | Applies the enterprise model to heavy-truck dealer operations |
+| **Customer sphere** | This design — HawkinsTwin Customer 360 | The customer-facing face of that instance, indexed and vectored |
+| **Business data** | Postgres in Hawkins's Azure tenant | The only place a real record exists |
+
+The consequence is that nothing here is bespoke for its own sake. The customer key, the
+lineage discipline, the source-width rule, the widening register, the marts — all of them
+are portfolio patterns being instantiated, which is why a component lifted out of Hawkins
+lands cleanly in the next dealership instead of needing a rewrite.
+
+**Mirror non-proliferation applies.** Source vocabulary wins. Structures are defined once
+and referenced. Extensions attach at the edges. The sphere does not get to invent a private
+dialect because it found one inconvenient.
+
+## 5. An extension of ACDOCA, not a parallel standard
+
+The accounting spine of the enterprise model is **ACDOCA**, the SAP universal journal.
+Every financially meaningful event in the sphere aligns to it, and this is the single most
+important structural decision in the design after the two-body split.
+
+**ACDOCA is never modified.** Not extended in place, not widened, not given custom
+columns. It stays recognisable to anyone who knows SAP, which is what makes the dealership's
+numbers defensible to PACCAR, to a 20 Group, and to an auditor. What the sphere needs
+beyond the journal attaches as **extension journals at the edges**, in the pattern the
+enterprise model already establishes:
+
+| Journal | Carries | In the customer sphere |
+|---|---|---|
+| **ACDOCA** | The universal journal — financially meaningful transactions | Sales, F&I, parts invoices, warranty settlement, service revenue |
+| **ACDOCI** | Service and relationship interactions | Calls, voicemails, callbacks, contact attempts, appointment events |
+| **ACDOCX** | ESG and per-transaction impact measures | Available where a dealership wants transaction-level impact reporting |
+| **MRTDOC** | Non-tradeable earned standing | Available; not part of Phase 1 for Hawkins |
+| **MEMBR** | Membership and affiliation | Fleet-to-driver affiliation, account hierarchy |
+
+The important pairing is **ACDOCA and ACDOCI side by side.** The journal records what the
+dealership *sold*; the interaction journal records what the dealership *did about* the
+customer. Neither is derivable from the other, and a customer view built on only one of
+them is the reason most dealer CRM projects produce numbers nobody trusts. Sharing a
+customer key and a time axis across both is what makes "this account bought nothing for
+nine months and we never returned four of its calls" a single, defensible sentence.
+
+Where CDK carries a field wider than the SAP default, **the source width wins** and the
+widening is recorded in a declared widening register. Dealer data is never truncated to fit
+the model. Canonical naming coexists with legacy names in the index, so relabelling never
+destroys round-trip fidelity back to the source system.
+
+## 6. Vectored targets — the geometry of the sphere
+
+"Sphere" is not decoration. It is the working geometry, and it is what makes the model
+computable rather than merely descriptive.
+
+The customer sits at the centre. Every fact known about that customer is a **vector** from
+the centre — and a vector, not a field, because each one carries four things at once:
+
+- **A direction** — which face it belongs to: commercial, service, parts, finance,
+  warranty, relationship, marketing.
+- **A magnitude** — how much it says. Revenue, hours, unreturned calls, days since last
+  contact, warranty exposure.
+- **An origin** — the source system, the extraction, the timestamp, the confidence. A
+  vector with no traceable origin is not admitted to the sphere.
+- **A target** — the state the business is aiming that face at.
+
+That last one is the point. **A vectored target is a face of the customer with a declared
+destination.** Not a metric on a dashboard someone may or may not look at — a direction of
+travel, with a current position, a target position, and therefore a gap that can be
+measured, ranked, and dispatched to a person.
+
+The 20 Group guide figures are targets. PACCAR's expectations are targets. The two-hour
+voicemail return is a target. Absorption is a target. Each one is a vector on the sphere
+with a known current magnitude and a known intended one, and the difference between them is
+the entire decision surface — the worklists, the three standing cohorts, the variance
+columns already specified in the twin.
+
+Three properties follow, and they are the reason this shape was chosen:
+
+1. **Composition.** Vectors on the same face add. Nine unreturned calls across four
+   contacts at one fleet compose into one account-level relationship vector, without
+   averaging the individual events away.
+2. **Resolution of disagreement.** When two sources disagree, the sphere holds both vectors
+   with their origins and confidences intact and reports the divergence. It does not
+   collapse them into an average that hides which system was wrong.
+3. **Ranking is intrinsic.** The largest gap between current and target, weighted by
+   account value, *is* the top of the worklist. Prioritisation falls out of the geometry
+   instead of being a rule someone maintains by hand.
+
+Targets are declared in the index repository, versioned there, and never hard-coded into a
+model. Changing what the dealership is aiming at is a committed decision with a date and an
+author on it, not a silent edit to a query.
+
+## 7. Sources into the sphere
 
 Three source families, one schema.
 
-### 3a. CDK — customer and sales
+### 7a. CDK — customer and sales
 The dealer management system is the spine. Customer master, sales transactions, deals and
 F&I, repair orders, parts invoices, warranty claims, and the general ledger tie-out.
 Acquisition follows the existing two-lane design in the
@@ -63,7 +193,7 @@ Postgres and reconciled on demand rather than silently merged. The field-level m
 21 objects and 443 confidence-tagged fields — is the starting dictionary for the customer
 and sales portion of the combined schema, not a separate artefact.
 
-### 3b. Call history — the relationship record
+### 7b. Call history — the relationship record
 The TELUS call platform supplies inbound and outbound call events, direction, duration,
 extension, disposition and voicemail state. This is the only source in the sphere that
 records what the dealership *did about* a customer rather than what it *sold* one. Its
@@ -73,7 +203,7 @@ under a Peterbilt-owned service identity so custody and audit trail stay with th
 Where call direction or extension identity is missing, the record contributes to cohort
 counts but is never used to score an individual.
 
-### 3c. Craig's register — the operating surface
+### 7c. Craig's register — the operating surface
 The sixteen systems catalogued by Craig Allen are treated as first-class sources, not as
 context. Marketing and lead platforms, inventory and ePortal surfaces, scheduling, and
 whatever else the register holds each contribute a face to the customer. Craig's register
@@ -86,7 +216,7 @@ complete and current, and until each system has a stated access route — API, e
 manual. Systems without an access route are recorded as known-but-unreachable rather than
 quietly dropped.
 
-## 4. Identity — how a customer becomes one customer
+## 8. Identity — how a customer becomes one customer
 
 Identity resolution is the hardest part of the sphere and the part most likely to be got
 wrong quietly, so it is specified before any model is built.
@@ -113,7 +243,7 @@ wrong quietly, so it is specified before any model is built.
   service and warranty history hang from the vehicle, not from the person who happened to
   book the appointment.
 
-## 5. Schema shape
+## 9. Schema shape
 
 Five layers, each with a job, all in the same Postgres and all described in the metadata
 repository.
@@ -123,7 +253,7 @@ repository.
    the widening is recorded explicitly — dealer data is never truncated to fit a model.
 2. **Conformed.** Types normalised, phone and address standardised, currency and dates
    unified, source keys preserved. Still one row per source record.
-3. **Identity.** The resolution layer of §4 — entity tables, link tables, candidate queue,
+3. **Identity.** The resolution layer of §8 — entity tables, link tables, candidate queue,
    merge event log.
 4. **Sphere.** The combined customer model. One customer, all faces: commercial history,
    service history, parts, warranty, finance, contact and call behaviour, marketing
@@ -138,7 +268,7 @@ Every field at every layer carries source, extraction timestamp, and confidence 
 number that reaches a decision surface can always be walked back to the record and the
 extraction that produced it.
 
-## 6. Governance and the gates
+## 10. Governance and the gates
 
 - **Nothing moves before the agreement.** Tim Hawkins's executed agreement gates any real
   dealership data. Until then the sphere runs on synthetic and mock composite data.
@@ -158,7 +288,7 @@ extraction that produced it.
   erasure path that resolves through the identity layer, so a deletion request can be
   executed once and propagate rather than being chased across sixteen systems by hand.
 
-## 7. Why this makes Hawkins the reference model
+## 11. Why this makes Hawkins the reference model
 
 The commercial argument is not that the dealership gets better reports. It is structural.
 
@@ -174,7 +304,7 @@ shape that Hawkins owns, and Hawkins carries none of the custody risk that would
 be the price of being the example. Components scale commercially; the reference model
 stays with the dealership.
 
-## 8. Open questions
+## 12. Open questions
 
 1. Is the sixteen-system register complete and current, and what is the access route for
    each entry?
@@ -185,6 +315,11 @@ stays with the dealership.
 4. What is the retention policy per source, and who signs it off?
 5. Which of Craig's systems hold customer contact data that duplicates CDK, and which is
    authoritative when they disagree?
+6. Which extension journals are in scope for Phase 1? ACDOCA and ACDOCI are assumed;
+   ACDOCX, MRTDOC and MEMBR are available but unscoped until Tim says whether impact
+   reporting and account hierarchy matter to him now or later.
+7. Who declares and signs off the targets — the 20 Group guide figures, the callback
+   window, the absorption goals — and how often are they re-versioned in the index?
 
 ---
 

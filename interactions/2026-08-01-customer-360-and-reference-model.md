@@ -82,6 +82,31 @@ Direction stated and recorded. Design written. Awaiting acknowledgement from Tim
 and awaiting Craig's confirmation that the sixteen-system register is complete and current
 before the source inventory in the customer sphere design is treated as closed.
 
+## Amendment, same day — index, ACDOCA, and the vectored target
+
+Recorded after the first draft of the design was reviewed. Four corrections, all
+structural, all folded into the design document:
+
+1. **It is an index repository, not a metadata repository.** The GitHub side holds
+   pointers, registry, vocabulary, and declared targets — the thing you consult before you
+   touch anything. Never payload. This is the portfolio's `START-HERE` discipline applied
+   to one dealership's customer estate.
+2. **It fits inside the larger enterprise model.** The customer sphere is an instance under
+   the EVEglyphDesign enterprise reference model, routed through the L0 portfolio index,
+   not a standalone Hawkins artefact. It inherits vocabulary and custody doctrine rather
+   than inventing beside them.
+3. **It is an extension of the existing ACDOCA standard.** ACDOCA is never modified. What
+   the sphere needs beyond the universal journal attaches at the edges as extension
+   journals — ACDOCI for interactions alongside ACDOCA for transactions, with ACDOCX,
+   MRTDOC and MEMBR available. Source vocabulary wins; extensions attach at the edges.
+4. **The design is spherical with vectored targets.** Each face of the customer is a vector
+   from the centre carrying direction, magnitude, traceable origin, and a declared target.
+   The gap between current and target magnitude is the decision surface, which is why
+   prioritisation falls out of the geometry instead of being maintained by hand.
+
+Landed as §3 through §6 of the
+[customer sphere design](../customer-sphere/CUSTOMER-SPHERE-DESIGN.md).
+
 ---
 
 © 2026 Dany Theriault. EVE “digital stem cell” glyph and glyph-based design principles — all rights reserved. Stewardship of rights of use and assignment for large public and institutional usage rests with the Pacific Utilities Design Council. Published as a time-stamped record of authorship and intent.
