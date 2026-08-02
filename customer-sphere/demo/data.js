@@ -36,7 +36,7 @@ const FACES = [
 /* ---------------- accounts ---------------- */
 const ACCOUNTS = [
   {
-    id: "CS-0001", key: "cs_8f31a0c2", name: "Miramichi Forest Haulage Ltd", kind: "Organisation",
+    id: "CS-0001", key: "cs_8f31a0c2", name: "Miramichi Forest Haulage Ltd", short: "Miramichi", kind: "Organisation",
     value: "CAD 1.24M trailing 12 months", units: 14, since: "2011",
     people: ["R. Savoie — dispatch", "M. Doucet — maintenance", "P. Arsenault — accounts"],
     keys: ["CDK 104882", "TELUS +1 506 555 0142", "ePortal MFH-4471", "Marketing acct 88213"],
@@ -84,7 +84,7 @@ const ACCOUNTS = [
     }
   },
   {
-    id: "CS-0002", key: "cs_23d90fb7", name: "Restigouche Aggregate Co", kind: "Organisation",
+    id: "CS-0002", key: "cs_23d90fb7", name: "Restigouche Aggregate Co", short: "Restigouche", kind: "Organisation",
     value: "CAD 2.61M trailing 12 months", units: 22, since: "2004",
     people: ["J. Lévesque — owner", "A. Chiasson — shop"],
     keys: ["CDK 100214", "TELUS +1 506 555 0771", "ePortal RAC-1102"],
@@ -130,7 +130,7 @@ const ACCOUNTS = [
     }
   },
   {
-    id: "CS-0003", key: "cs_5b7e14aa", name: "Fundy Bay Seafood Transport Inc", kind: "Organisation",
+    id: "CS-0003", key: "cs_5b7e14aa", name: "Fundy Bay Seafood Transport Inc", short: "Fundy Bay", kind: "Organisation",
     value: "CAD 640,000 trailing 12 months", units: 6, since: "2019",
     people: ["S. Comeau — owner"],
     keys: ["CDK 112907", "TELUS +1 902 555 0330"],
@@ -176,7 +176,7 @@ const ACCOUNTS = [
     }
   },
   {
-    id: "CS-0004", key: "cs_c04182de", name: "Chaleur Regional Freight", kind: "Organisation",
+    id: "CS-0004", key: "cs_c04182de", name: "Chaleur Regional Freight", short: "Chaleur", kind: "Organisation",
     value: "CAD 910,000 trailing 12 months", units: 9, since: "2016",
     people: ["Y. Roy — dispatch", "L. Basque — accounts"],
     keys: ["CDK 108330", "TELUS +1 506 555 0288", "Marketing acct 90114"],

@@ -22,6 +22,21 @@ and the live dealer management system is never written to.
 Three list recipients are selectable. Names appear without titles, per
 [the naming canon](../../canon/naming-people.md).
 
+## Navigation
+
+Every screen has an address, so the browser back and forward buttons work and any screen
+can be linked to directly — `#/a/CS-0002/f/finance` is the finance face of Restigouche
+Aggregate Co, and it will still be there tomorrow. Three things are always on the page:
+
+- a **section bar** of five items with the current one marked, following the
+  [GOV.UK service navigation pattern](https://design-system.service.gov.uk/components/service-navigation/);
+- a **breadcrumb** whose every earlier segment is a link;
+- an **account strip**, so moving sideways from one account to another never requires
+  going back to the worklist first. A dispatched account keeps its tick.
+
+Changing the list recipient keeps you on the screen you are reading rather than
+returning you to the worklist.
+
 ## What it is not
 
 It is not a measurement of the dealership. Every customer, vehicle, phone number, amount and
@@ -35,6 +50,6 @@ real data, and that is gated on the executed agreement (§10).
 | `index.html` | Page shell and font loading |
 | `app.css` | EVEglyphDesign palette and type canon |
 | `data.js` | All synthetic data, in one file, readable end to end |
-| `app.js` | Screen rendering and state. No framework, no build step, no network calls |
+| `app.js` | Routing, screen rendering and state. No framework, no build step, no network calls |
 
 © 2026 EVEglyphDesign. *Pour le bien-être du peuple.*

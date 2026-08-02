@@ -50,11 +50,128 @@ const SCOPE = {
   craig: "This list is scoped to accounts whose widest gap is a marketing or relationship face, which is where the systems register and identity resolution decide the answer."
 };
 
-function go(screen, opts) { S.screen = screen; Object.assign(S, opts || {}); render(); window.scrollTo(0, 0); }
+function go(screen, opts) {
+  S.screen = screen;
+  Object.assign(S, opts || {});
+  const h = hashFor();
+  if (location.hash === h) render(); else location.hash = h;   // hashchange renders
+  window.scrollTo(0, 0);
+}
+
+
+/* ---------------- routing ----------------
+   Every screen has an address. The browser back and forward buttons work,
+   and any screen can be linked to directly. Navigation is never one-way. */
+
+const SECTIONS = [
+  { id: "worklist", label: "Worklist",   screens: ["home"] },
+  { id: "accounts", label: "Accounts",   screens: ["sphere", "face", "gate", "record"] },
+  { id: "root",     label: "Root causes", screens: ["structural"] },
+  { id: "identity", label: "Identity",   screens: ["identity"] },
+  { id: "index",    label: "Index",      screens: ["indexcard"] }
+];
+const sectionOf = sc => (SECTIONS.find(s => s.screens.includes(sc)) || SECTIONS[0]).id;
+
+function hashFor() {
+  const q = S.view === "tim" ? "" : "?v=" + S.view;
+  switch (S.screen) {
+    case "sphere":     return `#/a/${S.acct}${q}`;
+    case "face":       return `#/a/${S.acct}/f/${S.face}${q}`;
+    case "gate":       return `#/a/${S.acct}/gate${q}`;
+    case "record":     return `#/a/${S.acct}/record${q}`;
+    case "structural": return `#/root/${S.struct}${q}`;
+    case "identity":   return `#/identity${q}`;
+    case "indexcard":  return `#/index/${S.card}${q}`;
+    default:           return `#/${q}`;
+  }
+}
+
+function applyHash() {
+  const raw = (location.hash || "#/").slice(1);
+  const [path, query] = raw.split("?");
+  const v = (query || "").replace("v=", "");
+  S.view = VIEWS.some(x => x.id === v) ? v : "tim";
+  const p = path.split("/").filter(Boolean);
+  if (p[0] === "a" && acct(p[1])) {
+    S.acct = p[1];
+    if (p[2] === "f" && FACES.some(f => f.id === p[3])) { S.face = p[3]; S.screen = "face"; }
+    else if (p[2] === "gate")   { S.face = null; S.screen = "gate"; }
+    else if (p[2] === "record") { S.face = null; S.screen = "record"; }
+    else                        { S.face = null; S.screen = "sphere"; }
+  } else if (p[0] === "root" && struc(p[1])) {
+    S.struct = p[1]; S.screen = "structural";
+  } else if (p[0] === "identity") {
+    S.screen = "identity";
+  } else if (p[0] === "index" && INDEX_CARDS[p[1]]) {
+    S.card = p[1]; S.screen = "indexcard";
+  } else {
+    S.screen = "home";
+  }
+}
+
+/* ---------------- navigation chrome ---------------- */
+
+function navBar() {
+  const here = sectionOf(S.screen);
+  const target = {
+    worklist: () => "#/",
+    accounts: () => `#/a/${S.acct || (queueFor(S.view)[0] || ACCOUNTS[0]).id}`,
+    root:     () => `#/root/${S.struct || STRUCTURAL[0].id}`,
+    identity: () => "#/identity",
+    index:    () => `#/index/${S.card || Object.keys(INDEX_CARDS)[0]}`
+  };
+  const q = S.view === "tim" ? "" : "?v=" + S.view;
+  const items = SECTIONS.map(s => {
+    const on = s.id === here;
+    return `<li class="${on ? "on" : ""}"><a href="${target[s.id]() + q}"${on ? ' aria-current="page"' : ""}>${
+      on ? `<strong>${esc(s.label)}</strong>` : esc(s.label)}</a></li>`;
+  }).join("");
+  return `<nav class="svcnav" aria-label="Sections"><ul>${items}</ul></nav>`;
+}
+
+function crumbs() {
+  const q = S.view === "tim" ? "" : "?v=" + S.view;
+  const c = [["Worklist", "#/" + q]];
+  const a = S.acct ? acct(S.acct) : null;
+  switch (S.screen) {
+    case "sphere": c.push([a.name, null]); break;
+    case "face": {
+      const f = FACES.find(x => x.id === S.face);
+      c.push([a.name, `#/a/${a.id}${q}`], [f.label, null]); break;
+    }
+    case "gate":   c.push([a.name, `#/a/${a.id}${q}`], ["Approval", null]); break;
+    case "record": c.push([a.name, `#/a/${a.id}${q}`], ["The record", null]); break;
+    case "structural": {
+      const x = struc(S.struct);
+      c.push(["Root causes", null], [x.title, null]); break;
+    }
+    case "identity":  c.push(["Stewardship queue", null]); break;
+    case "indexcard": c.push(["Index", null], [S.card, null]); break;
+    default: return "";
+  }
+  return `<nav class="crumbs" aria-label="Breadcrumb">` + c.map(([label, href], i) => {
+    const last = i === c.length - 1;
+    const seg = href && !last ? `<a href="${href}">${esc(label)}</a>` : `<span${last ? ' aria-current="page"' : ""}>${esc(label)}</span>`;
+    return (i ? `<span class="sep">&rsaquo;</span>` : "") + seg;
+  }).join("") + `</nav>`;
+}
+
+/* sideways movement: every other account is one click away, from any account screen */
+function acctStrip() {
+  if (!S.acct) return "";
+  const q = S.view === "tim" ? "" : "?v=" + S.view;
+  const tail = S.screen === "face" ? `/f/${S.face}` : S.screen === "gate" ? "/gate" : S.screen === "record" ? "/record" : "";
+  return `<div class="strip"><span class="lbl">Accounts</span>` + ACCOUNTS.map(a => {
+    const on = a.id === S.acct;
+    const done = S.dispatched[a.id] ? ' <span class="tick">&#10003;</span>' : "";
+    return `<a class="${on ? "on" : ""}" href="#/a/${a.id}${on ? tail : ""}${q}">${esc(a.short || a.name)}${done}</a>`;
+  }).join("") + `</div>`;
+}
 
 /* ---------------- chrome ---------------- */
 function chrome() {
   return `
+  ${navBar()}
   <header class="app">
     <div>
       <h1>Customer Sphere</h1>
@@ -75,6 +192,8 @@ function chrome() {
     <span>${SOURCES.filter(s => s.state === "current").length} of ${SOURCES.length} sources current</span>
     ${SOURCES.map(s => `<span class="src"${s.state !== "current" ? ' style="border-color:#e0b48a"' : ""}>${esc(s.short)} ${esc(s.landed)}</span>`).join("")}
   </div>
+  ${crumbs()}
+  ${acctStrip()}
   <div class="note warn" style="margin-top:12px">
     <strong>No dealership data has moved.</strong> ${esc(META.agreement)}
     Every customer, VIN, phone number and amount on this surface is invented,
@@ -239,7 +358,6 @@ function sphereScreen() {
   }).join("");
 
   return `${chrome()}
-  <div class="back"><button class="ghost" onclick="go('home')">&larr; Back to the worklist</button></div>
   <div class="titlebar">
     <h2>${esc(a.name)}</h2>
     <span class="r">${esc(a.value)}</span>
@@ -290,7 +408,6 @@ function faceScreen() {
   const a = acct(S.acct), f = FACES.find(x => x.id === S.face), v = a.vectors[S.face];
   const fields = FACE_FIELDS[S.face] || [];
   return `${chrome()}
-  <div class="back"><button class="ghost" onclick="go('sphere',{acct:'${a.id}'})">&larr; Back to the sphere</button></div>
   <div class="titlebar">
     <h2>${esc(f.label)} — ${esc(a.name)}</h2>
     <span class="r">gap ${v.gap}</span>
@@ -333,7 +450,6 @@ function faceScreen() {
 function indexCardScreen() {
   const c = INDEX_CARDS[S.card];
   return `${chrome()}
-  <div class="back"><button class="ghost" onclick="back()">&larr; Back</button></div>
   <div class="titlebar">
     <h2>Index card</h2>
     <span class="r">${esc(c.canonical)}</span>
@@ -367,7 +483,6 @@ function indexCardScreen() {
 /* ---------------- stewardship queue ---------------- */
 function identityScreen() {
   return `${chrome()}
-  <div class="back"><button class="ghost" onclick="back()">&larr; Back</button></div>
   <div class="titlebar">
     <h2>Stewardship queue</h2>
     <span class="r">${CANDIDATES.filter(c => !S.merged[c.id]).length} of ${CANDIDATES.length} outstanding</span>
@@ -406,7 +521,6 @@ function identityScreen() {
 function structuralScreen() {
   const c = struc(S.struct);
   return `${chrome()}
-  <div class="back"><button class="ghost" onclick="go('home')">&larr; Back to the worklist</button></div>
   <div class="titlebar">
     <h2>${esc(c.title)}</h2>
     <span class="r">${esc(c.ref)}</span>
@@ -441,7 +555,6 @@ function structuralScreen() {
 function gateScreen() {
   const a = acct(S.acct);
   return `${chrome()}
-  <div class="back"><button class="ghost" onclick="go('sphere',{acct:'${a.id}'})">&larr; Back to the sphere</button></div>
   <div class="titlebar">
     <h2>Approval required</h2>
     <span class="r">${esc(a.name)}</span>
@@ -570,7 +683,9 @@ function render() {
   };
   $("#app").innerHTML = v[S.screen]();
   const sw = $("#sw");
-  if (sw) sw.onchange = e => { S.view = e.target.value; go("home"); };
+  if (sw) sw.onchange = e => { S.view = e.target.value; location.hash = hashFor(); };
 }
 
+window.addEventListener("hashchange", () => { applyHash(); render(); });
+applyHash();
 render();
