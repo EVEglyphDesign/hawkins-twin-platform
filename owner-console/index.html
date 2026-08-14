@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Owner Console — Conceptual Map · EVEglyphDesign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdfaf4;
+    --cream2: #f7f2e7;
+    --ink: #1a1a1a;
+    --line: #e7e1d3;
+    --mute: #6b665c;
+    --accent: #e87722;
+  }
+  html, body { background: var(--cream); color: var(--ink); margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 16px; line-height: 1.55; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 3rem 1.25rem 4rem; }
+  .rule { border-top: 1px solid var(--line); margin: 2rem 0; }
+  h1 { font-family: 'Fraunces', Georgia, serif; font-size: 2.5rem; line-height: 1.1; margin: 0 0 .5rem; letter-spacing: -0.01em; }
+  h2 { font-family: 'Fraunces', Georgia, serif; color: var(--accent); font-size: 1.25rem; margin: 2rem 0 .5rem; }
+  .sub { color: var(--mute); font-family: 'Fraunces', Georgia, serif; font-size: 1.1rem; margin: 0 0 1.5rem; }
+  .brand { font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); font-weight: 600; }
+  .cta {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    padding: .8rem 1.4rem;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    margin: 1rem 0;
+  }
+  .cta:hover { background: #d0651a; }
+  a { color: var(--accent); }
+  ul { padding-left: 1.2rem; }
+  li { margin: .35rem 0; }
+  .box { background: var(--cream2); border-left: 3px solid var(--accent); padding: 1rem 1.2rem; margin: 1rem 0; }
+  code { background: var(--cream2); padding: 1px 5px; border-radius: 3px; font-size: .9em; }
+  footer { color: var(--mute); font-size: .85rem; margin-top: 3rem; border-top: 1px solid var(--line); padding-top: 1rem; }
+  footer .tag { color: var(--accent); font-family: 'Fraunces', Georgia, serif; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">EVEglyphDesign · EgD-HAWKINS-CONSOLE-001</div>
+  <h1>The Owner Console</h1>
+  <p class="sub">Conceptual Map — ATD Performance Measurement 2026 driving the Hawkins Twin</p>
+
+  <p>
+    The 60 Critical Operating Variables published by ATD in the NADA Management Series
+    <em>Driven</em> are the owner's ledger of truth. The Hawkins Twin translates those variables
+    into a drill-downable console whose first question is not <em>how are we doing</em> but
+    <em>where is the next dollar</em> — which customers to accelerate, which vendors to press,
+    which trucks to move.
+  </p>
+
+  <a class="cta" href="EVEglyphDesign_Hawkins_Owner_Console_Conceptual_Map.pdf">
+    Open the conceptual map (PDF · 6 pages)
+  </a>
+
+  <h2>What's inside</h2>
+  <ul>
+    <li>Why the ATD guide is the anchor for a peer-comparable, portable owner console.</li>
+    <li>Seven owner categories mapped from the 60 COVs to the top-level console tiles.</li>
+    <li>The eleven ATD operating guides as the console's alarm line.</li>
+    <li>The five-layer twin stack from boot contract through owner console.</li>
+    <li>Where each category's numbers come from — CDK, PACCAR, TELUS, Exchange, Fortellis.</li>
+    <li>The drill sequence that turns a tile into a next dollar: customers to accelerate, vendors to press, trucks to move, bays that earn.</li>
+    <li>2023–2025 Total-Dealer Average and Best-of-Class values for the fifteen key COVs.</li>
+    <li>How the console scales beyond Peterbilt to Kenworth, Mack, Volvo, Freightliner, International, and non-CDK dealers.</li>
+    <li>What is already in place across the Hawkins repositories, and what plugs in next.</li>
+  </ul>
+
+  <div class="box">
+    <strong>Anchor guide.</strong>
+    <a href="https://www.nada.org/media/6116/download?inline">ATD Performance Measurement 2026 (TD08, publication TD08260519)</a>.
+    NADA Management Series <em>Driven</em>.
+  </div>
+
+  <h2>Where this lands</h2>
+  <ul>
+    <li><a href="https://github.com/EVEglyphDesign/hawkins-twin-platform">hawkins-twin-platform</a> — public twin surface (this Pages site).</li>
+    <li><a href="https://github.com/EVEglyphDesign/eve-hawkins-cdk-twin">eve-hawkins-cdk-twin</a> — CDK ingestion lane (primary source of record).</li>
+    <li><a href="https://github.com/EVEglyphDesign/eve-hawkins-telus-twin">eve-hawkins-telus-twin</a> — TELUS Business Connect twin.</li>
+    <li><a href="https://github.com/EVEglyphDesign/eve-glyph-boot-contract">eve-glyph-boot-contract</a> — durability and return-shape canon.</li>
+  </ul>
+
+  <footer>
+    © 2026 EVEglyphDesign · Controlled copy · EgD-KEY-2026-07 · <span class="tag">Pour le bien-être du peuple</span>
+  </footer>
+</div>
+</body>
+</html>
