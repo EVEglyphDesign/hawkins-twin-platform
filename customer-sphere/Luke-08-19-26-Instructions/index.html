@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Luke 08-19-26 Instructions · Where the money is · Hawkins Twin</title>
+<meta name="description" content="Luke Weatherbie's cause-of-loss checklist for the Hawkins Twin, recorded 2026-08-19 — the operator's brief to the development team on what to look for, what to ask, and where the dollars leak." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:#fdfaf4; --cream-2:#f7f2e7;
+    --ink:#1a1a1a; --ink-soft:#4a463d;
+    --line:#e7e1d3; --line-soft:#efe9db;
+    --mute:#6b665c; --faint:#9c9585;
+    --accent:#e87722; --accent-soft:#f4a86a;
+    --past:#7a5c3a; --future:#b8823a;
+
+    --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    --space-2:.5rem; --space-3:.75rem; --space-4:1rem; --space-5:1.25rem;
+    --space-6:1.5rem; --space-8:2rem; --space-10:2.5rem; --space-12:3rem;
+    --space-16:4rem; --space-20:5rem;
+
+    --content:760px; --wide:1120px;
+  }
+  *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+  a:hover { border-bottom-color: var(--accent); }
+  .container { width: min(calc(100% - 2rem), var(--content)); margin: 0 auto; }
+  .wide { width: min(calc(100% - 2rem), var(--wide)); margin: 0 auto; }
+
+  header.masthead {
+    border-bottom: 1px solid var(--line);
+    padding: var(--space-6) 0;
+  }
+  .masthead-row {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: var(--space-4); flex-wrap: wrap;
+  }
+  .masthead-title { font-family: var(--font-display); font-weight: 500; font-size: 18px; letter-spacing: -0.01em; }
+  .masthead-meta { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); }
+
+  .hero { padding: var(--space-16) 0 var(--space-10); }
+  .kicker {
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: var(--space-6);
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(38px, 5vw, 60px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-6);
+    max-width: 22ch;
+  }
+  h1 em { font-style: italic; font-weight: 400; color: var(--accent); }
+  .lede {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 21px; line-height: 1.5;
+    color: var(--ink);
+    margin-bottom: var(--space-6);
+    max-width: 40ch;
+  }
+  .byline { color: var(--mute); font-size: 14px; margin-bottom: var(--space-8); }
+
+  .dedication {
+    background: var(--cream-2);
+    border-left: 3px solid var(--accent);
+    padding: var(--space-6) var(--space-6);
+    margin: var(--space-10) 0 var(--space-16);
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 19px; line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .dedication p { margin-bottom: var(--space-4); }
+  .dedication p:last-child { margin-bottom: 0; }
+  .dedication strong { color: var(--ink); font-weight: 500; }
+  .dedication .attrib { display: block; margin-top: var(--space-4); font-size: 14px; color: var(--mute); font-family: var(--font-body); }
+
+  section.rail { padding: var(--space-10) 0; border-top: 1px solid var(--line); }
+  section.rail:first-of-type { border-top: none; }
+
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.15;
+    margin-bottom: var(--space-4);
+    letter-spacing: -0.01em;
+  }
+  .section-num {
+    display: inline-block; margin-right: var(--space-3);
+    color: var(--accent); font-family: var(--font-display); font-weight: 400;
+  }
+  h2 em { font-style: italic; color: var(--mute); font-weight: 400; }
+
+  .look-ask { margin: var(--space-4) 0 0; }
+  .look-ask h3 {
+    font-family: var(--font-body); font-weight: 600;
+    font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--past); margin: var(--space-5) 0 var(--space-2);
+  }
+  .look-ask p { margin-bottom: var(--space-3); }
+  .look-ask ul { list-style: none; padding: 0; margin: var(--space-2) 0 var(--space-4); }
+  .look-ask ul li {
+    padding: var(--space-2) 0 var(--space-2) var(--space-5);
+    border-bottom: 1px solid var(--line-soft);
+    position: relative;
+  }
+  .look-ask ul li:last-child { border-bottom: none; }
+  .look-ask ul li::before {
+    content: "→";
+    position: absolute; left: 0; top: var(--space-2);
+    color: var(--accent);
+  }
+
+  blockquote.luke {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 20px; line-height: 1.5;
+    color: var(--ink-soft);
+    border-left: 3px solid var(--accent);
+    padding: var(--space-3) var(--space-5);
+    margin: var(--space-4) 0;
+    background: var(--cream-2);
+  }
+  .followup { margin-top: var(--space-4); color: var(--ink-soft); }
+
+  .covered {
+    background: var(--cream-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: var(--space-4) var(--space-5);
+    margin: var(--space-4) 0;
+    font-size: 15px;
+  }
+  .covered strong { color: var(--accent); }
+
+  .strike {
+    padding: var(--space-6) 0;
+    color: var(--mute);
+  }
+  .strike blockquote {
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--faint);
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.6;
+    padding-left: var(--space-4);
+    border-left: 2px solid var(--line);
+    margin-bottom: var(--space-3);
+  }
+  .strike .note {
+    font-family: var(--font-body); font-size: 14px; color: var(--ink-soft);
+    padding-left: var(--space-4);
+  }
+
+  .impact {
+    background: var(--ink);
+    color: var(--cream);
+    padding: var(--space-10) 0;
+    margin-top: var(--space-16);
+  }
+  .impact .container { color: var(--cream); }
+  .impact h2 { color: var(--cream); }
+  .impact h2 em { color: var(--accent-soft); }
+  .impact ol { list-style: none; counter-reset: leak; padding: 0; margin: var(--space-6) 0 0; }
+  .impact ol li {
+    counter-increment: leak;
+    padding: var(--space-3) 0 var(--space-3) var(--space-10);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+    color: var(--cream);
+  }
+  .impact ol li:last-child { border-bottom: none; }
+  .impact ol li::before {
+    content: counter(leak, decimal-leading-zero);
+    position: absolute; left: 0; top: var(--space-3);
+    color: var(--accent-soft); font-family: var(--font-display); font-weight: 400;
+    font-size: 20px;
+  }
+  .impact ol li strong { color: #fff; font-weight: 500; }
+
+  footer.foot {
+    padding: var(--space-10) 0 var(--space-16);
+    border-top: 1px solid var(--line);
+    color: var(--mute);
+    font-size: 14px;
+  }
+  footer.foot .mark {
+    font-family: var(--font-display); font-style: italic;
+    color: var(--accent); margin-top: var(--space-4);
+  }
+
+  @media (max-width: 720px) {
+    .hero { padding: var(--space-10) 0 var(--space-8); }
+    .masthead-row { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wide masthead-row">
+    <div class="masthead-title">EVEglyphDesign · Hawkins Twin · Luke 08-19-26 Instructions</div>
+    <div class="masthead-meta">v0.1 · 2026-08-19</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="kicker">Luke 08-19-26 Instructions</div>
+    <h1>Where the <em>money</em> is, and where he expects to see it.</h1>
+    <p class="lede">Fourteen sections of operator signal, recorded in Luke's own voice, so the development team knows what to look for, what to ask, and where the dollars leak.</p>
+    <p class="byline">Author · Luke Weatherbie ("Luke Skywalker" on the project team) · Recorded by Dany Thériault, EVEglyphDesign · For Tim Hawkins, Peterbilt Atlantic</p>
+  </div>
+
+  <div class="container">
+    <div class="dedication">
+      <p>On this day, August 19, 2026, Luke Weatherbie — otherwise known as Luke Skywalker on our project team — has provided us some very good guidance in how to show Tim the money.</p>
+      <p>This is an important lifeline to the development team. Because what it tells them is: <strong>this is where the money is, and this is where he expects to see it.</strong> And that if we can frame the identification, the seeing, and the action in response, in a way that is enjoyable, we should have a lot of people wanting to work with it.</p>
+      <p>For now, we only have to make one person happy. And that's Tim Hawkins. The rest of us serve at his pleasure.</p>
+      <span class="attrib">— Luke Weatherbie, 2026-08-19</span>
+    </div>
+  </div>
+</section>
+
+<section class="rail">
+  <div class="container">
+    <h2><span class="section-num">01</span>Parts</h2>
+    <div class="look-ask">
+      <h3>Look for</h3>
+      <p>Sales below matrix · obsolete / aged stock · high special-order ratio · uncredited core returns.</p>
+      <h3>Ask</h3>
+      <ul>
+        <li>What % of invoices are below matrix, and who's overriding?</li>
+        <li>What's our fill rate — stock vs. special order?</li>
+        <li>What's the dollar value of parts with no movement in 12+ months?</li>
+        <li>Are core credits being captured before the return window closes? <strong>Flag when cores hit the system to be returned.</strong></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="rail">
+  <div class="container">
+    <h2><span class="section-num">02</span>Service</h2>
+    <div class="look-ask">
+      <h3>Look for</h3>
+      <p>Technician efficiency gaps · warranty under-billing or rejected claims · uncaptured shop supply / sublet · unexplained discounting by advisor.</p>
+      <h3>Ask</h3>
+      <ul>
+        <li>What's our flag-hours vs. clock-hours efficiency by tech and by location?</li>
+        <li>Is our warranty labor rate below what the manufacturer allows?</li>
+        <li>What % of ROs carry a shop supply / sublet line, and is that consistent across advisors?</li>
+        <li>Which advisor has the highest average discount per RO?</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="rail">
+  <div class="container">
+    <h2><span class="section-num">03</span>Warranty capture <em>on units already in the shop</em></h2>
+    <blockquote class="luke">Where can we capture more warranty work on units when they are in the shop? We could possibly upload warranty plans into the model for this.</blockquote>
+    <p class="followup">The plan-upload path is the load-bearing idea: if the twin holds each unit's warranty coverage, the shop-visit trigger becomes automatic — every RO opened on an in-warranty unit checks against the coverage table before the customer pays out of pocket.</p>
+  </div>
+</section>
+
+<section class="rail">
+  <div class="container">
+    <h2><span class="section-num">04</span>Customers who disappeared</h2>
+    <blockquote class="luke">Customers who have disappeared — I think that is covered in what Tobias has already drafted.</blockquote>
+    <div class="covered">
+      <strong>Confirmed.</strong> That signal is <a href="../tim/">Screen 2 of the Customer Sphere Wireframe v0.1</a> — the 228-day silence gap and the four "worth a phone call this week" tiles. No duplication needed here. The sphere already reports the absence.
+    </div>
+  </div>
+</section>
+
+<section class="rail">
+  <div class="container">
+    <h2><span class="section-num">05</span>Service retention <em>— first visit → repeat visits</em></h2>
+    <div class="look-ask">
+      <h3>Look for</h3>
+      <p>Customers who service once and never return · gaps between recommended and actual next-visit intervals · no-shows on scheduled appointments.</p>
+      <h3>Ask</h3>
+      <ul>
+        <li>What % of first-time service customers return within their next service interval?</li>
+        <li>How many customers are overdue for scheduled maintenance with no follow-up contact logged?</li>
+        <li>What's our appointment no-show rate, and is anyone rebooking those customers?</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="rail">
+  <div class="container">
+    <h2><span class="section-num">06</span>Declined and deferred work</h2>
+    <div class="look-ask">
+      <h3>Look for</h3>
+      <p>Recommended repairs that were declined and never revisited · safety-related items that lapse without a follow-up.</p>
+      <h3>Ask</h3>
+      <ul>
+        <li>What's the dollar value of declined work sitting in the system right now?</li>
+        <li>Is there a process to re-contact customers on declined items at the next visit, or does it just disappear from the RO?</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="rail">
+  <div class="container">
+    <h2><span class="section-num">07</span>Warranty and maintenance-contract expirations</h2>
+    <div class="look-ask">
+      <h3>Look for</h3>
+      <p>Extended warranties or maintenance plans expiring with no renewal outreach · customers who fall out of warranty and immediately stop coming in.</p>
+      <h3>Ask</h3>
+      <ul>
+        <li>Who has a warranty or PM contract expiring in the next 60–90 days, and is anyone reaching out before it lapses?</li>
+        <li>What % of customers renew vs. walk after expiration?</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="rail">
+  <div class="container">
+    <h2><span class="section-num">08</span>Fleet and commercial accounts <em>— Peterbilt-specific</em></h2>
+    <div class="look-ask">
+      <h3>Look for</h3>
+      <p>Fleet accounts with declining unit counts serviced · accounts that haven't been touched by a rep in months · service-level slippage (turnaround time) on key accounts.</p>
+      <h3>Ask</h3>
+      <ul>
+        <li>Which fleet accounts have reduced their visit frequency or spend year-over-year?</li>
+        <li>Do our top accounts have a named contact checking in regularly, or is it purely reactive?</li>
+        <li>Are we losing fleet work to a competitor because of turnaround time?</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="rail">
+  <div class="container">
+    <h2><span class="section-num">09</span>Customer experience and complaints</h2>
+    <div class="look-ask">
+      <h3>Look for</h3>
+      <p>Negative reviews or CSI scores with no documented resolution · repeat complaints from the same customer · complaints that never reach a manager.</p>
+      <h3>Ask</h3>
+      <ul>
+        <li>What's our CSI trend by location, and are low scores tied to a specific advisor or process?</li>
+        <li>Is there a closed-loop process for a customer complaint — logged, resolved, and followed up — or does it end at "we fixed the car"?</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="rail">
+  <div class="container">
+    <h2><span class="section-num">10</span>Service throughput <em>— the sold-hour question</em></h2>
+    <blockquote class="luke">How many hours in the service dept do we need to sell a day, week, month, year — per tech, per rooftop?</blockquote>
+    <p class="followup">This is the daily control for the service floor. The twin surfaces it as a per-tech and per-rooftop panel with the target on one axis and the sold-hours on the other, in day / week / month / year windows.</p>
+  </div>
+</section>
+
+<section class="rail">
+  <div class="container">
+    <h2><span class="section-num">11</span>Effective labor rate</h2>
+    <blockquote class="luke">What are effective labor rates per tech, per rooftop?</blockquote>
+    <p class="followup">Effective labor rate = total labor revenue ÷ total flag hours sold. The twin surfaces the delta between the door rate and the effective rate — that gap is discounting, warranty write-downs, and uncaptured sublet compressed into one number.</p>
+  </div>
+</section>
+
+<section class="rail">
+  <div class="container">
+    <h2><span class="section-num">12</span>Expense exceptions</h2>
+    <blockquote class="luke">Exceptions in expenses, both fixed and semi — accounting exceptions.</blockquote>
+    <p class="followup">The twin's job on the expense side is to flag the row that does not fit — a January utility bill that is triple December's, a rent posting to the wrong CMF, a supplier the dealership has never used before. Not a report. A list of rows that need eyes.</p>
+  </div>
+</section>
+
+<section class="rail">
+  <div class="container">
+    <h2><span class="section-num">13</span>Floor-plan aging</h2>
+    <blockquote class="luke">Flooring dates and when units will be coming off of those floor plans.</blockquote>
+    <p class="followup">Every unit on the lot has an in-date and a curtailment schedule. The twin surfaces the coming-due window (30 / 60 / 90 days) so the unit is either sold, moved, or paid down before the interest step-up hits.</p>
+  </div>
+</section>
+
+<section class="rail">
+  <div class="container">
+    <h2><span class="section-num">14</span>Collections</h2>
+    <blockquote class="luke">Difficult collection customers flagged.</blockquote>
+    <p class="followup">The customer sphere already sees the FINAL NOTICE / COLLECTIONS chain (<a href="../tim/">Screen 2 of the Wireframe</a>). This section names it as a first-class list rather than an incident on one customer card: <strong>the collections worklist</strong>, ranked by dollars aged, with the last three touch-points on each row and the desk that owns the next call.</p>
+  </div>
+</section>
+
+<section class="rail strike">
+  <div class="container">
+    <h3 style="font-family:var(--font-body);font-weight:600;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:var(--mute);margin-bottom:var(--space-3);">Struck from the record</h3>
+    <blockquote>What if I had a company-wide survey go out asking some simple stuff — what are your major time killers during the day, things like that — that we could then look at trying to fold into this and be able to disperse it out amongst staff in smaller pieces? Obviously, they don't know the scope of it.</blockquote>
+    <p class="note">"Strike that one from the record. That's something dumb-dumb I can do with HR to make them feel like they're involved." — Luke, 2026-08-19</p>
+    <p class="note" style="margin-top:var(--space-3);">Preserved crossed-out for the audit trail. The twin will not solicit staff input for the operator dashboard. If the survey happens later through HR, its output is a separate document the twin can ingest, not drive.</p>
+  </div>
+</section>
+
+<section class="impact">
+  <div class="container">
+    <h2>What this changes for the <em>development team</em></h2>
+    <p style="max-width:60ch;color:var(--cream);margin-bottom:var(--space-4);">Luke has given us the cause-of-loss checklist — the specific signals a working dealer principal expects the dashboard to surface without being asked. The extraction plan grows by seven exception surfaces that were not in v0.1:</p>
+    <ol>
+      <li><strong>Below-matrix parts sales</strong> — invoice-line override register (parts kind, override user, dollar delta vs. matrix).</li>
+      <li><strong>Aged parts inventory</strong> — parts master × last-movement date × on-hand extended value, banded 12m / 18m / 24m+.</li>
+      <li><strong>Core-return watchdog</strong> — cores accepted × return window × credit posting; alert when the window is 14 days from close.</li>
+      <li><strong>RO shop-supply consistency</strong> — RO header × advisor × supply/sublet line presence rate; per-advisor deviation from the rooftop average.</li>
+      <li><strong>Declined-work register</strong> — RO estimate lines with status=declined × dollar value × age × next-visit flag.</li>
+      <li><strong>Contract-expiration outreach</strong> — warranty and PM contract expiration × 60/90-day window × last customer touch.</li>
+      <li><strong>Floor-plan curtailment</strong> — unit inventory × floor-plan in-date × curtailment schedule × interest step-up date.</li>
+    </ol>
+    <p style="max-width:60ch;color:var(--cream);margin-top:var(--space-6);font-size:15px;opacity:0.85;">Each becomes a <code style="background:rgba(255,255,255,0.08);padding:1px 6px;border-radius:3px;">twin.doc(kind=…)</code> extension or a computed view on the existing <code style="background:rgba(255,255,255,0.08);padding:1px 6px;border-radius:3px;">kind='invoice'</code> shape — the sphere absorbs them without a migration.</p>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="container">
+    <p>EVEglyphDesign · Luke's Guidance v0.1 · 2026-08-19</p>
+    <p style="margin-top:var(--space-2);">Companion to the <a href="../tim/">Customer Sphere Wireframe for Tim</a> · the <a href="https://eveglyphdesign.github.io/eve-hawkins-cdk-twin/dashboard/EVEglyphDesign_Customer_Sphere_v0.1_Review.pdf">Customer Sphere v0.1 Review for Tobias</a> · the <a href="https://github.com/EVEglyphDesign/eve-hawkins-cdk-twin/blob/main/dashboard/EXTRACTION-STAGING.md">Extraction Staging</a> and <a href="https://github.com/EVEglyphDesign/eve-hawkins-cdk-twin/blob/main/dashboard/EXTERNAL-REFERENCES.md">External References</a> registers.</p>
+    <p style="margin-top:var(--space-4);">Recorded verbatim from Luke Weatherbie's guidance to the project team. Preserved because the development team needs to hear it in his voice.</p>
+    <p class="mark">Pour le bien-être du peuple.</p>
+  </div>
+</footer>
+
+</body>
+</html>
