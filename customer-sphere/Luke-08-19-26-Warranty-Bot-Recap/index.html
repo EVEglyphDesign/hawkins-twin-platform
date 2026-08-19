@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luke 08-19-26 Warranty-Bot Recap · Hawkins Twin</title>
+  <meta name="description" content="Off-the-record recap of a warranty-bot conversation between Dany Thériault and Luke Weatherbie, recorded 2026-08-19." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream:#fdfaf4; --cream-2:#f7f2e7; --ink:#1a1a1a; --line:#e7e1d3;
+      --mute:#6b665c; --accent:#e87722; --past:#7a5c3a; --accent-soft:#f4a86a;
+      --ink-soft:#4a463d; --line-soft:#efe9db;
+      --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+      --font-body:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --content:760px; --wide:1120px;
+      --space-2:.5rem; --space-3:.75rem; --space-4:1rem; --space-5:1.25rem;
+      --space-6:1.5rem; --space-8:2rem; --space-10:2.5rem; --space-12:3rem;
+      --space-16:4rem; --space-20:5rem;
+    }
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--cream); color:var(--ink); font-family:var(--font-body); font-size:17px; font-weight:400; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+    a { color:var(--accent); text-decoration:none; border-bottom:1px solid transparent; }
+    a:hover, a:focus-visible { border-bottom-color:var(--accent); }
+    .container { width:min(calc(100% - 2rem),var(--content)); margin:0 auto; }
+    .wide { width:min(calc(100% - 2rem),var(--wide)); margin:0 auto; }
+
+    header.masthead { border-bottom:1px solid var(--line); padding:var(--space-6) 0; }
+    .masthead-row { display:flex; align-items:baseline; justify-content:space-between; gap:var(--space-4); flex-wrap:wrap; }
+    .masthead-title { font-family:var(--font-display); font-weight:500; font-size:18px; letter-spacing:-.01em; }
+    .masthead-meta { color:var(--mute); font-size:12px; letter-spacing:.14em; text-transform:uppercase; }
+
+    .hero { padding:var(--space-16) 0 var(--space-10); }
+    .kicker { color:var(--accent); font-size:12px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; margin-bottom:var(--space-6); }
+    h1 { font-family:var(--font-display); font-size:clamp(38px,5vw,60px); font-weight:400; letter-spacing:-.02em; line-height:1.05; margin-bottom:var(--space-6); max-width:22ch; }
+    h1 em { color:var(--accent); font-style:italic; font-weight:400; }
+    .lede { font-family:var(--font-display); font-size:21px; font-weight:300; line-height:1.5; margin-bottom:var(--space-6); max-width:43ch; }
+    .byline { color:var(--mute); font-size:14px; margin-bottom:var(--space-8); }
+    .dedication { background:var(--cream-2); border-left:3px solid var(--accent); color:var(--ink-soft); font-family:var(--font-display); font-size:19px; font-weight:300; line-height:1.55; margin:var(--space-10) 0 var(--space-16); padding:var(--space-6); }
+    .dedication p { margin-bottom:var(--space-4); }
+    .dedication p:last-child { margin-bottom:0; }
+    .dedication .attrib { display:block; color:var(--mute); font-family:var(--font-body); font-size:14px; margin-top:var(--space-4); }
+
+    section.rail { border-top:1px solid var(--line); padding:var(--space-10) 0; }
+    h2 { font-family:var(--font-display); font-size:28px; font-weight:500; letter-spacing:-.01em; line-height:1.15; margin-bottom:var(--space-5); }
+    .section-num { color:var(--accent); display:inline-block; font-family:var(--font-display); font-weight:400; margin-right:var(--space-3); }
+    h3 { color:var(--past); font-size:13px; font-weight:600; letter-spacing:.08em; line-height:1.35; margin:var(--space-8) 0 var(--space-3); text-transform:uppercase; }
+    p + p { margin-top:var(--space-4); }
+    strong { font-weight:600; }
+
+    .idea-line { font-family:var(--font-display); font-size:23px; font-weight:300; line-height:1.5; max-width:37ch; }
+    .idea-line strong { font-weight:500; }
+
+    .dialogue { display:grid; gap:var(--space-6); margin-top:var(--space-8); }
+    .turn { border-left:2px solid var(--line); max-width:640px; padding:var(--space-4) 0 var(--space-4) var(--space-5); }
+    .turn.dany { border-left-color:var(--past); }
+    .speaker { display:inline-block; font-size:11px; font-weight:600; letter-spacing:.14em; margin-bottom:var(--space-3); text-transform:uppercase; }
+    .speaker.luke { color:var(--accent); }
+    .speaker.dany { color:var(--past); }
+    .speaker.tim { color:var(--ink); }
+    .turn blockquote { color:var(--ink-soft); font-family:var(--font-display); font-size:20px; font-weight:300; line-height:1.5; }
+    .turn blockquote p + p { margin-top:var(--space-4); }
+    .tim-aside { border-bottom:1px solid var(--line); border-top:1px solid var(--line); color:var(--ink); font-family:var(--font-display); font-size:clamp(24px,3vw,31px); font-style:italic; font-weight:300; letter-spacing:-.01em; line-height:1.25; margin:0 auto; max-width:650px; padding:var(--space-6) var(--space-4); text-align:center; }
+    .tim-aside .speaker { display:block; font-family:var(--font-body); font-size:11px; font-style:normal; letter-spacing:.14em; margin-bottom:var(--space-3); }
+
+    .definition { color:var(--ink-soft); font-family:var(--font-display); font-size:20px; font-weight:300; line-height:1.5; margin-bottom:var(--space-8); }
+    .moving-parts { display:grid; gap:var(--space-4); list-style:none; counter-reset:parts; }
+    .moving-parts li { background:var(--cream-2); border:1px solid var(--line); counter-increment:parts; min-height:100%; padding:var(--space-5) var(--space-5) var(--space-5) 3.35rem; position:relative; }
+    .moving-parts li::before { color:var(--accent); content:counter(parts,decimal-leading-zero); font-family:var(--font-display); font-size:18px; left:var(--space-5); position:absolute; top:var(--space-5); }
+    .moving-parts strong { display:block; font-family:var(--font-display); font-size:19px; font-weight:500; margin-bottom:var(--space-2); }
+    .moving-parts em { font-family:var(--font-display); }
+
+    .plug h3 { margin-top:var(--space-6); }
+    .detail-list { list-style:none; margin-top:var(--space-3); }
+    .detail-list li { border-bottom:1px solid var(--line-soft); padding:var(--space-3) 0 var(--space-3) var(--space-5); position:relative; }
+    .detail-list li::before { color:var(--accent); content:'→'; left:0; position:absolute; }
+    .detail-list li:last-child { border-bottom:none; }
+    .stage { color:var(--past); font-weight:600; }
+
+    blockquote.luke-caveat { background:var(--cream-2); border-left:3px solid var(--accent); color:var(--ink-soft); font-family:var(--font-display); font-size:20px; font-weight:300; line-height:1.5; margin:var(--space-5) 0 var(--space-5); padding:var(--space-4) var(--space-5); }
+
+    .impact { background:var(--ink); color:var(--cream); margin:0; padding:var(--space-12) 0; }
+    .impact h2 { color:var(--cream); }
+    .impact .section-num { color:var(--accent-soft); }
+    .impact-quote { color:var(--accent-soft); font-family:var(--font-display); font-size:clamp(27px,4vw,39px); font-weight:300; letter-spacing:-.015em; line-height:1.25; margin:var(--space-6) 0; max-width:24ch; }
+    .impact p { color:var(--cream); max-width:46ch; }
+
+    footer.foot { border-top:1px solid var(--line); color:var(--mute); font-size:14px; padding:var(--space-10) 0 var(--space-16); }
+    footer.foot p + p { margin-top:var(--space-3); }
+    footer.foot .mark { color:var(--accent); font-family:var(--font-display); font-style:italic; margin-top:var(--space-4); }
+
+    @media (min-width:720px) {
+      .dialogue { gap:var(--space-8); }
+      .turn.dany { justify-self:end; border-left:0; border-right:2px solid var(--past); padding:var(--space-4) var(--space-5) var(--space-4) 0; text-align:right; }
+      .turn.dany .speaker { text-align:right; }
+    }
+    @media (min-width:900px) { .moving-parts { grid-template-columns:1fr 1fr; } }
+    @media (max-width:720px) { .masthead-row { align-items:flex-start; flex-direction:column; } .hero { padding:var(--space-10) 0 var(--space-8); } }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wide masthead-row">
+      <div class="masthead-title">EVEglyphDesign · Hawkins Twin · Luke 08-19-26 Warranty-Bot Recap</div>
+      <div class="masthead-meta">v0.1 · 2026-08-19 · off-the-record recap</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="kicker">Luke 08-19-26 Warranty-Bot Recap</div>
+        <h1>A little <em>warranty bot</em>.</h1>
+        <p class="lede">Off-the-record recap of a call between Dany Thériault and Luke Weatherbie, 2026-08-19 — recorded because the meeting was not on record and the idea is load-bearing for the dashboard.</p>
+        <p class="byline">Participants · Luke Weatherbie · Dany Thériault · Aside from Tim Hawkins · Recorded by Dany Thériault, EVEglyphDesign</p>
+      </div>
+      <div class="container">
+        <aside class="dedication" aria-label="Opening dedication">
+          <p>"Luke's got some pretty good ideas here today. We don't have the meeting on record, so I want to recap it. Luke, you go ahead."</p>
+          <span class="attrib">— Dany Thériault, opening the recap, 2026-08-19.</span>
+        </aside>
+      </div>
+    </section>
+
+    <section class="rail" id="idea">
+      <div class="container">
+        <h2><span class="section-num">01</span>The idea in one line</h2>
+        <p class="idea-line"><strong>When a truck comes in, the twin already knows what warranty it holds — OEM and aftermarket — and the service advisor gets a "warranty bot" to hit before the customer is in the door. The bot answers <em>what can we check right now that will be an easy win for a warranty claim</em>.</strong></p>
+      </div>
+    </section>
+
+    <section class="rail" id="recap">
+      <div class="container">
+        <h2><span class="section-num">02</span>The recap, in the order it came out</h2>
+        <div class="dialogue">
+          <article class="turn luke"><div class="speaker luke">Luke — the setup</div><blockquote><p>Essentially we take the warranty information that's assigned to each unit. Because we can pull that when we run an exam, so we feed that in. So anytime that truck comes in, it's automatically picked up, scanned — what warranty is still covered — and it can allow the service advisor to easily hit a button and talk to it to see: <em>what can we check at this moment? Is it going to be an easy win for a warranty claim?</em></p><p>It can be simple stuff. It can be, on the torque side, within 500 kilometres we check brakes. Within the Peterbilt side, you know, where's your first inspection? Is it a crucial point to get that done?</p><p>It would be a simple warranty upload that would be able to track what's applicable to each unit based on year, extended package — and it could even then also be folded into when warranties are nearing the end.</p></blockquote></article>
+          <article class="turn dany"><div class="speaker dany">Dany — where does the warranty live today?</div><blockquote><p>How do you collect the warranty information? Like, where do you validate the warranty today?</p></blockquote></article>
+          <article class="turn luke"><div class="speaker luke">Luke — the source, and the join key</div><blockquote><p>That would be through either the OEM system, or an aftermarket warranty that they would have. And it's all tracked through the VIN.</p></blockquote></article>
+          <article class="turn dany"><div class="speaker dany">Dany — so we can do it before the customer arrives</div><blockquote><p>The vehicle identification number. Right. So you'll check the third-party on that before doing the repair.</p></blockquote></article>
+          <article class="turn luke"><div class="speaker luke">Luke — proactive rather than reactive</div><blockquote><p>When a unit comes in for any type of service, the VIN is collected — and it's usually already picked up. Unless they're a new customer, we already have their VIN. So this could be a proactive thing as well. If somebody books in, we have their VIN. We can already start to run warranty checks on it.</p><p>And when they walk in the door, we can say, <em>hey, we're also going to check this for warranty, this for warranty, this for warranty too. Would you like us to do that?</em></p></blockquote></article>
+          <article class="turn dany"><div class="speaker dany">Dany — why not for everyone</div><blockquote><p>Why would you not do that? We can give you minimal charge. Why not do that for everyone?</p></blockquote></article>
+          <article class="turn luke"><div class="speaker luke">Luke — because it's the bonus, not the base</div><blockquote><p>Well, we can — absolutely. But this isn't just a technical thing. This is a customer-service bonus too. <em>Hey, we knew you were coming. You're under warranty. We see there's things that are covered. Would you like us to check this for a warranty-coverage surcharge?</em></p></blockquote></article>
+          <article class="turn dany"><div class="speaker dany">Dany — the name that stuck</div><blockquote><p>So we'll have — why don't we make you, like, a little warranty bot? A little warranty bot. And then you'd provide it to the service advisors.</p></blockquote></article>
+          <article class="turn luke"><div class="speaker luke">Luke — Tim's line</div><blockquote><p>Warranty bot. And that could be — that's the possibilities of the entire business.</p></blockquote></article>
+          <aside class="tim-aside"><span class="speaker tim">Tim — aside</span>“I like that. I like that. I like that.”</aside>
+          <article class="turn dany"><div class="speaker dany">Dany — the plumbing question</div><blockquote><p>These OEM sites will probably want some samples of a few of those, because probably we can connect to some of them with our APIs.</p></blockquote></article>
+          <article class="turn luke"><div class="speaker luke">Luke — where the easy wins live</div><blockquote><p>Aftermarket warranty, especially on the powersport side, would be really vulnerable to this — the OEM side third-parties it out, so that could be a window as well.</p><p>I'm not 100% sure on the Peterbilt side how warranty flows and works yet. I know it's much more complicated because of the dollar volume. But it's the easy wins that we'd want to look for that can turn a three-hour RO into a six-hour RO — because of extra warranty work we can complete while we're draining an oil tank.</p></blockquote></article>
+          <article class="turn dany"><div class="speaker dany">Dany — the targeting system</div><blockquote><p>So that will be the targeting system for this. We can upload warranty coverages and start to specify them, maybe even through a code, when they're entered into CDK or Lightspeed.</p></blockquote></article>
+          <article class="turn luke"><div class="speaker luke">Luke — LLM caveat</div><blockquote><p>Warranty's pretty good, because the terms and conditions can be loaded as context. Even if they're all right in the same session, we can get pretty close on it. It's just that with a commercial LLM like that, it's always going to be reasoning over and over again — it's never going to be exactly the same.</p></blockquote></article>
+          <article class="turn dany"><div class="speaker dany">Dany — drift, and how to bound it</div><blockquote><p>But it can be a trigger to look, because quite often it's something that can pop up and make you jump out. It's always going to have a little bit of drift. But you can manage the drift over time — like I showed you with the boot contract and the canon and the SIN registry. As long as you have some kind of boundary. That's just an example of how to set up a boundary. You couldn't do it with less than three points in order to set up a boundary — that's the minimum. But it can be done in other ways.</p></blockquote></article>
+          <article class="turn luke"><div class="speaker luke">Luke — the close</div><blockquote><p>You know what, that makes sense. It can be done a number of different ways. And really, this could be a further-down-the-road long-term thing. <strong>But like — that's big-money-off-the-table stuff. That's what we go with — the information that's the easiest to consolidate.</strong></p></blockquote></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="rail" id="moving-parts">
+      <div class="container">
+        <h2><span class="section-num">03</span>What this actually is, once the recap is set aside</h2>
+        <p class="definition"><strong>The Warranty Bot is a per-unit warranty context object, keyed on VIN, exposed to the service advisor as a natural-language button, evaluated at booking time not at repair time.</strong></p>
+        <ol class="moving-parts">
+          <li><strong>The unit register.</strong>Every VIN the dealership has ever touched, with year, model, factory package, extended-warranty package, in-service date, and every OEM / aftermarket warranty rider tied to it. This is a <code>twin.doc(kind='warranty_coverage')</code> extension of the sphere.</li>
+          <li><strong>The coverage rules.</strong>OEM warranty terms (Peterbilt / PACCAR base + extended), aftermarket warranty terms (Torque, powersport-style third-party programs), and dealership-added service contracts. Loaded as context. Structured where possible (year + component + km/mile threshold + coverage window + labor rate), narrative where it has to be.</li>
+          <li><strong>The check catalogue.</strong><em>What can we check at this moment that will be an easy win?</em> Curated list of high-yield inspections, indexed by coverage rule and by the ROs the truck is already in for. Brakes at 500 km on Torque. First-inspection point on Peterbilt. Oil-drain windows where the tech is under the truck anyway.</li>
+          <li><strong>The advisor UI.</strong>One button on the service-advisor screen — <em>"Warranty check this VIN"</em> — plus a talk-to-it mode where the advisor asks in plain language and the bot answers what is in coverage and what is worth checking, right now, on this unit. <strong>Proactive, not reactive</strong>: fires when the booking is made, not when the truck rolls in.</li>
+          <li><strong>The customer-facing script.</strong>The bot output becomes an offer, not an invoice line: <em>"We saw you were coming in. Your unit is still under warranty for A, B and C. Would you like us to include those in today's visit?"</em> — the customer-service bonus Luke insisted on.</li>
+          <li><strong>The boundary.</strong>Because a commercial LLM will drift, the bot output is a trigger-to-look, not an authoritative claim. The advisor still confirms. The dealership still submits. Drift is managed the same way it is managed in the boot contract and the SIN registry — with an explicit three-point boundary (source rule · unit context · check catalogue). Anything the bot suggests outside those three points is out of bounds.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="rail" id="extraction">
+      <div class="container plug">
+        <h2><span class="section-num">04</span>Where it plugs into the sphere and the extraction plan</h2>
+        <h3>VIN as the join key</h3>
+        <p><strong>VIN is the join key.</strong> VIN already lives on <code>twin.customer</code> and on every service RO in CDK. The new <code>kind='warranty_coverage'</code> document joins on VIN, not on customer id, so a warranty rider that transfers with a truck to a second owner still resolves.</p>
+        <h3>Booking as the trigger event</h3>
+        <p><strong>Booking is the trigger event.</strong> When a booking lands in CDK, the twin fires the warranty check. If the OEM side is API-reachable (per Luke's "we can connect to some of them with our APIs"), the check is live. If the OEM side is a third-party (Peterbilt / PACCAR going through their own third party, aftermarket programs via their own portals), the check is a scheduled fetch off a stored credential — the same shape as the existing CDK export-route pattern.</p>
+        <h3>Adds to the extraction plan</h3>
+        <p>This is a new stage in the eight-stage extraction order that lives in <a href="https://github.com/EVEglyphDesign/eve-hawkins-cdk-twin/blob/main/dashboard/EXTRACTION-STAGING.md">EXTRACTION-STAGING.md</a>. Concretely:</p>
+        <ul class="detail-list">
+          <li><span class="stage">Stage 3b</span> — Warranty coverage per unit (OEM base, OEM extended, aftermarket, dealership-added service contract).</li>
+          <li><span class="stage">Stage 3c</span> — Warranty terms as context (structured where the rule is a threshold, narrative where the terms are prose).</li>
+          <li><span class="stage">Stage 3d</span> — Check catalogue (high-yield inspections indexed by rule × current-RO).</li>
+          <li><span class="stage">Stage 3e</span> — Booking-time trigger (event handler on CDK booking-created; scoring output persisted so it survives the LLM being reasoned again).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="rail" id="peterbilt">
+      <div class="container">
+        <h2><span class="section-num">05</span>The Peterbilt caveat, quoted honestly</h2>
+        <blockquote class="luke-caveat">Luke: <em>I'm not 100% sure on the Peterbilt side how warranty flows and works yet. I know it's much more complicated because of the dollar volume.</em></blockquote>
+        <p>The Peterbilt claim path is complicated, and the twin does not pretend to hold it end-to-end today. <strong>What the twin can do first, safely:</strong></p>
+        <ul class="detail-list">
+          <li>The dealership-side lens (which coverages the unit holds, which checks are worth doing at this visit) is fully inside the twin's remit.</li>
+          <li>Submitting the claim to Peterbilt / PACCAR stays where it is today — in the manufacturer's system — until the walkthrough with Craig Allen and the operator lands (that ask is already open in <a href="https://github.com/EVEglyphDesign/eve-hawkins-cdk-twin/blob/main/dashboard/EXTERNAL-REFERENCES.md">EXTERNAL-REFERENCES.md</a>).</li>
+          <li>Aftermarket / powersport is where the twin can be end-to-end first, because as Luke put it, that side "would be really vulnerable to this."</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="impact" id="tim-list">
+      <div class="container">
+        <h2><span class="section-num">06</span>Why this is on Tim's list, in Luke's own words</h2>
+        <blockquote class="impact-quote">Like — that's big-money-off-the-table stuff. That's what we go with — the information that's the easiest to consolidate.</blockquote>
+        <p>The RO that was a three-hour job becomes a six-hour job because the warranty coverage was checked before the tech opened the drain plug. <strong>The revenue that this surfaces is revenue the dealership was already entitled to but was not going to bill.</strong> That is precisely the profile of every other signal in the Instructions doc — leakage, not new work.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="container">
+      <p>EVEglyphDesign · Luke 08-19-26 Warranty-Bot Recap · v0.1 · 2026-08-19</p>
+      <p>Companion to <a href="../Luke-08-19-26-Instructions/">Luke 08-19-26 Instructions</a> · <a href="../tim/">Customer Sphere Wireframe for Tim</a> · <a href="https://github.com/EVEglyphDesign/eve-hawkins-cdk-twin/blob/main/dashboard/EXTRACTION-STAGING.md">Extraction Staging</a></p>
+      <p>Recorded off-the-record. Preserved verbatim because the idea is load-bearing for the dashboard.</p>
+      <p class="mark">Pour le bien-être du peuple.</p>
+    </div>
+  </footer>
+</body>
+</html>
