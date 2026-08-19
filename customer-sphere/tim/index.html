@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Customer Sphere wireframe for Tim Hawkins, prepared by Luke Weatherbie.">
+  <title>Customer Sphere · For Tim Hawkins</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream:#fdfaf4; --cream-2:#f7f2e7; --ink:#1a1a1a; --line:#e7e1d3;
+      --mute:#6b665c; --accent:#e87722; --past:#7a5c3a; --ink-soft:#4a463d;
+      --font-display:'Fraunces', Georgia, serif; --font-body:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --space-2:.5rem; --space-3:.75rem; --space-4:1rem; --space-5:1.25rem; --space-6:1.5rem;
+      --space-8:2rem; --space-10:2.5rem; --space-12:3rem; --space-16:4rem; --space-20:5rem; --space-24:6rem;
+      --content:720px; --wide:1120px;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--cream); color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+    a { color:inherit; text-decoration:none; border-bottom:1px solid var(--accent); }
+    a:hover, a:focus-visible { color:var(--accent); outline:none; }
+    .container { width:min(calc(100% - 2rem), var(--content)); margin:0 auto; }
+    .wide { width:min(calc(100% - 2rem), var(--wide)); margin:0 auto; }
+
+    .masthead { border-bottom:1px solid var(--line); padding:var(--space-5) 0; }
+    .masthead-row { display:flex; align-items:baseline; justify-content:space-between; gap:var(--space-4); }
+    .masthead-title { font-family:var(--font-display); font-weight:500; font-size:18px; letter-spacing:-.01em; }
+    .masthead-meta { max-width:440px; font-size:11px; letter-spacing:.1em; line-height:1.55; text-transform:uppercase; text-align:right; color:var(--mute); }
+
+    .hero { padding:var(--space-16) 0 var(--space-10); }
+    .kicker, .eyebrow { margin:0 0 var(--space-5); color:var(--past); font-size:12px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; }
+    h1, h2, h3, p { margin-top:0; }
+    h1 { max-width:21ch; margin-bottom:var(--space-6); font-family:var(--font-display); font-size:clamp(39px, 7vw, 61px); font-weight:400; letter-spacing:-.025em; line-height:1.04; }
+    .lede { max-width:34em; margin-bottom:var(--space-8); font-family:var(--font-display); font-size:21px; font-weight:300; line-height:1.5; }
+    .state-banner { max-width:var(--wide); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:var(--space-5) 0; }
+    .state-title { font-family:var(--font-display); font-size:19px; font-weight:500; }
+    .sources { display:grid; grid-template-columns:repeat(3, 1fr); gap:var(--space-3); margin-top:var(--space-4); }
+    .source-chip { min-height:76px; border:1px solid var(--line); background:var(--cream-2); padding:var(--space-3) var(--space-4); }
+    .source-chip strong { display:block; margin-bottom:2px; font-size:13px; font-weight:600; }
+    .source-chip span { display:block; color:var(--mute); font-size:12px; line-height:1.45; }
+
+    .page-nav { display:flex; flex-wrap:wrap; gap:var(--space-4); padding:var(--space-4) 0 var(--space-10); color:var(--mute); font-size:13px; }
+    .section { padding:var(--space-16) 0; border-top:1px solid var(--line); scroll-margin-top:1rem; }
+    .section-head { display:grid; grid-template-columns:140px 1fr; gap:var(--space-6); margin-bottom:var(--space-8); }
+    .section-number { padding-top:8px; color:var(--past); font-size:12px; font-weight:600; letter-spacing:.15em; text-transform:uppercase; }
+    h2 { max-width:23ch; margin-bottom:var(--space-4); font-family:var(--font-display); font-size:clamp(31px, 4vw, 45px); font-weight:400; letter-spacing:-.02em; line-height:1.1; }
+    .section-lede { max-width:48em; color:var(--ink-soft); font-size:17px; }
+
+    .sphere-frame { border:1px solid var(--line); background:var(--cream-2); padding:var(--space-4); }
+    .sphere-vis { display:block; width:100%; height:auto; overflow:visible; }
+    .sphere-vis .shell { fill:#fbf7ee; stroke:#d9d0c0; stroke-width:1.2; }
+    .sphere-vis .ring { fill:none; stroke:#e3dacb; stroke-width:.75; }
+    .sphere-vis .axis { fill:#6b665c; font-family:var(--font-body); font-size:9px; letter-spacing:.09em; text-transform:uppercase; }
+    .sphere-vis .quiet { fill:#6b665c; opacity:.74; }
+    .sphere-vis .growing { fill:#e87722; opacity:.9; }
+    .sphere-vis .fading { fill:#7a5c3a; opacity:.92; }
+    .sphere-vis .stale { fill:#7a5c3a; opacity:.64; }
+    .sphere-caption { display:flex; justify-content:space-between; gap:var(--space-4); padding:var(--space-3) 4px 0; color:var(--mute); font-size:12px; }
+    .legend { display:grid; grid-template-columns:repeat(4, 1fr); gap:var(--space-3); padding:var(--space-5) 0; border-bottom:1px solid var(--line); }
+    .legend-item { display:flex; gap:8px; align-items:flex-start; color:var(--mute); font-size:12px; line-height:1.45; }
+    .legend-mark { display:inline-block; width:9px; height:9px; margin-top:5px; border-radius:50%; background:var(--mute); flex:0 0 auto; }
+    .legend-mark.orange { background:var(--accent); } .legend-mark.brown { background:var(--past); }
+    .legend-mark.ring { border:1px solid var(--mute); background:transparent; }
+
+    .picture-says { margin-top:var(--space-10); }
+    .picture-says h3, .calls-intro h3 { margin-bottom:var(--space-4); font-family:var(--font-display); font-size:25px; font-weight:400; letter-spacing:-.01em; }
+    .finding-grid { display:grid; grid-template-columns:repeat(4, 1fr); border-top:1px solid var(--line); border-left:1px solid var(--line); }
+    .finding { min-height:146px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); padding:var(--space-5); }
+    .finding strong { display:block; margin-bottom:var(--space-3); font-family:var(--font-display); color:var(--past); font-size:30px; font-weight:400; line-height:1; }
+    .finding span { color:var(--ink-soft); font-size:13px; line-height:1.45; }
+
+    .customer-grid { display:grid; grid-template-columns:1fr 1.25fr 1fr; gap:var(--space-4); }
+    .customer-card { min-height:356px; border:1px solid var(--line); padding:var(--space-6); }
+    .customer-card h3 { margin-bottom:var(--space-5); font-family:var(--font-display); font-size:25px; font-weight:400; letter-spacing:-.01em; }
+    .customer-label { margin-bottom:var(--space-5); color:var(--past); font-size:12px; font-weight:600; letter-spacing:.09em; line-height:1.45; text-transform:uppercase; }
+    .record-list { padding:0; margin:0; list-style:none; }
+    .record-list li { padding:var(--space-3) 0; border-top:1px solid var(--line); color:var(--ink-soft); font-size:14px; }
+    .record-list li:first-child { border-top:0; padding-top:0; }
+    .timeline-wrap { position:relative; padding-left:28px; }
+    .gap-label { display:inline-block; margin:-2px 0 var(--space-5); padding:3px 7px; background:var(--cream-2); color:var(--past); font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; }
+    .timeline { position:relative; padding:0; margin:0; list-style:none; }
+    .timeline::before { content:""; position:absolute; left:-20px; top:4px; bottom:8px; border-left:1px solid var(--line); }
+    .timeline li { position:relative; padding:0 0 var(--space-4); color:var(--ink-soft); font-size:13px; line-height:1.45; }
+    .timeline li::before { content:""; position:absolute; left:-24px; top:5px; width:7px; height:7px; border:1px solid var(--past); border-radius:50%; background:var(--cream); }
+    .timeline li:last-child { padding-bottom:0; }
+    .timeline time { display:block; color:var(--mute); font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
+    .timeline-note { margin:var(--space-5) 0 0; color:var(--mute); font-size:11px; }
+    .empty-money { display:flex; min-height:246px; flex-direction:column; justify-content:center; border:1px dashed #cfc5b2; background:var(--cream-2); padding:var(--space-5); }
+    .empty-money strong { margin-bottom:var(--space-3); font-family:var(--font-display); font-size:23px; font-weight:400; line-height:1.2; }
+    .empty-money p { margin:0; color:var(--mute); font-size:13px; line-height:1.55; }
+    .rules { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); margin-top:var(--space-4); }
+    .rule-callout { border-left:3px solid var(--accent); background:var(--cream-2); padding:var(--space-4) var(--space-5); font-family:var(--font-display); font-size:18px; line-height:1.3; }
+
+    .absence { max-width:53em; margin:0 0 var(--space-10) 140px; color:var(--ink-soft); font-family:var(--font-display); font-size:21px; font-weight:300; line-height:1.5; }
+    .call-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:var(--space-4); }
+    .call-tile { display:flex; min-height:215px; flex-direction:column; border:1px solid var(--line); padding:var(--space-5); }
+    .call-tile h3 { margin-bottom:var(--space-2); font-family:var(--font-display); font-size:24px; font-weight:400; }
+    .example { margin-bottom:var(--space-5); color:var(--past); font-size:10px; font-weight:600; letter-spacing:.08em; line-height:1.45; text-transform:uppercase; }
+    .why { margin-top:auto; padding-top:var(--space-4); border-top:1px solid var(--line); color:var(--ink-soft); font-size:13px; line-height:1.5; }
+    .why strong { color:var(--ink); font-weight:600; }
+    footer { border-top:1px solid var(--line); padding:var(--space-10) 0 var(--space-12); color:var(--mute); font-size:12px; }
+    footer p { max-width:70em; margin:0 0 var(--space-3); }
+    .mark { color:var(--ink); font-family:var(--font-display); font-size:17px; }
+
+    @media (max-width:760px) {
+      .masthead-row { align-items:flex-start; flex-direction:column; }
+      .masthead-meta { text-align:left; }
+      .sources, .finding-grid, .call-grid { grid-template-columns:1fr 1fr; }
+      .section-head { grid-template-columns:1fr; gap:var(--space-3); }
+      .section-number { padding-top:0; }
+      .customer-grid { grid-template-columns:1fr; }
+      .customer-card { min-height:0; }
+      .absence { margin-left:0; }
+      .legend { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:440px) {
+      body { font-size:15px; }
+      .hero { padding-top:var(--space-12); }
+      h1 { font-size:39px; }
+      .sources, .finding-grid, .call-grid, .rules, .legend { grid-template-columns:1fr; }
+      .finding { min-height:0; }
+      .page-nav { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-3); }
+    }
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+  </style>
+</head>
+<body id="top">
+  <header class="masthead">
+    <div class="wide masthead-row">
+      <div class="masthead-title"><a href="#top">EVEglyphDesign</a> / <a href="#top">Hawkins Twin</a> / <a href="#sphere">Customer Sphere</a></div>
+      <div class="masthead-meta">For Tim Hawkins · Prepared by Luke Weatherbie · v0.1 · 2026-08-19</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wide" aria-labelledby="page-title">
+      <p class="kicker">Customer Sphere · Wireframe v0.1</p>
+      <h1 id="page-title">One record per customer, assembled from three sources, owned outright by the dealership.</h1>
+      <p class="lede">Not a report — a record, with the evidence still attached, so that a number can be opened and read back to the conversation that produced it.</p>
+      <div class="state-banner" aria-label="Source state">
+        <div class="state-title">Built for calls and mail. Waiting on CDK for money.</div>
+        <div class="sources">
+          <div class="source-chip"><strong>Telephone</strong><span>286,972 calls</span></div>
+          <div class="source-chip"><strong>Mail</strong><span>104 of 343 mailboxes walked, 432,951 messages</span></div>
+          <div class="source-chip"><strong>CDK</strong><span>ordered, not granted</span></div>
+        </div>
+      </div>
+    </section>
+
+    <nav class="wide page-nav" aria-label="On this page">
+      <a href="#sphere">[The sphere]</a>
+      <a href="#one-customer">[One customer]</a>
+      <a href="#calls">[What the sphere finds]</a>
+    </nav>
+
+    <section class="section" id="sphere" aria-labelledby="sphere-title">
+      <div class="wide">
+        <div class="section-head">
+          <p class="section-number">01 · The sphere</p>
+          <div>
+            <h2 id="sphere-title">The sphere</h2>
+            <p class="section-lede">420 real customers. Around is how many people deal with us. Up and down is how recently. Size is the weight of the relationship. Colour is its direction.</p>
+          </div>
+        </div>
+        <figure class="sphere-frame" aria-labelledby="sphere-caption">
+          <svg class="sphere-vis" viewBox="0 0 900 530" role="img" aria-label="Stylised customer sphere with anonymous relationship points">
+            <ellipse class="shell" cx="450" cy="265" rx="277" ry="223"/>
+            <ellipse class="ring" cx="450" cy="265" rx="277" ry="71"/>
+            <ellipse class="ring" cx="450" cy="265" rx="174" ry="223"/>
+            <path class="ring" d="M205 169 Q450 265 695 169 M205 361 Q450 265 695 361"/>
+            <text class="axis" x="450" y="23" text-anchor="middle">This week</text>
+            <text class="axis" x="450" y="515" text-anchor="middle">A year or more</text>
+            <text class="axis" x="154" y="270" text-anchor="end">fewer people</text>
+            <text class="axis" x="746" y="270">more people</text>
+            <g aria-hidden="true">
+              <circle class="growing" cx="405" cy="101" r="5"/><circle class="quiet" cx="466" cy="111" r="4"/><circle class="growing" cx="518" cy="129" r="7"/><circle class="quiet" cx="351" cy="139" r="3"/><circle class="growing" cx="557" cy="157" r="4"/>
+              <circle class="quiet" cx="310" cy="169" r="5"/><circle class="growing" cx="401" cy="161" r="4"/><circle class="quiet" cx="462" cy="173" r="7"/><circle class="fading" cx="521" cy="181" r="5"/><circle class="quiet" cx="584" cy="204" r="3"/>
+              <circle class="quiet" cx="245" cy="218" r="4"/><circle class="growing" cx="330" cy="205" r="8"/><circle class="quiet" cx="373" cy="218" r="3"/><circle class="growing" cx="421" cy="213" r="5"/><circle class="quiet" cx="475" cy="222" r="4"/><circle class="fading" cx="534" cy="228" r="7"/><circle class="quiet" cx="612" cy="233" r="5"/>
+              <circle class="quiet" cx="206" cy="262" r="3"/><circle class="growing" cx="280" cy="248" r="5"/><circle class="quiet" cx="341" cy="250" r="4"/><circle class="fading" cx="389" cy="259" r="8"/><circle class="quiet" cx="441" cy="248" r="3"/><circle class="growing" cx="492" cy="256" r="6"/><circle class="fading" cx="548" cy="258" r="5"/><circle class="quiet" cx="602" cy="270" r="7"/><circle class="fading" cx="660" cy="277" r="4"/>
+              <circle class="quiet" cx="238" cy="302" r="5"/><circle class="fading" cx="298" cy="292" r="7"/><circle class="quiet" cx="355" cy="306" r="4"/><circle class="fading" cx="405" cy="297" r="10"/><circle class="quiet" cx="464" cy="311" r="6"/><circle class="fading" cx="521" cy="302" r="9"/><circle class="quiet" cx="583" cy="318" r="4"/><circle class="fading" cx="630" cy="310" r="7"/>
+              <circle class="stale" cx="275" cy="343" r="8"/><circle class="fading" cx="334" cy="349" r="6"/><circle class="stale" cx="384" cy="338" r="13"/><circle class="fading" cx="442" cy="353" r="9"/><circle class="stale" cx="493" cy="341" r="15"/><circle class="fading" cx="551" cy="359" r="8"/><circle class="stale" cx="604" cy="348" r="11"/>
+              <circle class="stale" cx="326" cy="392" r="10"/><circle class="fading" cx="378" cy="405" r="14"/><circle class="stale" cx="434" cy="393" r="9"/><circle class="fading" cx="487" cy="412" r="17"/><circle class="stale" cx="543" cy="399" r="12"/><circle class="fading" cx="580" cy="386" r="7"/>
+              <circle class="stale" cx="395" cy="449" r="11"/><circle class="fading" cx="451" cy="458" r="19"/><circle class="stale" cx="509" cy="447" r="14"/>
+            </g>
+          </svg>
+          <figcaption class="sphere-caption" id="sphere-caption"><span>Anonymous dots only — customer identity is not shown on this surface.</span><span>larger, lower dots = heavier silent relationships</span></figcaption>
+        </figure>
+        <div class="legend" aria-label="Sphere legend">
+          <div class="legend-item"><span class="legend-mark ring"></span><span><strong>Around</strong><br>people at the company who deal with us</span></div>
+          <div class="legend-item"><span class="legend-mark ring"></span><span><strong>Up / down</strong><br>how recently the record spoke</span></div>
+          <div class="legend-item"><span class="legend-mark"></span><span><strong>Size</strong><br>weight of the relationship</span></div>
+          <div class="legend-item"><span class="legend-mark orange"></span><span><strong>Colour</strong><br>orange growing · grey quiet · brown fading</span></div>
+        </div>
+
+        <div class="picture-says">
+          <h3>What the picture says</h3>
+          <div class="finding-grid">
+            <div class="finding"><strong>315</strong><span>companies with 4+ people silent 90+ days</span></div>
+            <div class="finding"><strong>246</strong><span>silent 6+ months</span></div>
+            <div class="finding"><strong>2,933</strong><span>conversations, then stopped</span></div>
+            <div class="finding"><strong>1,006</strong><span>companies remain — the customer book as the record currently knows it</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="one-customer" aria-labelledby="customer-title">
+      <div class="wide">
+        <div class="section-head">
+          <p class="section-number">02 · One customer</p>
+          <div>
+            <h2 id="customer-title">One customer</h2>
+            <p class="section-lede">A record opens through the people, the evidence, and the value it can honestly support today.</p>
+          </div>
+        </div>
+        <div class="customer-grid">
+          <article class="customer-card">
+            <h3>Who are they</h3>
+            <p class="customer-label">Customer #A-2117 (name redacted for this surface)</p>
+            <ul class="record-list">
+              <li>8 people at this company on our record.</li>
+              <li>3 desks here dealt with them.</li>
+              <li>One of them 102 times.</li>
+              <li>248 documents.</li>
+            </ul>
+          </article>
+          <article class="customer-card">
+            <h3>What happened</h3>
+            <div class="timeline-wrap">
+              <div class="gap-label">228-day gap</div>
+              <ol class="timeline" aria-label="Customer interaction chain, read bottom-up">
+                <li><time>January 2</time>one message</li>
+                <li><time>December 22</time>FINAL NOTICE / COLLECTIONS</li>
+                <li><time>September, November</time>statements</li>
+                <li><time>August</time>trailer dropped for inspection</li>
+              </ol>
+              <p class="timeline-note">Read bottom-up.</p>
+            </div>
+          </article>
+          <article class="customer-card">
+            <h3>What it is worth</h3>
+            <div class="empty-money">
+              <strong>Waiting on CDK.</strong>
+              <p>Truck against service. Gross profit per year. The department split. No figure on this panel is estimated. When CDK is granted, this space fills.</p>
+            </div>
+          </article>
+        </div>
+        <div class="rules" aria-label="Record rules">
+          <div class="rule-callout">The money panel is empty and says why.</div>
+          <div class="rule-callout">A quoted figure stays a quote.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="calls" aria-labelledby="calls-title">
+      <div class="wide">
+        <div class="section-head">
+          <p class="section-number">03 · This week</p>
+          <div>
+            <h2 id="calls-title">What the sphere finds that a dashboard cannot</h2>
+          </div>
+        </div>
+        <p class="absence">No dealer dashboard shows this, because the thing to see is an absence. Invoices that stopped generate no row. The evidence that the relationship ended is in the mail server and the phone system, which is exactly what this system holds and CDK does not.</p>
+        <div class="calls-intro"><h3>Worth a phone call this week</h3></div>
+        <div class="call-grid">
+          <article class="call-tile"><h3>Customer #1</h3><p class="example">example — real customer, name redacted for this surface</p><p class="why"><strong>Why:</strong> 228 days silent · last department: mail · 3 desks dealt with them</p></article>
+          <article class="call-tile"><h3>Customer #2</h3><p class="example">example — real customer, name redacted for this surface</p><p class="why"><strong>Why:</strong> 90+ days silent · last department: telephone · 3 desks dealt with them</p></article>
+          <article class="call-tile"><h3>Customer #3</h3><p class="example">example — real customer, name redacted for this surface</p><p class="why"><strong>Why:</strong> 6+ months silent · last department: mail · 3 desks dealt with them</p></article>
+          <article class="call-tile"><h3>Customer #4</h3><p class="example">example — real customer, name redacted for this surface</p><p class="why"><strong>Why:</strong> 90+ days silent · last department: telephone · 3 desks dealt with them</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wide">
+      <p><a href="#top">EVEglyphDesign</a> · Companion to the Customer Sphere Blueprint v0.1, Technical Specification v0.1 and Wireframe v0.1 (Tobias Polly, 2026-08-18).</p>
+      <p class="mark">Pour le bien-être du peuple.</p>
+    </div>
+  </footer>
+</body>
+</html>
