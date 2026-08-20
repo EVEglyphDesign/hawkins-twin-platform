@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luke 08-20-26 PACCAR Portfolio · Hawkins Twin</title>
+  <meta name="description" content="A public reading surface for Luke Weatherbie: the profile PACCAR asks a dealer principal to fit, the councils and meetings where the other Lukes gather, the programs, the resources, the named people, and the award tracks — every value carrying its own primary-source link." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream:#fdfaf4; --cream-2:#f7f2e7; --ink:#1a1a1a; --line:#e7e1d3;
+      --mute:#6b665c; --accent:#e87722; --past:#7a5c3a; --accent-soft:#f4a86a;
+      --ink-soft:#4a463d; --line-soft:#efe9db;
+      --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+      --font-body:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --content:760px; --wide:1120px;
+      --space-2:.5rem; --space-3:.75rem; --space-4:1rem; --space-5:1.25rem;
+      --space-6:1.5rem; --space-8:2rem; --space-10:2.5rem; --space-12:3rem;
+      --space-16:4rem; --space-20:5rem;
+    }
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--cream); color:var(--ink); font-family:var(--font-body); font-size:17px; font-weight:400; line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+    a { color:var(--accent); text-decoration:none; border-bottom:1px solid transparent; }
+    a:hover, a:focus-visible { border-bottom-color:var(--accent); }
+    .container { width:min(calc(100% - 2rem),var(--content)); margin:0 auto; }
+    .wide { width:min(calc(100% - 2rem),var(--wide)); margin:0 auto; }
+
+    header.masthead { border-bottom:1px solid var(--line); padding:var(--space-6) 0; }
+    .masthead-row { display:flex; align-items:baseline; justify-content:space-between; gap:var(--space-4); flex-wrap:wrap; }
+    .masthead-title { font-family:var(--font-display); font-weight:500; font-size:18px; letter-spacing:-.01em; }
+    .masthead-meta { color:var(--mute); font-size:12px; letter-spacing:.14em; text-transform:uppercase; }
+
+    .hero { padding:var(--space-16) 0 var(--space-10); }
+    .kicker { color:var(--accent); font-size:12px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; margin-bottom:var(--space-6); }
+    h1 { font-family:var(--font-display); font-size:clamp(38px,5vw,60px); font-weight:400; letter-spacing:-.02em; line-height:1.05; margin-bottom:var(--space-6); max-width:22ch; }
+    h1 em { color:var(--accent); font-style:italic; font-weight:400; }
+    .lede { font-family:var(--font-display); font-size:21px; font-weight:300; line-height:1.5; margin-bottom:var(--space-6); max-width:52ch; }
+    .byline { color:var(--mute); font-size:14px; margin-bottom:var(--space-8); }
+
+    .toc { background:var(--cream-2); border:1px solid var(--line); padding:var(--space-5) var(--space-6); margin:var(--space-8) 0 var(--space-4); }
+    .toc-label { color:var(--mute); font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; margin-bottom:var(--space-3); }
+    .toc ol { list-style:none; counter-reset:toc; display:grid; gap:var(--space-2); }
+    @media (min-width:720px) { .toc ol { grid-template-columns:1fr 1fr; } }
+    .toc li { counter-increment:toc; padding-left:2rem; position:relative; }
+    .toc li::before { color:var(--accent); content:'§' counter(toc); font-family:var(--font-display); left:0; position:absolute; }
+    .toc a { color:var(--ink); border-bottom:1px solid transparent; }
+    .toc a:hover, .toc a:focus-visible { border-bottom-color:var(--accent); color:var(--accent); }
+
+    section.rail { border-top:1px solid var(--line); padding:var(--space-12) 0; }
+    h2 { font-family:var(--font-display); font-size:32px; font-weight:500; letter-spacing:-.01em; line-height:1.15; margin-bottom:var(--space-6); max-width:28ch; }
+    .section-num { color:var(--accent); display:inline-block; font-family:var(--font-display); font-weight:400; margin-right:var(--space-3); }
+    h3 { color:var(--past); font-size:13px; font-weight:600; letter-spacing:.08em; line-height:1.35; margin:var(--space-8) 0 var(--space-3); text-transform:uppercase; }
+    p + p { margin-top:var(--space-4); }
+    strong { font-weight:600; }
+    em { font-style:italic; }
+
+    .lede-section { font-family:var(--font-display); font-size:20px; font-weight:300; line-height:1.55; margin-bottom:var(--space-8); max-width:52ch; color:var(--ink-soft); }
+
+    ul.evidence { list-style:none; display:grid; gap:var(--space-4); margin-top:var(--space-6); }
+    ul.evidence li { border-left:2px solid var(--line); padding:var(--space-3) 0 var(--space-3) var(--space-5); }
+    ul.evidence li strong.lead { color:var(--ink); display:block; font-family:var(--font-display); font-size:18px; font-weight:500; letter-spacing:-.005em; margin-bottom:var(--space-2); }
+
+    .table-wrap { border:1px solid var(--line); margin:var(--space-6) 0; overflow-x:auto; }
+    table { border-collapse:collapse; font-size:14px; width:100%; }
+    thead { background:var(--cream-2); }
+    th, td { border-bottom:1px solid var(--line-soft); padding:var(--space-3) var(--space-4); text-align:left; vertical-align:top; }
+    th { color:var(--past); font-family:var(--font-body); font-size:11px; font-weight:600; letter-spacing:.10em; text-transform:uppercase; }
+    tr:last-child td { border-bottom:none; }
+    td.name { font-family:var(--font-display); font-weight:500; }
+    td .na { color:var(--mute); font-style:italic; }
+
+    .callout { background:var(--cream-2); border-left:3px solid var(--accent); color:var(--ink-soft); font-family:var(--font-display); font-size:19px; font-weight:300; line-height:1.55; margin:var(--space-8) 0; padding:var(--space-5) var(--space-6); }
+    .callout strong { color:var(--ink); font-weight:500; }
+
+    .gaps { background:var(--cream-2); border:1px solid var(--line); padding:var(--space-6); margin-top:var(--space-8); }
+    .gaps h3 { margin-top:0; }
+    .gaps ul { list-style:none; }
+    .gaps li { padding:var(--space-2) 0 var(--space-2) var(--space-5); position:relative; }
+    .gaps li::before { color:var(--mute); content:'·'; font-family:var(--font-display); font-size:20px; left:0; position:absolute; top:.4rem; }
+
+    footer.foot { border-top:1px solid var(--line); color:var(--mute); font-size:14px; padding:var(--space-10) 0 var(--space-16); }
+    footer.foot p + p { margin-top:var(--space-3); }
+    footer.foot .mark { color:var(--accent); font-family:var(--font-display); font-style:italic; margin-top:var(--space-4); }
+    footer.foot a { color:var(--past); }
+    footer.foot a:hover { color:var(--accent); }
+
+    @media (max-width:720px) {
+      body { font-size:16px; }
+      .masthead-row { align-items:flex-start; flex-direction:column; }
+      .hero { padding:var(--space-10) 0 var(--space-8); }
+      section.rail { padding:var(--space-10) 0; }
+      table { font-size:13px; }
+      th, td { padding:var(--space-3); }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wide masthead-row">
+      <div class="masthead-title">EVEglyphDesign · Hawkins Twin · Luke 08-20-26 PACCAR Portfolio</div>
+      <div class="masthead-meta">v0.1 · 2026-08-20 · public reading surface</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="kicker">Luke 08-20-26 PACCAR Portfolio</div>
+        <h1>The <em>profile</em> PACCAR is asking a dealer principal to fit.</h1>
+        <p class="lede">A public reading surface for Luke Weatherbie: the profile PACCAR asks a dealer principal to fit, the councils and meetings where the other Lukes gather, the programs, the resources, the named people, and the award tracks. Every value carries its own primary-source link.</p>
+        <p class="byline">Prepared by EVEglyphDesign · 2026-08-20 · public sources only · nothing invented</p>
+        <div class="toc" aria-label="Sections">
+          <div class="toc-label">Contents</div>
+          <ol>
+            <li><a href="#s1">The profile PACCAR asks you to fit</a></li>
+            <li><a href="#s2">Where the other Lukes gather</a></li>
+            <li><a href="#s3">Programs and what each asks of the dealer</a></li>
+            <li><a href="#s4">Resources, portals, and money</a></li>
+            <li><a href="#s5">Named people</a></li>
+            <li><a href="#s6">Award tracks and who has won them</a></li>
+            <li><a href="#s7">What PACCAR tells its owners</a></li>
+            <li><a href="#s8">Confirmed gaps</a></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="rail" id="s1">
+      <div class="container">
+        <h2><span class="section-num">§1</span>The profile PACCAR is asking a dealer principal to fit</h2>
+        <p class="lede-section">Every company has a profile. PACCAR's is measurable, scored, and re-tested every year. The evidence is in PACCAR's own press releases, its award citations, and its annual report to shareholders.</p>
+
+        <ul class="evidence">
+          <li>
+            <strong class="lead">Excellence is scored, not asserted.</strong>
+            Peterbilt's Best-in-Class dealer awards are decided on "Peterbilt Standard of Excellence scores, financial performance, parts and service performance and utilization of PACCAR programs and initiatives" — the fourth criterion means adopting PACCAR's programs is itself a measured dimension of dealer quality (<a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-recognizes-top-dealers-of-2025">Peterbilt, Feb 6 2026</a>).
+          </li>
+          <li>
+            <strong class="lead">The top-of-network language is brand stewardship, not volume alone.</strong>
+            Allstate Peterbilt was named 2025 North American Dealer Group of the Year for "top marks in Peterbilt's Standards of Excellence program," customer satisfaction, and "practices that strengthen the Peterbilt brand," per Peterbilt general manager and PACCAR vice president Jake Montero (<a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-recognizes-allstate-peterbilt-as-the-north-american-dealer-group-of-the-year">Peterbilt, Feb 4 2026</a>).
+          </li>
+          <li>
+            <strong class="lead">The visible proof points are certification counts.</strong>
+            The same release quantifies Allstate as Platinum Service certified at 17 locations, Platinum Oval at 15, with 106 certified PACCAR MX technicians and 52 mobile service units (<a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-recognizes-allstate-peterbilt-as-the-north-american-dealer-group-of-the-year">Peterbilt</a>). The currency of standing is certified locations, certified techs, and mobile capacity.
+          </li>
+          <li>
+            <strong class="lead">Platinum Service Center status is a recurring test, not a badge.</strong>
+            Certification is "granted... based on an objective set of criteria," with "scores assigned," and a dealer "must continue to meet or exceed the scoring threshold" (<a href="https://www.peterbilt.com/news-and-events/blog/peterbilt-platinum-service-centers-driving-uptime-every-day">Peterbilt</a>).
+          </li>
+          <li>
+            <strong class="lead">The Platinum criteria tell you exactly what PACCAR wants operationally.</strong>
+            "World-class facilities and driver's lounges, utilization of PACCAR Solutions service management, expanded hours of service, excellent parts availability, certified MX engine technicians, lower dwell time, performing Rapid Check triage" — designated at the annual Peterbilt Dealer Meeting each February, with special designation in Peterbilt's dealer locator (<a href="https://www.prestigepeterbilt.ca/en/certification-program/">Prestige Peterbilt certification page quoting then-GM Jason Skoog</a>; <a href="https://www.peterbilt.com/why-peterbilt/dealer-network">Peterbilt Dealer Network</a>).
+          </li>
+          <li>
+            <strong class="lead">On the Kenworth side, "World's Best Dealer" is 100% certification coverage plus captive-finance and TRP participation.</strong>
+            Kenworth Sales Company won 2025 Dealer of the Year on heavy-duty share growth, 100% PremierCare Gold at all locations, four new stores, PACCAR Financial utilization, and TRP store participation, with Kenworth general manager and PACCAR vice president Jim Walenczak saying the dealer exemplifies "what it means to be a World's Best Dealer" (<a href="https://www.kenworth.com/about-us/news/kenworth-sales-company-receives-prestigious-2025-kenworth-dealer-of-the-year-award/">Kenworth, Feb 9 2026</a>).
+          </li>
+          <li>
+            <strong class="lead">PremierCare Gold spells out the service model PACCAR expects.</strong>
+            A 2-hour full diagnostic analysis and repair estimate via ExpressLane, dedicated ExpressLane technicians, mandatory extended evening and weekend hours, technicians at "the highest levels of certification under new and more rigorous factory certification standards for PACCAR MX series engines," MX parts stocking, 1-800-KW-ASSIST roadside, and TruckTech+ (<a href="https://www.kenworth.com/about-us/news/gold-certfied/">Kenworth PremierCare Gold launch</a>; <a href="https://www.kenworth.com/parts-and-service/premiercare/">PremierCare overview</a>).
+          </li>
+          <li>
+            <strong class="lead">Parts performance is judged on loyalty share, not just sales.</strong>
+            PACCAR Parts' 2025 Peterbilt dealer honours were awarded on year-over-year retail parts growth, purchase loyalty, TRP growth, and Fleet Services billings, per PACCAR Parts general manager and PACCAR vice president Bryan Sitko (<a href="https://www.paccarparts.com/paccar-parts-announces-top-dealer-honors-at-peterbilt-dealer-meeting/">PACCAR Parts, Feb 10 2026</a>).
+          </li>
+          <li>
+            <strong class="lead">On the Kenworth parts side the 2025 award adds certification and fleet-services growth.</strong>
+            CIT Trucks won for "excellence in parts business growth, customer satisfaction, and product knowledge," top PACCAR Parts growth, TRP volume and growth, Fleet Services increases, and "100% PremierCare Gold certification throughout the year" (<a href="https://www.paccarparts.com/paccar-parts-names-cit-trucks-as-2025-kenworth-parts-and-service-dealer-of-the-year/">PACCAR Parts, Feb 10 2026</a>).
+          </li>
+          <li>
+            <strong class="lead">Dealer capital investment is publicly tallied as a measure of network quality.</strong>
+            In 2025 Kenworth dealers "invested $218 million" and the network reached a record 498 locations including 351 PremierCare Gold Certified dealerships; Peterbilt's network "grew to 433 locations" with $195 million invested and 129 mobile service units added, for 1,143 total (<a href="https://staging-cms.paccar.com/media/wshjbkt0/2025-annual-report-final.pdf">PACCAR 2025 Annual Report</a>).
+          </li>
+          <li>
+            <strong class="lead">Technician development is now an explicit dealer-principal expectation.</strong>
+            Peterbilt's Master Technician designation — "the highest level of technician achievement" requiring "extensive hands-on experience, completion of rigorous coursework and demonstrated proficiency" — is framed by Danny Landholm, Peterbilt director of Dealer Network Development, as creating mentors who "ensure vehicles meet Peterbilt's high standards" (<a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-celebrates-first-master-technician-graduate">Peterbilt, Feb 23 2026</a>). The Peterbilt Technician Institute is positioned as the pipeline "to meet the growing demand for skilled technicians across Peterbilt's dealer network" (<a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-technician-institute-celebrates-milestone-with-150th-graduating-class">Peterbilt, Jan 13 2026</a>).
+          </li>
+          <li>
+            <strong class="lead">Captive-finance penetration is a stated PACCAR objective that runs through the dealer.</strong>
+            "PFC financed 85 percent of dealers' new truck inventory and 21.1 percent of Kenworth and Peterbilt Class 8 trucks sold in the U.S. and Canada," with PFS retail share of 27.0% (<a href="https://staging-cms.paccar.com/media/wshjbkt0/2025-annual-report-final.pdf">2025 Annual Report</a>; confirmed at 27% in the <a href="https://investors.paccar.com/financial-news/news-details/2026/PACCAR-Achieves-Very-Good-Annual-Revenues-and-Net-Income/default.aspx">Q4 2025 earnings release</a>).
+          </li>
+          <li>
+            <strong class="lead">Connected-truck adoption is the newest loyalty lever.</strong>
+            "PACCAR Connect is installed in over 475,000 PACCAR vehicles" (<a href="https://staging-cms.paccar.com/media/wshjbkt0/2025-annual-report-final.pdf">2025 Annual Report</a>), and SmartLINQ fault alerts are surfaced in the PACCAR Solutions portal and emailed to "your dealer," monitoring over 900 engine and emissions codes across four notification levels — Stop Now, Service Now, Service Soon, Informational (<a href="https://www.peterbilt.com/static-assets/documents/resources/smartlinq_sales_sheet.pdf">Peterbilt SmartLINQ sales sheet</a>; <a href="https://www.peterbilt.com/why-peterbilt/connected-services">Peterbilt Connected Services</a>).
+          </li>
+          <li>
+            <strong class="lead">Growth math is set at the top and lands on dealers.</strong>
+            PACCAR's stated ambition is 35% North American heavy-duty market share; 2025 combined Peterbilt + Kenworth share was 30.3% (Peterbilt 15.2%, Kenworth 15.1%) (<a href="https://www.ttnews.com/articles/paccar-kenworth-peter-ahrens">Transport Topics, Kenworth GM transition</a>; see also <a href="https://www.ttnews.com/articles/paccar-truck-market-share">Transport Topics on PACCAR share</a>).
+          </li>
+          <li>
+            <strong class="lead">Aftermarket and finance are where PACCAR's profit stability comes from.</strong>
+            Dealer behaviour in those lines matters disproportionately. PACCAR Parts posted record $6.87B sales and $1.67B pre-tax in 2025, 24% of revenues, with parts sales expected up 4–8% in 2026 (<a href="https://staging-cms.paccar.com/media/wshjbkt0/2025-annual-report-final.pdf">2025 Annual Report</a>); at the February 2026 Analyst Day parts and finance were characterised as roughly 71% of profits (<a href="https://www.marketbeat.com/instant-alerts/paccar-analyst-day-parts-finance-fuel-stronger-cycle-profits-as-2026-outlook-holds-2026-02-11">MarketBeat, Feb 11 2026</a>).
+          </li>
+        </ul>
+
+        <div class="callout">
+          <strong>What this adds up to:</strong> The profile PACCAR is asking a dealer principal to fit is a certified, scored, high-utilization operator who leans into PACCAR programs — MX, Platinum/PremierCare Gold, PACCAR Solutions, PACCAR Financial, TRP, Fleet Services, PACCAR Connect — and who invests visibly in facilities and technicians. "Best" is measured, not claimed.
+        </div>
+      </div>
+    </section>
+
+    <section class="rail" id="s2">
+      <div class="container">
+        <h2><span class="section-num">§2</span>Where the other Lukes gather: councils, boards, and meetings</h2>
+        <p class="lede-section">The rooms where dealer principals sit together, who chairs them, and how a seat is reached. Gaps are marked; nothing is invented.</p>
+      </div>
+      <div class="wide">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Body</th>
+                <th>Brand</th>
+                <th>Membership basis</th>
+                <th>What it does</th>
+                <th>Named contact / officer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="name">Peterbilt Dealer Council</td>
+                <td>Peterbilt</td>
+                <td><span class="na">n.a. — no 2024–2026 public release naming a Peterbilt Dealer Council</span></td>
+                <td><span class="na">n.a.</span></td>
+                <td><span class="na">n.a.</span></td>
+              </tr>
+              <tr>
+                <td class="name">Peterbilt Parts Council</td>
+                <td>PACCAR Parts</td>
+                <td>Named/appointed by PACCAR Parts; "outstanding parts sales, operations and marketing professionals from Peterbilt dealerships throughout the United States and Canada"</td>
+                <td>"Partners with PACCAR Parts to empower Peterbilt dealerships across the United States and Canada"; focus on "optimizing existing programs and services and identifying new, innovative ways to maximize uptime" — see <a href="https://www.paccarparts.com/paccar-parts-names-2021-peterbilt-parts-council/">2021 roster</a></td>
+                <td>2021 Chairman Mike Beeghly (The Peterbilt Store, Richmond VA); Canadian members Howie Poirier (Cervus Peterbilt, Stoney Creek ON) and Brent Lawrence (Stahl Peterbilt, Edmonton AB); 2022 chairman Brent Lawrence, Stahl Peterbilt (<a href="https://www.worktruckonline.com/news/paccar-parts-names-2022-peterbilt-parts-council">Work Truck</a>)</td>
+              </tr>
+              <tr>
+                <td class="name">Kenworth Dealer Council (2026)</td>
+                <td>Kenworth</td>
+                <td>Appointed — announced at the annual Kenworth Dealer Meeting; represents 498 dealerships across US and Canada, structured around six dealer groups</td>
+                <td>Dealer voice into Kenworth on customer experience — <a href="https://www.kenworth.com/about-us/news/kenworth-names-2026-dealer-council-and-2026-parts-council-to-support-the-world-s-best-customer-experience/">2026 announcement</a></td>
+                <td>Chairman Mike Levering (Truckworx); members include Kyle Treadway, Jared White (MHC), <strong>Andrew Johnston (Inland Kenworth, Burnaby BC)</strong>, Carl Herzog (CIT), Scott Nichols (Palmer); ATD line rep Jake Nichols (Palmer)</td>
+              </tr>
+              <tr>
+                <td class="name">Kenworth Parts Council (2026)</td>
+                <td>Kenworth / PACCAR Parts</td>
+                <td>Appointed, announced with the Dealer Council</td>
+                <td>Dealer parts-side advisory — <a href="https://www.kenworth.com/about-us/news/kenworth-names-2026-dealer-council-and-2026-parts-council-to-support-the-world-s-best-customer-experience/">2026 councils</a></td>
+                <td>National Chair Eric Bontrager (CSM); members include <strong>Sébastien Letendre (Kenworth Maska, Quebec)</strong></td>
+              </tr>
+              <tr>
+                <td class="name">Kenworth Service Council (2026)</td>
+                <td>Kenworth</td>
+                <td>Appointed; announced separately in spring</td>
+                <td>Dealer service-side advisory — <a href="https://www.fleetequipmentmag.com/2026-kenworth-service-council/">Fleet Equipment coverage</a></td>
+                <td>Chair Jude Becnel (Kenworth of Louisiana), 11 members plus Mike Levering as Dealer Council representative</td>
+              </tr>
+              <tr>
+                <td class="name">DAF International Dealer Meeting</td>
+                <td>DAF</td>
+                <td>Global dealer gathering (2026 edition held in Benidorm, Spain)</td>
+                <td>Where International Dealers of the Year and PACCAR Financial / PACCAR Parts / PACCAR Connect awards are presented — <a href="https://www.daf.com/en/news-and-media/news-articles/global/2026/30-01-2025-daf-names-international-dealers-of-the-year-2025">DAF, Jan 2026</a></td>
+                <td>Harald Seidel, President of DAF (until July 17, 2026); Bart Bosmans, Board of Management, Marketing &amp; Sales</td>
+              </tr>
+              <tr>
+                <td class="name">ATD Board of Directors</td>
+                <td>American Truck Dealers (division of NADA)</td>
+                <td>Elected officers plus manufacturer <strong>line representatives</strong>; ATD serves 3,300+ dealer members across 5,600+ franchises — <a href="https://www.nada.org/atd/about-atd/atd-leadership">ATD Leadership</a>; <a href="https://www.nada.org/atd/about-atd/about-atd">About ATD</a></td>
+                <td>Represents franchised medium- and heavy-duty truck dealers before Congress, agencies and courts; also "addressing concerns with manufacturers and distributors"</td>
+                <td>2026 Chairman Kevin Holmes (Advantage Truck Group); Immediate Past Chair Scott Pearson (Peterbilt of Atlanta); President David Bell; <strong>Peterbilt line rep Andy Hoffman (GTG Peterbilt–Wichita)</strong>; <strong>Kenworth line rep Jacob "Jake" Nichols (Palmer Trucks)</strong> — <a href="https://www.palmertrucks.com/jacob-nichols-joins-the-american-truck-dealers-board-of-directors/">Palmer announcement</a></td>
+              </tr>
+              <tr>
+                <td class="name">ATD 20 Group</td>
+                <td>ATD</td>
+                <td>Open to ATD dealer members; noncompeting members grouped by franchise, department, volume and location; first meeting free as a "test drive"; dues <strong>$435/month plus $350 setup</strong></td>
+                <td>Meets three times a year, 2–3 days per meeting; composite benchmarking and peer review among noncompeting dealers — <a href="https://www.nada.org/atd/atd-education/atd-20-group">ATD 20 Group</a></td>
+                <td><span class="na">n.a.</span></td>
+              </tr>
+              <tr>
+                <td class="name">NADA Show 2026 / ATD Show</td>
+                <td>NADA / ATD</td>
+                <td>Open registration; February 3–6, 2026, Las Vegas (Grand Prix Plaza)</td>
+                <td>"The best-in-class event for commercial truck dealers"; dealers "enjoy exclusive access to truck manufacturer executives during make meetings" to "discuss manufacturer challenges and opportunities directly with their truck manufacturers" — <a href="https://www.nada.org/nada-show/nada-headlines/registration-housing-now-open-nada-show-2026">Show 2026</a>; <a href="https://www.nada.org/atd/about-atd/about-atd">About ATD</a></td>
+                <td><span class="na">n.a.</span></td>
+              </tr>
+              <tr>
+                <td class="name">Peterbilt annual dealer meeting</td>
+                <td>Peterbilt</td>
+                <td>Invitation to the dealer network; 2026 meeting: Rancho Palos Verdes, California, February 2–4, 2026</td>
+                <td>Where Best-in-Class dealer awards and Platinum designations are announced — <a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-recognizes-top-dealers-of-2025">2025 recognitions</a>; Platinum designation timing per <a href="https://www.prestigepeterbilt.ca/en/certification-program/">Prestige Peterbilt</a></td>
+                <td>Danny Landholm, Peterbilt director of Dealer Network Development; Jake Montero, GM</td>
+              </tr>
+              <tr>
+                <td class="name">Kenworth annual dealer meeting</td>
+                <td>Kenworth</td>
+                <td>Invitation to the dealer network; 2026 meeting: Carlsbad, California</td>
+                <td>Where Dealer of the Year, Gold/Silver Dealer Excellence Awards and the year's councils are announced — <a href="https://www.kenworth.com/about-us/news/kenworth-sales-company-receives-prestigious-2025-kenworth-dealer-of-the-year-award/">Kenworth Feb 2026</a></td>
+                <td>Jim Walenczak, GM (through July 2026); Kevin Haygood, assistant GM sales and marketing</td>
+              </tr>
+              <tr>
+                <td class="name">PACCAR Analyst Day</td>
+                <td>PACCAR Inc</td>
+                <td>Investor/analyst event, not dealer; February 10, 2026, Denton, TX</td>
+                <td>Strategy and outlook disclosure — useful read-ahead on what corporate is telling the market about parts, finance and share — <a href="https://investors.paccar.com/events-and-presentations/events/event-details/2026/PACCAR-Analyst-Day-2026-SoXgUSnUOz/default.aspx">Analyst Day 2026</a></td>
+                <td><span class="na">n.a.</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="rail" id="s3">
+      <div class="container">
+        <h2><span class="section-num">§3</span>Programs: what each one asks of the dealer</h2>
+        <p class="lede-section">Every PACCAR program the dealer principal is expected to run, in the language of the sponsoring brand. What it is, what it asks in return.</p>
+      </div>
+      <div class="wide">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Program</th>
+                <th>Brand</th>
+                <th>What it does</th>
+                <th>What it asks of the dealer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="name">SmartLINQ Remote Diagnostics</td>
+                <td>Peterbilt</td>
+                <td>Monitors over 900 engine and emissions codes; four notification levels (Stop Now, Service Now, Service Soon, Informational); OTA engine/aftertreatment software updates on MY2017+ MX trucks with an active subscription — <a href="https://www.peterbilt.com/static-assets/documents/resources/smartlinq_sales_sheet.pdf">sales sheet</a></td>
+                <td>Accept alerts and scheduling through PACCAR Solutions; act on triage priority; support customer subscription activation. Alerts are emailed to "your dealer"</td>
+              </tr>
+              <tr>
+                <td class="name">PACCAR Solutions Service Management (PSSM)</td>
+                <td>PACCAR / Decisiv</td>
+                <td>Digital service-lifecycle management between service providers and fleets — estimates, approvals, case management, dwell control — <a href="https://paccar.decisiv.net/">PSSM portal</a></td>
+                <td>Operate service events in PSSM; electronic estimates and approvals; PSSM utilization is a Platinum Service Center criterion</td>
+              </tr>
+              <tr>
+                <td class="name">PACCAR Connect</td>
+                <td>PACCAR / DAF</td>
+                <td>Connected-vehicle platform; "installed in over 475,000 PACCAR vehicles" (2025) — <a href="https://www.daf.global/en-us/daf-services/connected-services/portal-services">DAF connected services</a></td>
+                <td>Enrol customers, use the data in service planning; a DAF International Dealer of the Year award category</td>
+              </tr>
+              <tr>
+                <td class="name">Peterbilt Platinum Service Center certification</td>
+                <td>Peterbilt</td>
+                <td>Top service-facility tier, with special designation in Peterbilt's dealer locator — <a href="https://www.peterbilt.com/news-and-events/blog/peterbilt-platinum-service-centers-driving-uptime-every-day">Platinum blog</a></td>
+                <td>Facilities and driver lounges, PACCAR Solutions utilization, expanded hours, parts availability, certified MX technicians, lower dwell time, Rapid Check triage; scored and re-tested annually — <a href="https://www.prestigepeterbilt.ca/en/certification-program/">criteria</a></td>
+              </tr>
+              <tr>
+                <td class="name">Kenworth PremierCare Gold Certified</td>
+                <td>Kenworth</td>
+                <td>Highest Kenworth service tier; 351 of 498 locations certified as of 2025 — <a href="https://www.kenworth.com/parts-and-service/premiercare/">PremierCare</a></td>
+                <td>ExpressLane with dedicated technicians and 2-hour diagnosis/estimate; mandatory extended weekday-evening and weekend hours; highest-level factory MX certification for technicians; MX parts stocking; premium driver lounge; 1-800-KW-ASSIST 24/365; TruckTech+ — <a href="https://kenworth.com/media/4gaom3pi/pc-gold-03-18-2019.pdf">PC Gold sheet</a></td>
+              </tr>
+              <tr>
+                <td class="name">PACCAR Parts loyalty tiers</td>
+                <td>PACCAR Parts</td>
+                <td>Retail loyalty programs: <strong>Peterbilt Preferred</strong>, <strong>Kenworth Privileges</strong>, <strong>TRP Performance</strong> (US, Canada, Mexico, Central/South America), plus DAF MAX (Europe) and Privileges Plus (Australia) — <a href="https://www.paccarparts.com/technology/">PACCAR Parts technology</a></td>
+                <td>Enrol and engage customers; loyalty/purchase-loyalty performance is an award criterion — <a href="https://cm.paccarpartsloyalty.com/media/1126/members-terms-and-conditions-2025-trp.pdf">TRP Performance terms 2025</a></td>
+              </tr>
+              <tr>
+                <td class="name">Managed Dealer Inventory (MDI)</td>
+                <td>PACCAR Parts</td>
+                <td>Data-driven parts order recommendations "developed for each dealer location and transmitted electronically to the dealer daily" — <a href="https://www.paccarparts.com/technology/">PACCAR Parts technology</a></td>
+                <td>Accept/act on daily MDI recommendations; stocking discipline; cited as a growth investment in the <a href="https://investors.paccar.com/financial-news/news-details/2026/PACCAR-Achieves-Very-Good-Annual-Revenues-and-Net-Income/default.aspx">Q4 2025 release</a></td>
+              </tr>
+              <tr>
+                <td class="name">PACCAR Parts Fleet Services</td>
+                <td>PACCAR Parts</td>
+                <td>Fleet parts and service program; 2,900 fleets / 1.76M vehicles in the annual report — <a href="https://www.paccarparts.com/services/">PACCAR Parts services</a></td>
+                <td>Grow Fleet Services billings — an explicit dealer award criterion (<a href="https://www.paccarparts.com/paccar-parts-announces-top-dealer-honors-at-peterbilt-dealer-meeting/">Feb 2026</a>)</td>
+              </tr>
+              <tr>
+                <td class="name">Online Parts Counter / e-commerce</td>
+                <td>PACCAR Parts</td>
+                <td>1.4M parts online, loyalty-program integration, TRP catalog; e-commerce up 15% in 2025 — <a href="https://www.paccarparts.com/services/">PACCAR Parts services</a></td>
+                <td>Operate the e-commerce channel and keep pricing/inventory current</td>
+              </tr>
+              <tr>
+                <td class="name">MX-11 / MX-13 engine service certification</td>
+                <td>PACCAR / Kenworth / Peterbilt</td>
+                <td>Factory engine certification tiers for technicians — <a href="https://www.kenworth.com/about-us/news/gold-certfied/">PC Gold launch</a></td>
+                <td>Maintain certified MX technicians — required for both Platinum Service Center and PremierCare Gold; certified-technician counts are cited publicly in <a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-recognizes-allstate-peterbilt-as-the-north-american-dealer-group-of-the-year">award releases</a></td>
+              </tr>
+              <tr>
+                <td class="name">Peterbilt Master Technician</td>
+                <td>Peterbilt</td>
+                <td>Highest technician designation; first graduate February 2026 (Michael Fitzpatrick, Ohio Peterbilt) — <a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-celebrates-first-master-technician-graduate">Feb 23 2026</a></td>
+                <td>Sponsor technicians through rigorous coursework; Master Technicians act as in-store mentors</td>
+              </tr>
+              <tr>
+                <td class="name">Kenworth EV technician certification</td>
+                <td>Kenworth</td>
+                <td>Seven-course curriculum, 2–4 days per course — <a href="https://kenworth.com/about-us/news/kenworth-launches-ev-technician-training-and-certification-program-for-kenworth-service-technicians/">Kenworth EV training</a></td>
+                <td>Send and certify technicians before selling/servicing EVs</td>
+              </tr>
+              <tr>
+                <td class="name">Battery-electric models</td>
+                <td>Peterbilt / Kenworth</td>
+                <td>PACCAR reported "thirteen zero emissions models in production"; 579EV up to 200 miles, 567EV up to 250 miles — <a href="https://www.peterbilt.com/trucks/zero-emission/579EV">579EV</a>; <a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-expands-electric-vehicle-lineup-with-next-generation-model-579ev-and-all-new-model-567ev">579EV/567EV launch</a></td>
+                <td>Become an <strong>EV-certified dealer</strong>: certified technicians, charging/infrastructure support (QMerit, Schneider Electric named), service readiness — <a href="https://www.peterbilt.com/why-peterbilt/dealer-network">Dealer Network EV certification</a></td>
+              </tr>
+              <tr>
+                <td class="name">Hydrogen fuel-cell (PACCAR + Toyota)</td>
+                <td>PACCAR / Kenworth / Peterbilt</td>
+                <td>Commercialization collaboration on Toyota next-gen fuel-cell modules; ten T680 FCEVs piloted at the Port of Los Angeles; T680 FCEV quoted at up to 450 miles range and ~20-minute refuelling — <a href="https://www.paccar.com/news/current-news/2023/paccar-and-toyota-expand-hydrogen-fuel-cell-truck-collaboration-to-include-commercialization/">PACCAR–Toyota</a></td>
+                <td>Nothing required today: serial production "will not begin in 2025 as previously announced" (<a href="https://www.ttnews.com/articles/kenworth-hydrogen-fcev-delay">Transport Topics, Apr 11 2025</a>) and Peterbilt says it will "bring the product to market when infrastructure and customers are ready"</td>
+              </tr>
+              <tr>
+                <td class="name">Red Oval Certified (used trucks)</td>
+                <td>Peterbilt</td>
+                <td>Certified pre-owned: six model years or newer, under 650,000 miles, 150-point inspection; enhanced May 2024 with optional one-year factory chassis warranty — <a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-red-oval-certified-program-enhanced-with-optional-chassis-coverage">May 14 2024</a></td>
+                <td>Run the certification and inspection standard; Red Oval/used performance is a Best-in-Class award category (2025 winner Rush) — <a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-recognizes-top-dealers-of-2025">award categories</a></td>
+              </tr>
+              <tr>
+                <td class="name">Custom Dealer Marketing Services</td>
+                <td>PACCAR Parts</td>
+                <td>"DAF, Kenworth, Peterbilt dealers and TRP retailers utilize a variety of award-winning advertising, digital marketing and email communication tools" — <a href="https://www.paccarparts.com/technology/">PACCAR Parts technology</a></td>
+                <td>Use the supplied advertising/digital/email tools. A published <strong>co-op funding</strong> structure: <span class="na">n.a.</span></td>
+              </tr>
+              <tr>
+                <td class="name">Dealer-locator tiering</td>
+                <td>Peterbilt</td>
+                <td>Locator supports "Filter By Dealer Type"; Platinum Service Centers receive "special designation in Peterbilt's Dealer Locator" — <a href="https://www.peterbilt.com/find-a-dealer">Find a Dealer</a></td>
+                <td>Earn the certification that changes how you appear in the locator</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="rail" id="s4">
+      <div class="container">
+        <h2><span class="section-num">§4</span>Resources, portals and money</h2>
+        <p class="lede-section">The publicly known surfaces a Peterbilt or Kenworth dealer principal touches — training, service portals, finance, leasing, marketing.</p>
+      </div>
+      <div class="wide">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Resource</th>
+                <th>Brand</th>
+                <th>Access basis</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="name">Peterbilt Technician Institute (PTI)</td><td>Peterbilt</td><td>Enrolment; certification in 12 weeks; campuses at Dallas/Irving TX and Chicago IL; includes a Dealer Sponsored School Partnership Training Program — <a href="https://www.peterbilt.com/careers/pti">peterbilt.com/careers/pti</a>; <a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-technician-institute-celebrates-milestone-with-150th-graduating-class">150th class release</a></td></tr>
+              <tr><td class="name">Peterbilt Master Technician track</td><td>Peterbilt</td><td>Dealer-sponsored technician progression; advanced coursework — <a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-celebrates-first-master-technician-graduate">Master Technician release</a></td></tr>
+              <tr><td class="name">Kenworth Essentials dealer technician training</td><td>Kenworth</td><td>Dealer training modules — "the same modules every new technician is required to complete when hired at a Kenworth dealership"; freely available to WyoTech students under Kenworth NextTech (Aug 2025) — <a href="https://kenworthessentials.com/dealerships/">kenworthessentials.com/dealerships</a>; <a href="https://www.kenworth.com/about-us/news/kenworth-and-wyotech-partner-to-launch-kenworth-nexttech-program-to-address-diesel-technician-shortage/">Kenworth NextTech</a></td></tr>
+              <tr><td class="name">Kenworth EV technician certification curriculum</td><td>Kenworth</td><td>Dealer technicians; seven courses — <a href="https://kenworth.com/about-us/news/kenworth-launches-ev-technician-training-and-certification-program-for-kenworth-service-technicians/">EV training</a></td></tr>
+              <tr><td class="name">PACCAR Solutions Service Management (PSSM)</td><td>PACCAR / Decisiv</td><td>Portal login (dealer/service-provider account) — <a href="https://paccar.decisiv.net/">paccar.decisiv.net</a></td></tr>
+              <tr><td class="name">PACCAR Solutions portal / OTA app</td><td>Peterbilt / PACCAR</td><td>Active SmartLINQ subscription; web portal plus PACCAR Over-The-Air app — <a href="https://www.peterbilt.com/why-peterbilt/connected-services">Connected Services</a></td></tr>
+              <tr><td class="name">DAF PACCAR Connect portal services</td><td>DAF</td><td>Portal/subscription — <a href="https://www.daf.global/en-us/daf-services/connected-services/portal-services">daf.global portal services</a></td></tr>
+              <tr><td class="name">PACCAR Financial Services — floor plan, retail, lease</td><td>PACCAR Financial</td><td>Dealer and customer credit relationship; "For 65 years" as dedicated finance partner for Kenworth and Peterbilt; PFC financed 85% of dealers' new truck inventory in 2025; 26 countries, $22.8B assets, 226,000 units — <a href="https://paccarfinancial.com/">paccarfinancial.com</a></td></tr>
+              <tr><td class="name">PacLease</td><td>PACCAR Leasing</td><td>Locally owned franchise model — full-service lease, rental, contract maintenance, PacCentral — <a href="https://www.paclease.com/locations">paclease.com/locations</a></td></tr>
+              <tr><td class="name">TRP catalogue / all-makes parts</td><td>TRP (PACCAR Parts)</td><td>Public catalogue; dealer/retailer participation for TRP stores — <a href="https://www.trpparts.com/">trpparts.com</a>; <a href="https://www.paccarparts.com/services/">PACCAR Parts services</a></td></tr>
+              <tr><td class="name">Online Parts Counter e-commerce</td><td>PACCAR Parts</td><td>Customer accounts, loyalty integration; 1.4M parts — <a href="https://www.paccarparts.com/services/">PACCAR Parts services</a></td></tr>
+              <tr><td class="name">Custom Dealer Marketing Services</td><td>PACCAR Parts</td><td>Advertising, digital marketing, email tools available to DAF, Kenworth, Peterbilt dealers and TRP retailers — <a href="https://www.paccarparts.com/technology/">PACCAR Parts technology</a></td></tr>
+              <tr><td class="name">Parts distribution network</td><td>PACCAR Parts</td><td>21 global PDCs, over 4M sq ft, supporting 2,000+ DAF/Kenworth/Peterbilt locations and 350+ TRP stores; 85% of parts delivered within 24 hours; new Calgary PDC (180,000 sq ft) opened 2026 — <a href="https://www.paccarparts.com/news/">PACCAR Parts news</a></td></tr>
+              <tr><td class="name">ATD Academy / ATD 20 Group</td><td>ATD</td><td>ATD membership; 20 Group dues $435/month plus $350 setup — <a href="https://www.nada.org/atd/about-atd/about-atd">About ATD</a>; <a href="https://www.nada.org/atd/atd-education/atd-20-group">ATD 20 Group</a></td></tr>
+              <tr><td class="name">PACCAR Parts press channel</td><td>PACCAR Parts</td><td>General contact <strong>PPD.PR@PACCAR.com</strong> publishes annual dealer award releases (TRP, Kenworth Parts &amp; Service, Peterbilt Dealer Meeting honors) — <a href="https://www.paccarparts.com/news/">PACCAR Parts news</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="rail" id="s5">
+      <div class="container">
+        <h2><span class="section-num">§5</span>Named people (nothing invented)</h2>
+        <p class="lede-section">Every name here appears in a primary PACCAR or ATD source. Where a role has no publicly named holder, the row is marked <em>n.a.</em></p>
+      </div>
+      <div class="wide">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Role</th>
+                <th>Name</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>PACCAR Executive Chairman</td><td class="name">Mark C. Pigott</td><td><a href="https://www.paccar.com/about-us/board-of-directors/director-bios/">Director bios</a>; <a href="https://investors.paccar.com/financial-news/news-details/2026/PACCAR-Achieves-Very-Good-Annual-Revenues-and-Net-Income/default.aspx">Q4 2025</a></td></tr>
+              <tr><td>PACCAR Chief Executive Officer</td><td class="name">R. Preston Feight</td><td><a href="https://investors.paccar.com/financial-news/news-details/2026/PACCAR-Achieves-Very-Good-Annual-Revenues-and-Net-Income/default.aspx">Q4 2025</a></td></tr>
+              <tr><td>PACCAR President (from Jan 1, 2026)</td><td class="name">Kevin D. Baney</td><td>Retains DAF, PACCAR Financial Services and IR; assumes PACCAR Parts — <a href="https://www.marketscreener.com/news/paccar-inc-announces-executive-leadership-changes-ce7d50d8de89f420">Exec changes</a></td></tr>
+              <tr><td>PACCAR SVP and CFO</td><td class="name">Brice J. Poplawski</td><td><a href="https://investors.paccar.com/financial-news/news-details/2026/PACCAR-Achieves-Very-Good-Annual-Revenues-and-Net-Income/default.aspx">Q4 2025</a></td></tr>
+              <tr><td>PACCAR EVP and CTO (assumes Peterbilt oversight)</td><td class="name">John N. Rich</td><td><a href="https://www.marketscreener.com/news/paccar-inc-announces-executive-leadership-changes-ce7d50d8de89f420">Exec changes</a>; <a href="https://www.paccar.com/news/current-news/2023/paccar-and-toyota-expand-hydrogen-fuel-cell-truck-collaboration-to-include-commercialization/">PACCAR–Toyota</a></td></tr>
+              <tr><td>PACCAR SVP — Kenworth, Corporate Quality &amp; Purchasing, Dynacraft</td><td class="name">Laura J. Bloch</td><td><a href="https://www.ttnews.com/articles/paccar-truck-market-share">Transport Topics</a></td></tr>
+              <tr><td>Peterbilt GM and PACCAR VP</td><td class="name">Jake Montero</td><td><a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-names-new-top-leadership">Peterbilt leadership</a>; <a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-recognizes-allstate-peterbilt-as-the-north-american-dealer-group-of-the-year">Group of the Year</a></td></tr>
+              <tr><td>Peterbilt Asst GM, Sales and Marketing</td><td class="name">Erik Johnson</td><td><a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-names-new-top-leadership">Peterbilt leadership</a></td></tr>
+              <tr><td>Peterbilt National Service Development Manager</td><td class="name">Adam Spinks</td><td><a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-celebrates-first-master-technician-graduate">Master Technician release</a></td></tr>
+              <tr><td>Peterbilt Dealer Development Manager</td><td class="name">Devin Stuck</td><td><a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-celebrates-first-master-technician-graduate">Master Technician release</a></td></tr>
+              <tr><td>Peterbilt Director of Dealer Network Development</td><td class="name">Danny Landholm</td><td><a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-recognizes-top-dealers-of-2025">2025 dealer awards</a>; <a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-technician-institute-celebrates-milestone-with-150th-graduating-class">PTI 150</a></td></tr>
+              <tr><td>Kenworth GM (through Jul 2026) → DAF President (from Jul 17, 2026)</td><td class="name">Jim Walenczak</td><td><a href="https://www.kenworth.com/about-us/news/kenworth-sales-company-receives-prestigious-2025-kenworth-dealer-of-the-year-award/">Kenworth DOY</a>; <a href="https://www.ttnews.com/articles/paccar-kenworth-peter-ahrens">Transport Topics</a></td></tr>
+              <tr><td>Kenworth GM (from Jul 1, 2026)</td><td class="name">Peter Ahrens</td><td><a href="https://www.ttnews.com/articles/paccar-kenworth-peter-ahrens">Transport Topics</a></td></tr>
+              <tr><td>Kenworth Asst GM, Sales and Marketing</td><td class="name">Kevin Haygood</td><td><a href="https://www.kenworth.com/about-us/news/kenworth-sales-company-receives-prestigious-2025-kenworth-dealer-of-the-year-award/">Kenworth DOY</a></td></tr>
+              <tr><td>Kenworth Asst GM, Operations</td><td class="name">Joe Adams</td><td><a href="https://www.ttnews.com/articles/paccar-kenworth-peter-ahrens">Transport Topics</a></td></tr>
+              <tr><td>Kenworth Director of Dealer Network Development</td><td class="name">Kathie Falcone</td><td><a href="https://www.kenworth.com/about-us/news/kenworth-and-wyotech-partner-to-launch-kenworth-nexttech-program-to-address-diesel-technician-shortage/">Kenworth NextTech</a></td></tr>
+              <tr><td>Kenworth Director, Dealer Service Training</td><td class="name">Michael Gaudio</td><td><a href="https://www.kenworth.com/about-us/news/kenworth-and-wyotech-partner-to-launch-kenworth-nexttech-program-to-address-diesel-technician-shortage/">Kenworth NextTech</a></td></tr>
+              <tr><td>PACCAR Parts GM and PACCAR VP</td><td class="name">Bryan Sitko</td><td><a href="https://www.paccarparts.com/bryan-sitko-named-paccar-vice-president-and-paccar-parts-general-manager/">Appointment</a>; <a href="https://investors.paccar.com/financial-news/news-details/2026/PACCAR-Achieves-Very-Good-Annual-Revenues-and-Net-Income/default.aspx">Q4 2025</a></td></tr>
+              <tr><td>PACCAR VP, Global Financial Services</td><td class="name">Craig Gryniewicz</td><td><a href="https://investors.paccar.com/financial-news/news-details/2026/PACCAR-Achieves-Very-Good-Annual-Revenues-and-Net-Income/default.aspx">Q4 2025</a></td></tr>
+              <tr><td>PACCAR Financial Corp. President</td><td class="name">Terren Drake</td><td><a href="https://investors.paccar.com/financial-news/news-details/2026/PACCAR-Achieves-Very-Good-Annual-Revenues-and-Net-Income/default.aspx">Q4 2025</a></td></tr>
+              <tr><td>PACCAR Leasing (PacLease) President</td><td class="name">Ken Roemer</td><td><a href="https://www.paclease.com/news/2026/rush-truck-leasing-named-paclease-north-american-franchise-of-the-year/">Apr 16, 2026</a></td></tr>
+              <tr><td>DAF President (through Jul 17, 2026)</td><td class="name">Harald Seidel</td><td><a href="https://www.daf.com/en/news-and-media/news-articles/global/2026/30-01-2025-daf-names-international-dealers-of-the-year-2025">DAF Dealers of the Year</a></td></tr>
+              <tr><td>DAF Board of Management, Marketing &amp; Sales</td><td class="name">Bart Bosmans</td><td><a href="https://www.daf.com/en/news-and-media/news-articles/global/2026/30-01-2025-daf-names-international-dealers-of-the-year-2025">DAF Dealers of the Year</a></td></tr>
+              <tr><td>ATD President (from Mar 2, 2026)</td><td class="name">David Bell</td><td><a href="https://www.nada.org/atd/press-releases/atd-welcomes-new-president-david-bell">ATD Welcomes David Bell</a></td></tr>
+              <tr><td>ATD 2026 Chairman</td><td class="name">Kevin Holmes (Advantage Truck Group)</td><td><a href="https://www.nada.org/atd/about-atd/atd-leadership">ATD Leadership</a></td></tr>
+              <tr><td>ATD Peterbilt line representative</td><td class="name">Andy Hoffman (GTG Peterbilt–Wichita)</td><td><a href="https://www.nada.org/atd/about-atd/atd-leadership">ATD Leadership</a></td></tr>
+              <tr><td>ATD Kenworth line representative</td><td class="name">Jacob "Jake" Nichols (Palmer Trucks)</td><td><a href="https://www.nada.org/atd/about-atd/atd-leadership">ATD Leadership</a>; <a href="https://www.palmertrucks.com/jacob-nichols-joins-the-american-truck-dealers-board-of-directors/">Palmer</a></td></tr>
+              <tr><td>Peterbilt regional/district manager for Atlantic Canada</td><td class="name"><span class="na">n.a. — not published</span></td><td>—</td></tr>
+              <tr><td>Peterbilt Atlantic CEO</td><td class="name">Tim Hawkins (Hanwell)</td><td><a href="https://www.peterbiltatlantic.com/view-our--xstaff">Peterbilt Atlantic staff</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="rail" id="s6">
+      <div class="container">
+        <h2><span class="section-num">§6</span>Award tracks and who has won them</h2>
+        <p class="lede-section">Every dealer-facing award track with a public 2025 or 2026 winner or nomination path.</p>
+      </div>
+      <div class="wide">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Award</th>
+                <th>Sponsor</th>
+                <th>Public criteria and recent winners</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="name">Peterbilt Standards of Excellence (Best-in-Class dealer awards)</td>
+                <td>Peterbilt</td>
+                <td>"Peterbilt Standard of Excellence scores, financial performance, parts and service performance and utilization of PACCAR programs and initiatives." 2025: N.A. Dealer of the Year — Allstate; Sales Excellence — Rush; Medium Duty — Peterbilt (dealer named in release); Service — Allstate; MX Engine — The Peterbilt Store; Parts — TLG; TRP — Hunter Peterbilt; Red Oval/Used — Rush; Technician Excellence — Hunter; Fleet Services — Ohio Peterbilt — <a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-recognizes-top-dealers-of-2025">Peterbilt 2025</a></td>
+              </tr>
+              <tr>
+                <td class="name">Peterbilt North American Dealer Group of the Year</td>
+                <td>Peterbilt</td>
+                <td>2025: Allstate Peterbilt — Platinum Service at 17 locations, Platinum Oval at 15, 106 certified MX techs, 52 mobile service units — <a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-recognizes-allstate-peterbilt-as-the-north-american-dealer-group-of-the-year">Allstate release</a></td>
+              </tr>
+              <tr>
+                <td class="name">Kenworth Dealer of the Year</td>
+                <td>Kenworth</td>
+                <td>Selected from the year's Gold Award winners. 2025 basis: heavy-duty share growth, 100% PremierCare Gold at all locations, four new stores, PACCAR Financial utilization, TRP participation. 2025: Kenworth Sales Company (Kyle Treadway); also 8 Gold and 6 Silver Dealer Excellence Awards; PremierCare Gold Dwell Time Dealer of the Year — CSM Companies-Wisconsin; PACCAR Engines Dealer of the Year — Truckworx — <a href="https://www.kenworth.com/about-us/news/kenworth-sales-company-receives-prestigious-2025-kenworth-dealer-of-the-year-award/">Kenworth Feb 9 2026</a></td>
+              </tr>
+              <tr>
+                <td class="name">Kenworth Parts and Service Dealer of the Year</td>
+                <td>PACCAR Parts</td>
+                <td>"Excellence in parts business growth, customer satisfaction, and product knowledge"; plus TRP volume/growth, Fleet Services growth, 100% PremierCare Gold. 2025: CIT Trucks; 2023: Kenworth Northeast Group — <a href="https://www.paccarparts.com/paccar-parts-names-cit-trucks-as-2025-kenworth-parts-and-service-dealer-of-the-year/">2025</a>; <a href="https://www.paccarparts.com/paccar-parts-honors-excellence-in-dealer-performance-at-kenworth-dealer-meeting/">2023</a></td>
+              </tr>
+              <tr>
+                <td class="name">TRP Dealer of the Year</td>
+                <td>PACCAR Parts / TRP</td>
+                <td>"Excellence in TRP purchase volume and TRP store retail sales" (2023 wording); 2025 Peterbilt-side basis included TRP growth. 2025 (Peterbilt): Hunter Peterbilt; 2023 (Kenworth): The Palmer Group — <a href="https://www.paccarparts.com/paccar-parts-announces-top-dealer-honors-at-peterbilt-dealer-meeting/">Peterbilt</a>; <a href="https://www.paccarparts.com/paccar-parts-honors-excellence-in-dealer-performance-at-kenworth-dealer-meeting/">Kenworth</a></td>
+              </tr>
+              <tr>
+                <td class="name">TRP Global Store of the Year</td>
+                <td>PACCAR Parts / TRP</td>
+                <td>2025: TRP Ciudad Juárez — <a href="https://www.paccarparts.com/news/">PACCAR Parts news</a></td>
+              </tr>
+              <tr>
+                <td class="name">PACCAR Parts Dealer of the Year (Peterbilt)</td>
+                <td>PACCAR Parts</td>
+                <td>Year-over-year retail parts growth, purchase loyalty, TRP growth, Fleet Services billings. 2025: TLG (Parts Dealer of the Year); Fleet Services — Ohio Peterbilt — <a href="https://www.paccarparts.com/paccar-parts-announces-top-dealer-honors-at-peterbilt-dealer-meeting/">Feb 10 2026</a></td>
+              </tr>
+              <tr>
+                <td class="name">DAF International Dealer of the Year</td>
+                <td>DAF / PACCAR</td>
+                <td>Categories include PACCAR Financial, PACCAR Parts, PACCAR Connect, Customer First. 2026 announcement: Wietholt Nutzfahrzeuge, at the DAF International Dealer Meeting, Benidorm, Spain — <a href="https://www.daf.com/en/news-and-media/news-articles/global/2026/30-01-2025-daf-names-international-dealers-of-the-year-2025">DAF Jan 2026</a></td>
+              </tr>
+              <tr>
+                <td class="name">PacLease North American Franchise of the Year</td>
+                <td>PACCAR Leasing</td>
+                <td>New for 2026: MX Engine Franchise of the Year category. "Recognizing outstanding performance and operational excellence across the PacLease network"; factors include placing 15% more Peterbilts in service year over year, fleet modernity, uptime, revenue stability. 2025: Rush Truck Leasing (announced April 16, 2026); 2024: MHC Truck Leasing. Category winners: TLG Leasing, Kenworth Sales Company PacLease, Eureka Truck Leasing, Gabrielli PacLease, The Pete Store Truck Leasing — <a href="https://www.paclease.com/news/2026/rush-truck-leasing-named-paclease-north-american-franchise-of-the-year/">2026</a>; <a href="https://www.paclease.com/news/2025/mhc-truck-leasing-named-as-paclease-north-american-franchise-of-the-year/">2025</a></td>
+              </tr>
+              <tr>
+                <td class="name">ATD Truck Dealer of the Year</td>
+                <td>American Truck Dealers, sponsored by Procede Software and Trucks, Parts, Service</td>
+                <td>Winners list runs back to <strong>1968</strong>. "More than an industry achievement recognition. The winner of the annual award will be a spokesperson for truck dealers throughout the nation and a force in shaping the future of the industry." Nominations submitted by form; <strong>entry deadline Friday, Oct 17</strong>. 2026: Terry Martin, VP and dealer principal, Martin's Peterbilt (London, KY), presented at the ATD Show in Las Vegas — <a href="https://www.nada.org/atd/truck-dealer-year-award-winners">Winners list</a>; <a href="https://www.truckpartsandservice.com/business/article/15816498/terry-martin-wins-2026-atd-truck-dealer-of-the-year">2026 winner</a>; <a href="https://www.truckpartsandservice.com/page/2026-tdoy">Nomination form</a></td>
+              </tr>
+              <tr>
+                <td class="name">Peterbilt Master Technician designation</td>
+                <td>Peterbilt</td>
+                <td>First graduate 2026 — Michael Fitzpatrick, Ohio Peterbilt. Requires "extensive hands-on experience, completion of rigorous coursework and demonstrated proficiency in diagnosing and resolving critical vehicle system issues" — <a href="https://www.peterbilt.com/news-and-events/press-releases/peterbilt-celebrates-first-master-technician-graduate">Feb 23 2026</a></td>
+              </tr>
+              <tr>
+                <td class="name">Kenworth Technician of the Year (PACCAR Australia)</td>
+                <td>PACCAR Australia / Kenworth</td>
+                <td>2025: Daniel Jennings — <a href="https://www.paccar.com.au/daniel-jennings-named-paccar-australias-kenworth-technician-of-the-year-2025/">PACCAR Australia</a></td>
+              </tr>
+              <tr>
+                <td class="name">PACCAR Parts Supplier of the Year</td>
+                <td>PACCAR Parts</td>
+                <td>2025: East Penn Manufacturing (announced May 11, 2026) — <a href="https://www.paccarparts.com/news/">PACCAR Parts news</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="rail" id="s7">
+      <div class="container">
+        <h2><span class="section-num">§7</span>What PACCAR tells its owners</h2>
+        <p class="lede-section">Direct quotations and figures from the PACCAR 2025 Annual Report and the January 27, 2026 Q4 2025 earnings release. Section headings are used in place of page numbers because the retrieved PDF text was section-tagged rather than paginated. Treat the annual-report link as a working copy of the document and re-verify the canonical path from PACCAR IR before quoting it in writing to PACCAR — <a href="https://staging-cms.paccar.com/media/wshjbkt0/2025-annual-report-final.pdf">2025 Annual Report</a>; <a href="https://investors.paccar.com/financial-news/news-details/2026/PACCAR-Achieves-Very-Good-Annual-Revenues-and-Net-Income/default.aspx">Q4 2025 release</a>.</p>
+
+        <h3>Market share by region</h3>
+        <ul class="evidence">
+          <li>"Peterbilt and Kenworth's Class 8 retail sales share in the U.S. and Canada was 30%. DAF's European 16+ tonne market share was 13.5%."</li>
+          <li>Medium duty 15.9%; PACCAR Mexico 36.4%; Australia a record 27.7%; DAF Brasil 8.6%; Colombia 18.0%.</li>
+          <li>MD&amp;A – Truck: U.S./Canada heavy-duty share 29.9% in 2025 versus 30.7% in 2024.</li>
+          <li>Q4 2025 release: "Kenworth and Peterbilt achieved excellent U.S. and Canada Class 8 retail sales market share of 30% in 2025."</li>
+          <li>Longer-run ambition of 35% North American heavy-duty share, 2025 split of Peterbilt 15.2% / Kenworth 15.1% — <a href="https://www.ttnews.com/articles/paccar-kenworth-peter-ahrens">Transport Topics</a>; further Analyst Day tariff and manufacturing-flexibility commentary from SVP Laura Bloch at <a href="https://www.ttnews.com/articles/paccar-truck-market-share">Transport Topics, Feb 13 2026</a>.</li>
+        </ul>
+
+        <h3>Dealer-network quality</h3>
+        <ul class="evidence">
+          <li>"The Kenworth dealer network grew to a record 498 locations, including 351 PremierCare Gold Certified dealerships. Dealers invested $218 million..."</li>
+          <li>Peterbilt's "network grew to 433 locations and invested $195 million," adding 129 mobile service units for 1,143 total.</li>
+          <li>Q4 2025 release: "PACCAR Parts' 21 global PDCs, with over 4 million square feet, support more than 2,000 DAF, Kenworth and Peterbilt sales, parts and service locations, and more than 350 TRP stores." CEO Preston Feight: "I am very proud of our employees and dealers who delivered outstanding trucks and transportation solutions to our customers."</li>
+        </ul>
+
+        <h3>Aftermarket parts strategy</h3>
+        <ul class="evidence">
+          <li>Record sales of $6.87 billion and pre-tax income of $1.67 billion; 21 PDCs; "85% of parts within 24 hours"; TRP "expanded... to 365 locations in 49 countries"; the Managed Dealer Inventory (MDI) program; e-commerce up 15%; 2,900 fleets and 1.76 million vehicles supported; Parts equal 24% of revenues; 2026 parts sales expected up 4–8%.</li>
+          <li>Bryan Sitko in the Q4 2025 release: "PACCAR Parts provides strong foundational profitability through all phases of the business cycle. PACCAR Parts' excellent long-term growth reflects the benefits of investments in transportation solutions that increase customer loyalty and vehicle uptime. These investments include new parts distribution centers (PDCs), Fleet Services, and Managed Dealer Inventory programs."</li>
+        </ul>
+
+        <h3>Financial services</h3>
+        <ul class="evidence">
+          <li>$485 million pre-tax income; retail finance market share 27.0%; "PFC financed 85 percent of dealers' new truck inventory and 21.1 percent of Kenworth and Peterbilt Class 8 trucks sold in the U.S. and Canada"; 26 countries; 226,000 units; $22.8 billion of assets.</li>
+          <li>Terren Drake in the Q4 2025 release: "PACCAR's strong balance sheet, complemented by its A+/A1 credit ratings, enables PFS to offer competitive retail financing to Kenworth, Peterbilt and DAF dealers and customers in 26 countries on four continents. PACCAR Financial Services has excellent access to the debt markets, issuing $3.12 billion in medium-term notes during 2025."</li>
+        </ul>
+
+        <h3>Connected truck and data strategy</h3>
+        <ul class="evidence">
+          <li>"PACCAR Connect is installed in over 475,000 PACCAR vehicles," alongside investment in integrated truck data and agentic AI initiatives.</li>
+        </ul>
+
+        <h3>EV and alternative-powertrain roadmap</h3>
+        <ul class="evidence">
+          <li>"Thirteen zero emissions models in production." A 30% stake in Amplify Cell Technologies and a 2.6-million-square-foot LFP battery cell plant at Byhalia, Mississippi. The 579EV rated up to 200 miles and the 567EV up to 250 miles; DAF XD/XF Electric named International Truck of the Year 2026; PACCAR Power Solutions delivered its 1,400th charger.</li>
+          <li>Timing risk publicly acknowledged elsewhere: hydrogen T680 FCEV serial production "will not begin in 2025 as previously announced" (<a href="https://www.ttnews.com/articles/kenworth-hydrogen-fcev-delay">Transport Topics</a>) and Amplify cell production pushed to 2028 (<a href="https://www.ttnews.com/articles/amplify-delays-battery-2028">Transport Topics</a>).</li>
+        </ul>
+
+        <h3>ESG and safety commitments</h3>
+        <ul class="evidence">
+          <li>CDP "A" score in 2025 and eleven consecutive years of A/A- ratings; top 13% in the S&amp;P Global Corporate Sustainability Assessment; ISO 14001 certification; more than 80% of facilities zero-waste-to-landfill; PACCAR Foundation giving of $260 million since 1951.</li>
+          <li>Safety content: Kenworth ADAS, ADAS PRO and ADAS PREMIER; Peterbilt Bendix Fusion and Electronic Park Brake.</li>
+          <li>The <a href="https://s202.q4cdn.com/173635405/files/doc_downloads/ESG/2024/02/esg-presentation-feb-2024.pdf">PACCAR ESG investor presentation</a> and the <a href="https://paccar.com/media/3rabmysl/sasb-esg-combined-report-feb_2024.pdf">SASB-ESG report</a> name Scope 3 targets (25% Category 11 by 2030), EV charging, ZEV models, PACCAR Connect telematics, cybersecurity (NIST CSF), data privacy and DEI — but publicly they do <em>not</em> operationalize any of these down to dealers with a stated dealer requirement, target, disclosure duty or training program. That gap is where a dealer arriving with a sovereign, consent-first framework has room others do not.</li>
+        </ul>
+
+        <h3>Policy and capital context</h3>
+        <ul class="evidence">
+          <li>Section 232 truck tariffs took effect in November 2025; 2026 capital spending guidance of $725–775 million and R&amp;D of $450–500 million.</li>
+          <li>At the February 2026 Analyst Day, parts and financial services were characterised as approximately 71% of profits (<a href="https://www.marketbeat.com/instant-alerts/paccar-analyst-day-parts-finance-fuel-stronger-cycle-profits-as-2026-outlook-holds-2026-02-11">MarketBeat</a>).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="rail" id="s8">
+      <div class="container">
+        <h2><span class="section-num">§8</span>Confirmed gaps (deliberately unfilled)</h2>
+        <p class="lede-section">Rows where a public primary source was not found and no value was invented. These are the doors still to open.</p>
+        <div class="gaps">
+          <h3>Not found in primary sources</h3>
+          <ul>
+            <li>Peterbilt <strong>Dealer</strong> Council (as distinct from the Peterbilt Parts Council) — no public 2024–2026 source.</li>
+            <li>TRP Dealer Council, PACCAR Financial Services Dealer Council, DAF dealer council (as councils), PACCAR Parts Advisory / MX Dealer Advisory as separately named bodies.</li>
+            <li>"PACCAR Parts ACCELERATE," "TRP Uptime Bay," "Peterbilt Best of Texas," and a published dealer marketing <strong>co-op</strong> funding structure.</li>
+            <li>A current, published Peterbilt Standards of Excellence criteria document.</li>
+            <li>Named Peterbilt VP Service, TRP General Manager, and the Peterbilt regional/district manager for Atlantic Canada.</li>
+            <li>The 10-K itself (sec.gov refused automated retrieval); §7 rests on the annual report PDF and the January 27, 2026 earnings release.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="container">
+      <p>Prepared by EVEglyphDesign for Luke Weatherbie, 2026-08-20. Public reading surface. Every value carries its own primary-source link; nothing on this page is filled from memory.</p>
+      <p>Companion document: the <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/customer-sphere/Luke-08-19-26-Warranty-Bot-Recap/">Warranty-Bot Recap</a> (Aug 19, 2026). External reference register: <a href="https://eveglyphdesign.github.io/eve-hawkins-cdk-twin/dashboard/">Hawkins CDK Twin dashboard</a>.</p>
+      <p class="mark">Pour le bien-être du peuple.</p>
+    </div>
+  </footer>
+</body>
+</html>
