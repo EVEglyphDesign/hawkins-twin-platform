@@ -1,0 +1,137 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Warranty GENE — Registration & T&Cs</title></head>
+<body><h1>Warranty GENE — Registration and Terms & Conditions data-source inventory</h1>
+<p>Two questions the operator asked, answered separately because they answer to different PACCAR surfaces. First, how the twin gathers <strong>warranty registration</strong> per VIN — retail sale date, in-service date, PDI status, coverage codes sold with the chassis. Second, how the twin gathers <strong>terms and conditions</strong> — the months, miles, hours, and exclusions that apply to that chassis — from a machine-readable API rather than by interpreting a contract PDF.</p>
+<p>The answer is: PRWS on Fortellis for registration, PACCAR Powertrain product pages and Extended Warranty PDF for T&Cs, PSSM (Decisiv OWL / VIP) for point-of-service coverage read-back, and PACCAR Connect for structured telemetry pending North-American scope confirmation. Every surface below is either named directly by PACCAR or by a first-tier integrator (CDK, Decisiv, Procede). None of the field names is invented.</p>
+<h2>The one-paragraph answer</h2>
+<p>The registration record of truth is <strong>PRWS</strong> — PACCAR's Registration and Warranty System — published as REST APIs on <strong>Fortellis</strong>, CDK Global's OpenAPI-specified automotive integration marketplace at <code>api.fortellis.io</code>. That is the machine-readable pipe for VIN-level registration, PDI status, retail-sale date, and claim/coverage read-back into the twin. It requires a Fortellis developer account, an App listing on the Fortellis Marketplace, and a <code>Subscription-Id</code> header per call — not a personal credential. The dealer-workflow-facing surface, <strong>PACCAR Solutions Service Management (PSSM)</strong>, is built on <strong>Decisiv</strong> and exposes coverage through the <strong>OWL (Online Warranty Link)</strong> system and truck specs through the <strong>VIP (Vehicle Information Portal)</strong> database at the point of service — reached from the DMS side via CDK Drive, Karmak, Procede Excede, or SERTI. The terms-and-conditions record of truth for PACCAR MX engines is <strong>not</strong> a contract that needs interpreting — PACCAR Powertrain publishes coverage-duration tables as structured markup on each engine product page and as a controlled MX Extended Warranty PDF, and NHTSA republishes the same emissions coverage numbers as government-source PDFs for cross-reference. Neither T&C source is an authenticated API, but both are stably URL-addressable and machine-fetchable, and the coverage math the twin needs is a compact table, not a full contract.</p>
+<h2>The registration surfaces</h2>
+<h3>PRWS on Fortellis — record of truth</h3>
+<p>Publisher: CDK Global (Fortellis marketplace and gateway) · PACCAR (PRWS). Machine-readable via REST over HTTPS. Fortellis supports OpenAPI Specification 2.0 and 3.0. Base URL <code>https://api.fortellis.io</code>. Authentication is a Fortellis service-account OAuth2 credential with a <code>Subscription-Id</code> header per call. Partner requirement: yes — a Fortellis developer account is required to build against the API, and the App must be listed in the Fortellis Marketplace at a $129 App listing fee.</p>
+<p>Returns: vehicle registration record per VIN (retail sale date, delivery-to-first-purchaser date — the coverage anchor — and PDI completion status); warranty claim drafts, submitted claims, and dynamic status of each; and read-back of coverage codes recorded to SIR for that chassis through the PRWS integration's SIR Sheet Access.</p>
+<p>Does <strong>not</strong> return: live SmartLINQ telemetry (that is PACCAR Solutions Portal or PACCAR Connect, separately), and does not return the T&C math itself — PRWS returns which coverage packages a chassis holds, not the coverage-duration text.</p>
+<p>Observed evidence:</p>
+<ul>
+<li>CDK Global Heavy Truck: "PRWS (PACCAR's newest Registration and Warranty system): Streamlines the filing of PACCAR warranty claims by creating drafts in the PACCAR PRWS (warranty system) with information from the RO and tracking via a dynamic status screen. <strong>PRWS is now available on Fortellis.</strong>" — <a href="https://www2.cdkglobal.com/ht-oem">CDK Global Heavy Truck</a></li>
+<li>Fortellis: "A Fortellis API spec is formatted in a YAML or JSON descriptor file that follows the OpenAPI Specification, and both <strong>OAS 2.0 and OAS 3.0</strong> are supported." — <a href="https://docs.fortellis.io/docs/general/developing-on-fortellis/developing-apis">Fortellis Docs · Developing APIs</a></li>
+<li>Fortellis: "<code>Subscription-Id</code>: The Subscription ID assigned to the solution you are developing on the Fortellis platform." — <a href="https://docs.fortellis.io/docs/general/making-calls/request-components/">Fortellis Docs · Request Components</a></li>
+<li>Base URL confirmed by CDK Tealium connector documentation: "API Endpoint: <code>https://api.fortellis.io</code>" — <a href="https://docs.tealium.com/server-side-connectors/cdk-connector/">Tealium · CDK Connector</a></li>
+<li>Procede Software's PRWS Integration v1.2 release notes (December 2025): "SIR Sheet Access: Pull Service Information Record (SIR) Sheets (PDF) directly from PACCAR." Confirms SIR data flows through the PRWS integration pipe.</li>
+</ul>
+<h3>PACCAR Solutions Service Management (Decisiv-built) — point of service</h3>
+<p>Publisher: PACCAR (product) · Decisiv (platform). Partially machine-readable — reached through DMS integrations with CDK Drive, Karmak, Procede Excede, and SERTI. Not a public REST API. UI at <a href="https://paccar.decisiv.net/">paccar.decisiv.net</a>. Authentication is the dealer's SSO account from paccarsolutions.com — same account as SmartLINQ Service Management.</p>
+<p>Returns: <strong>OWL (Online Warranty Link)</strong> system — warranty coverage information at the point of service. <strong>VIP (Vehicle Information Portal)</strong> truck specs database — truck specification build data and vehicle configuration data. Standard Repair Times (SRTs) for the estimating process. Open recalls and campaigns per VIN, auto-displayed on case open.</p>
+<p>Does <strong>not</strong> return: bulk registration data (go to PRWS on Fortellis for bulk) and does not return T&C coverage duration by option code as structured data (PSSM shows the current-coverage read-out for a specific case, not the underlying rule table).</p>
+<p>Observed evidence:</p>
+<ul>
+<li>"The PACCAR Solutions Service Management (PSSM) platform is developed by Decisiv for PACCAR." — <a href="https://paccar.decisiv.net/">PACCAR Solutions on Decisiv</a></li>
+<li>Decisiv SRM Case Estimator fact sheet: "Real time data is made available at the point of service and includes SRTs, warranty coverage, truck specification build data, and more, through connections with <strong>Express WriteUp, OWL (Online Warranty Link) system, and VIP (Vehicle Information Portal) truck specs database</strong>."</li>
+<li>Decisiv PACCAR support: "To inquire about integration with Decisiv, please start with contacting your DMS provider." — <a href="https://support.paccar.decisiv.net/hc/en-us/articles/360034411713">Decisiv PACCAR Support</a></li>
+</ul>
+<h3>PACCAR Connect Data Integration Services — telemetry API</h3>
+<p>Publisher: PACCAR Global Connected Services (Eindhoven, DAF-branded). Machine-readable REST API described as "our secure interface API" in the PACCAR Connect brochure. Portal at connect.paccar.com. Authentication is a PACCAR Connect service account under a Data Integration Partner Organization; the customer must approve a Data Sharing Request from PACCAR Connect before the partner can read their VIN data.</p>
+<p>Partner requirement: yes. An integrator must first apply as a PACCAR Connect Data Integration Partner and then buy a data package from the PACCAR Connect Webshop.</p>
+<p>Returns: original vehicle data from DAF trucks in real time. Data-package specifics are only revealed inside the webshop after partner onboarding. Categories overlap with the paccar.com/telematicsterms Truck Connectivity Services agreement — GPS location, speed, direction of travel, time of travel, service data, odometer, fault codes, engine data, mechanical condition, mileage, diagnostic and health data.</p>
+<p>Provenance: inferred. The DAF-branded PACCAR Connect page does not itself claim Kenworth/Peterbilt coverage. Third-party integrator <a href="https://navixy.com/ko/learn-more/oem-telematics/brands/">Navixy · OEM Telematics by Brand</a> states "PACCAR Connect provides a unified telematics ecosystem covering DAF, Kenworth, and Peterbilt vehicles under the PACCAR umbrella," but this is unconfirmed on the PACCAR North America side.</p>
+<p>Evidence:</p>
+<ul>
+<li><a href="https://www.daf.global/en-us/daf-services/connected-services/data-integration-services">DAF · PACCAR Connect Data Integration Services</a></li>
+<li><a href="https://www.daf.global/en-us/daf-services/connected-services/data-integration-services/become-a-paccar-connect-data-services-partner">DAF · Become a PACCAR Connect Data Integration Partner</a></li>
+</ul>
+<p>Pending for the operator: confirm with PACCAR North America whether Data Integration Services covers Peterbilt VINs at the level of vendor claims, or whether Peterbilt telemetry remains behind PACCAR Solutions Portal and SmartLINQ only for the U.S. and Canada.</p>
+<h3>PACCAR Solutions Portal — telemetry read-only UI</h3>
+<p>Publisher: PACCAR. Customer-facing telemetry portal at <a href="https://paccarsolutions.paccar.com">paccarsolutions.paccar.com</a>, fed by the PeopleNet Mobile Gateway on the truck. Read-only web UI; no public API. Subscription-based per <a href="https://www.paccar.com/telematicsterms">paccar.com/telematicsterms</a>.</p>
+<p>Returns: live fault-code notifications at four severities (Stop Now, Service Now, Service Soon, Informational); fuel economy, mileage, engine hours, idle time, GPS location, dealer proximity; open-recall visibility; and Over-The-Air software update delivery for MY2017+ MX-engine trucks.</p>
+<p>Does <strong>not</strong> return: structured data for a downstream system. For that path, use PACCAR Connect (above) or the PSSM/DMS integration (above). Evidence: <a href="https://www.peterbilt.com/why-peterbilt/connected-services">Peterbilt Connected Services</a>.</p>
+<h3>SIR through PRWS</h3>
+<p>Publisher: PACCAR. The Service Information Record has no direct public API — but its content flows out through PRWS on Fortellis (SIR Sheet Access, per the Procede v1.2 release notes) and is displayed in PSSM.</p>
+<p>Returns: chassis-serial-anchored coverage codes and campaign/recall status. Field-level mapping is already in <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/mappings/field-mappings.json"><code>warranty-gene/mappings/field-mappings.json</code></a>.</p>
+<p>Evidence: Warranty Procedure Manual v2026.7 §4.1 page 56 — "Check the chassis serial number monthly against the Service Information Record (SIR) system for open field campaigns and federal safety recalls."</p>
+<h2>The terms-and-conditions surfaces</h2>
+<h3>PACCAR Powertrain EPA MX-11 / MX-13 product pages — the canonical T&C table</h3>
+<p>Publisher: PACCAR Powertrain. Machine-readable HTML (structured list markup, extractable by any HTML parser). Public, no authentication. Base URL <code>https://paccarpowertrain.com/products/{engine}/</code> where <code>{engine}</code> is one of <code>epa-mx-11</code>, <code>epa-mx-13</code>, <code>carb-mx-13</code>, <code>epa-mx-13-fire-apparatus</code>, and so on.</p>
+<p>Returns per engine: Base Engine Warranty duration (months, miles, kilometers, engine hours); Major Components Warranty duration; Base Emissions Warranty split by jurisdiction (EPA vs CARB) and by heavy-duty vs medium-duty engine displacement; and Towing Coverage duration and scope of tow (to the nearest authorized U.S. or Canadian PACCAR engine dealer).</p>
+<p>Example values for EPA MX-13:</p>
+<table class="data"><thead><tr>
+<th>Coverage</th>
+<th>Months</th>
+<th>Miles</th>
+<th>Kilometers</th>
+<th>Engine Hours</th>
+</tr></thead><tbody>
+<tr>
+<td>Base Engine Warranty</td>
+<td>24</td>
+<td>250,000</td>
+<td>400,000</td>
+<td>6,250</td>
+</tr>
+<tr>
+<td>Major Components Warranty</td>
+<td>60</td>
+<td>500,000</td>
+<td>800,000</td>
+<td>12,500</td>
+</tr>
+<tr>
+<td>Base Emissions (EPA, heavy-duty)</td>
+<td>60</td>
+<td>100,000</td>
+<td>160,000</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Base Emissions (CARB, heavy-duty > 10.0 L)</td>
+<td>60</td>
+<td>350,000</td>
+<td>563,000</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Towing Coverage</td>
+<td>24</td>
+<td>250,000</td>
+<td>400,000</td>
+<td>6,250</td>
+</tr>
+</tbody></table>
+<p>Evidence: <a href="https://paccarpowertrain.com/products/epa-mx-13/">PACCAR Powertrain · EPA MX-13</a> and <a href="https://paccarpowertrain.com/products/epa-mx-11/">PACCAR Powertrain · EPA MX-11</a>.</p>
+<h3>PACCAR Powertrain MX Extended Warranty controlled PDF</h3>
+<p>Publisher: PACCAR Powertrain. Machine-readable PDF (parsed at ingest into JSON, same way the twin reads the 2025.4 Warranty Quick Reference Guide). Public, no authentication. Named on the <a href="https://paccarpowertrain.com/resources/">PACCAR Powertrain Resources</a> page and directly downloadable.</p>
+<p>Returns: every plan tier (base standard, Major Component, Aftertreatment, PACCAR Protection, Towing); extended plan increments (yearly, 50,000 mi / 80,000 km); Class 8 vs Class 6/7 differentiation; EPA vs CARB differentiation; and the full T&C text — what is applied, what is excluded, engine-hour treatment.</p>
+<p>Evidence: <a href="https://paccarpowertrain.com/wp-content/uploads/2024/11/MX-Extended-Warranty_2025_English.pdf">MX Extended Warranty 2025 · English PDF</a> — "PACCAR Engine extended warranty plans can be purchased in yearly and 50,000 MI. (80,000 KM.) increments. Plan coverage durations and mileages vary with engine horsepower and intended service."</p>
+<h3>Peterbilt Operator's Manuals — per-engine warranty statement PDFs</h3>
+<p>Publisher: Peterbilt Motors Company. Machine-readable PDF. Public, no authentication. Base URL <code>https://www.peterbilt.com/static-assets/documents/resources/paccar_{engine}_operators_manual_{year}.pdf</code>.</p>
+<p>Returns: base engine warranty coverage text with exact durations; extended-coverage text and the deductible language ("The owner is responsible for a $100 (U.S. Dollars) deductible per each service visit under this plan in the 3rd, 4th, and 5th years of base engine warranty"); and towing-coverage language and scope.</p>
+<p>Evidence: <a href="https://www.peterbilt.com/static-assets/documents/resources/paccar_mx-13_operators_manual_2017.pdf">PACCAR MX-13 Operator's Manual (Y53-1181-1K1)</a> — "Base Engine Warranty… begins on the date of delivery and ends two years or 250,000 miles (400,000 kilometers) or 6,250 hours, whichever occurs first, after the date of delivery of the engine to the first purchaser or first lessee."</p>
+<h3>NHTSA Technical and Emission Service Bulletins — government cross-reference</h3>
+<p>Publisher: U.S. National Highway Traffic Safety Administration. Machine-readable PDF, trust level 3. Public, no authentication. Base URL <code>https://static.nhtsa.gov/odi/tsbs/{year}/{bulletin_id}.pdf</code>.</p>
+<p>Returns: exact emissions-warranty coverage in duration, miles, kilometers, and hours, tied to specific engine model years and displacement. The warranty registration anchor date is named explicitly.</p>
+<p>Evidence: <a href="https://static.nhtsa.gov/odi/tsbs/2025/MC-11021404-0001.pdf">NHTSA MC-11021404-0001</a> — "U.S. and Canadian Federal emissions regulations require that the warranty coverage is a period of ten (10) years or 435,000 miles / 700,000 km / 22,000 engine hours, whichever comes first, from the original warranty registration date for these specific components on the EMY2023 PACCAR MX-11 and MX-13 engines." And <a href="https://static.nhtsa.gov/odi/tsbs/2024/MC-11008567-0001.pdf">NHTSA MC-11008567-0001</a> — "5yr/100k mi 5yr/160k km Federal Emissions Warranty; 2yr/250k mi 2yr/402k km Base Engine Warranty."</p>
+<h3>Peterbilt Warranty Procedure Manual v2026.7 — dealer application layer</h3>
+<p>Publisher: Peterbilt Motors Company. Machine-readable PDF (already parsed into the workspace). Dealer distribution. Held at <code>workspace/uploaded_attachments/…/Warranty-Procedure-Manual-Version-2026.7-August-10-2026-1.pdf</code>.</p>
+<p>Returns: coverage-window anchors (in-service date, retail-sale date, delivery-to-first-purchaser date); option-code specific T&C — for example the 7/700 Engine Major Component Extended Service Agreement, option codes 9485633 (original owner / used before 2023-05-22) and 9485634 (used vehicles purchased/sold 2023-05-22 through 2024-11-15), with reimbursement tiers running from $10,000 (5.0–5.5 yr / 500–550K mi) down to $4,000 (6.5–7.0 yr / 650–700K mi); the eight Emission Service Action bulletin types (already captured in <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/mappings/field-mappings.json"><code>field-mappings.json</code></a>); and Prior Approval requirements and PA-number field placement on claims.</p>
+<h3>Peterbilt Warranty Quick Reference Guide 2025.4</h3>
+<p>Publisher: Peterbilt Motors Company. Machine-readable XLSX (already parsed into the workspace). Dealer distribution. Held at <code>workspace/uploaded_attachments/…/WARRANTY-QUICK-REFERENCE-GUIDE-for-2025.4.xlsx</code>. Returns every coverage bucket in the rich-target schema with months, miles, hours, and exclusions.</p>
+<h2>Component-supplier T&Cs (63 suppliers)</h2>
+<p>Warranty Procedure Manual v2026.7 Section 7 (pages 130–177) enumerates 63 component suppliers with per-supplier T&Cs — Bendix, Cummins (older Roadrelay units), Eaton, Meritor, Allison, Sensata, Pana-Pacific, Sanden, National Seating, RH Sheppard, and so on. Each has its own coverage window, RMA number, and shipping instructions.</p>
+<ul>
+<li><strong>Supplier Warranty Bulletins on PACCAR.net</strong> — the Warranty Procedure Manual references PACCAR.net seventeen times as the location for supplier bulletins. Machine-readable PDFs behind a PACCAR.net dealer login. Returns per-supplier coverage duration and exclusions, RMA/CARE numbers (for example 50047 for Sensata MX Pressure Sensors and for Sensata Vehicle Sensors and Switches), shipping accounts (FedEx 1388868281, UPS 012981), and labor SRTs / VMRS codes per supplier.</li>
+<li><strong>Cummins RAPIDSERVE Web</strong> — for Cummins-engine chassis outside the PACCAR MX line, Cummins publishes a separate self-service warranty filing surface. Named in a <a href="https://www.decisiv.com/pape-kenworth-2/">Decisiv customer story with Papé Kenworth</a>: "By linking to Cummins RAPIDSERVE Web, a self-service warranty filing resource that allows certified dealers and repair locations to file claims, Papé Kenworth is able to automate the process and speed approval from Cummins on behalf of its customer." Only relevant if Hawkins carries Cummins-engine chassis — confirm scope with the operator.</li>
+</ul>
+<h2>What the twin does</h2>
+<p>Registration lane. The twin reads PRWS on Fortellis as the registration record of truth, authenticated with an EVEglyphDesign Fortellis Organization service account and per-App <code>Subscription-Id</code> header. It reads SIR Sheet Access through PRWS for the coverage-codes and campaign-status payload. It reads PSSM (Decisiv) via the CDK Drive integration Hawkins already runs for case-level coverage read-back at the point of service. It reads PACCAR Connect Data Integration Services for structured telemetry — pending PACCAR North America's confirmation that Peterbilt VINs are in scope. The twin never writes to PRWS. The Warranty GENE is a read lane; PRWS submission remains a dealer action via the existing CDK–PRWS workflow. The twin never asserts a coverage code it has not read from PRWS or SIR — if PRWS is unreachable, it holds the last-known coverage state, stamps it with a staleness age, and does not synthesize.</p>
+<p>Terms-and-conditions lane. The twin pulls the PACCAR Powertrain product pages (EPA MX-11, EPA MX-13, CARB variants, fire-apparatus variants) at ingest and refreshes weekly, extracting the coverage-duration table into JSON keyed by engine model, jurisdiction, and displacement class. It pulls the PACCAR Powertrain MX Extended Warranty PDF at ingest and refreshes monthly, parsing the extended-plan matrix. It pulls NHTSA Emission Service Bulletins for cross-reference and audit trail. It relies on the Peterbilt Warranty Procedure Manual v2026.7 and the 2025.4 Warranty Quick Reference Guide as the dealer-facing companions — both held in workspace and never re-fetched to resolve a coverage question. The twin does not interpret free-text contract language when a structured table exists. PACCAR Powertrain publishes the exact coverage math — the twin reads it as data, not prose.</p>
+<h2>Pending walkthrough items</h2>
+<ul>
+<li>Fortellis Organization setup at Hawkins — the App listing (recommended under the EVEglyphDesign Organization, consumed by the Hawkins tenant), the OAuth2 credential path, and the <code>Subscription-Id</code> provisioning. Confirm whether the CDK Drive Fortellis App is already installed at the eight rooftops.</li>
+<li>PACCAR Connect scope for North America — confirm with PACCAR whether Data Integration Services covers Peterbilt VINs, or whether Peterbilt telemetry remains PACCAR Solutions and SmartLINQ only for U.S. and Canada.</li>
+<li>Cummins RAPIDSERVE Web scope — does Hawkins service any Cummins-engine chassis outside PACCAR MX, and if so, does that warrant a separate Cummins-side read lane.</li>
+<li>PACCAR.net service-account credential for supplier-bulletin retrieval — same rule as elsewhere, never a personal credential.</li>
+</ul>
+<h2>Non-movement covenant</h2>
+<p>The Warranty GENE reads registration and T&C data into the twin. Registration reads are recorded to Hawkins-owned Azure Postgres and never syndicated. T&C tables and coverage-duration data are non-confidential public T&Cs and may be cached in the twin's data layer alongside the schema. No customer PII enters the mapping documents in this public repository.</p>
+<hr>
+<h2>Structured inventory</h2>
+<p>The complete data-source inventory in machine-readable form: <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/registration/registration-and-terms.json"><code>registration-and-terms.json</code></a>.</p>
+<p class="closing">© 2026 EVEglyphDesign. All rights reserved. Controlled copy.<br>Key ID <code>EgD-KEY-2026-07</code>.<br><em>Pour le bien-être du peuple.</em></p></body></html>

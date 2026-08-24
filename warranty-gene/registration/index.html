@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Warranty GENE — Registration & Terms · EVEglyphDesign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:#fdfaf4; --cream2:#f7f2e7; --ink:#1a1a1a;
+    --line:#e7e1d3; --mute:#6b665c; --orange:#e87722;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--cream); color:var(--ink);
+    font-family: Inter, "Helvetica Neue", Arial, sans-serif; line-height:1.55; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 48px 24px 96px; }
+  header { border-bottom: 0.6pt solid var(--orange); padding-bottom: 22px; margin-bottom: 40px;
+           display: flex; justify-content: space-between; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  header .brand { color:var(--orange); font-weight:600; font-size:11px;
+                  letter-spacing:1.5px; text-transform:uppercase; }
+  header .meta { color:var(--mute); font-size:11px; font-family:"JetBrains Mono",monospace; }
+  .kicker { color:var(--orange); font-size:11px; letter-spacing:2px; text-transform:uppercase;
+            margin-bottom:8px; }
+  h1 { font-family: Fraunces, "Times New Roman", serif; font-size: 44px;
+       line-height: 1.05; margin: 0 0 6px; font-weight: 600; }
+  .subtitle { font-family: Fraunces, serif; font-style: italic; font-size: 20px;
+              color:var(--mute); margin-bottom: 28px; }
+  h2 { font-family: Fraunces, serif; font-size: 22px; margin: 40px 0 10px;
+       font-weight: 600; }
+  p { margin: 0 0 12px; }
+  a { color: var(--orange); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  ul { margin: 0 0 16px 20px; padding: 0; }
+  li { margin-bottom: 6px; }
+  .cta { display:inline-flex; align-items:center; gap:8px;
+         background:var(--orange); color:#fff !important;
+         padding:12px 22px; border-radius:4px; font-weight:600;
+         margin: 6px 12px 6px 0; }
+  .cta.ghost { background: transparent; color: var(--orange) !important;
+               border: 1.5pt solid var(--orange); }
+  .card { background: var(--cream2); border: 0.6pt solid var(--line);
+          border-radius: 4px; padding: 18px 22px; margin: 0 0 18px; }
+  .card h3 { font-family: Fraunces, serif; margin: 0 0 6px; font-size: 16px;
+             font-weight: 600; }
+  .card p { margin: 0; font-size: 14px; color: var(--mute); }
+  .tag { display:inline-block; background:var(--cream2); color:var(--ink);
+         font-size:11px; padding:2px 8px; border-radius: 3px;
+         border: 0.5pt solid var(--line); margin-right:4px;
+         font-family:"JetBrains Mono", monospace; }
+  footer { margin-top: 60px; padding-top: 18px; border-top: 0.4pt solid var(--line);
+           color:var(--mute); font-size: 12px; font-style: italic; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="brand">EVEglyphDesign · Hawkins Twin Platform</span>
+    <span class="meta">EgD-KEY-2026-07 · v1.0.0</span>
+  </header>
+
+  <div class="kicker">Warranty GENE</div>
+  <h1>Registration & Terms</h1>
+  <div class="subtitle">PRWS on Fortellis · PSSM Decisiv OWL / VIP · PACCAR Connect · PACCAR Powertrain T&Cs · NHTSA.</div>
+
+  <p>Two questions, two answers. First, how the twin gathers <strong>warranty registration</strong> per VIN — retail sale date, in-service date, PDI status, coverage codes sold with the chassis. Second, how it gathers <strong>terms and conditions</strong> — the months, miles, hours, and exclusions that apply to that chassis — from a machine-readable API rather than by interpreting a contract PDF.</p>
+
+  <p style="margin-top:18px;">
+    <a class="cta" href="WARRANTY-GENE-REGISTRATION.pdf">Read the inventory PDF</a>
+    <a class="cta ghost" href="registration-and-terms.json">registration-and-terms.json</a>
+  </p>
+
+  <h2>Registration surfaces</h2>
+  <div class="card">
+    <h3>PRWS on Fortellis — record of truth <span class="tag">observed</span></h3>
+    <p>Machine-readable REST API at <code>api.fortellis.io</code>. OpenAPI 2.0 / 3.0. Subscription-Id header, OAuth2 service-account credential. Returns per-VIN registration, PDI status, retail-sale date, claim drafts, and SIR Sheet Access. CDK Global confirmed: "PRWS is now available on Fortellis."</p>
+  </div>
+  <div class="card">
+    <h3>PSSM (Decisiv OWL / VIP) — point of service <span class="tag">observed</span></h3>
+    <p>Case-scoped coverage read-back and truck-spec build data through the DMS integration (CDK Drive, Karmak, Procede Excede, SERTI). OWL returns warranty coverage; VIP returns spec data. Not a public REST API — reached from the DMS side.</p>
+  </div>
+  <div class="card">
+    <h3>PACCAR Connect — telemetry API <span class="tag">inferred</span></h3>
+    <p>DAF-branded, described in PACCAR literature as "our secure interface API." Partner onboarding required. Third-party integrators (Navixy) claim Kenworth and Peterbilt coverage; the DAF-branded page does not itself name Peterbilt. Pending PACCAR North America confirmation for Hawkins.</p>
+  </div>
+  <div class="card">
+    <h3>PACCAR Solutions Portal & SIR through PRWS <span class="tag">observed</span></h3>
+    <p>Solutions Portal is a read-only telemetry UI (no API); use PACCAR Connect for structured downstream reads. SIR content flows out through PRWS on Fortellis via SIR Sheet Access, confirmed by Procede's v1.2 release notes.</p>
+  </div>
+
+  <h2>Terms-and-conditions surfaces</h2>
+  <div class="card">
+    <h3>PACCAR Powertrain product pages — canonical T&C table <span class="tag">observed</span></h3>
+    <p>Public, structured HTML at <code>paccarpowertrain.com/products/{engine}/</code>. Returns base engine, major components, base emissions (EPA vs CARB), and towing coverage in months / miles / km / hours. No auth, no partner requirement — the coverage math the twin needs is a compact table, not a contract.</p>
+  </div>
+  <div class="card">
+    <h3>MX Extended Warranty controlled PDF <span class="tag">observed</span></h3>
+    <p>The extended-plan matrix — PACCAR Protection, Aftertreatment, Major Component, Towing, base emissions — parsed at ingest into JSON. Published on PACCAR Powertrain Resources.</p>
+  </div>
+  <div class="card">
+    <h3>NHTSA Emission Service Bulletins — government cross-reference <span class="tag">observed</span></h3>
+    <p>Trust level 3 PDFs at <code>static.nhtsa.gov/odi/tsbs/</code>. Republishes the exact federal emissions coverage numbers — 10 years / 435,000 mi / 22,000 engine hours from the original warranty registration date for EMY2023 MX-11 and MX-13.</p>
+  </div>
+  <div class="card">
+    <h3>Peterbilt Warranty Procedure Manual & Quick Reference Guide <span class="tag">observed</span></h3>
+    <p>Dealer-distribution PDF and XLSX, held in the workspace. Coverage-window anchors, option-code-specific T&Cs (like the 7/700 ESA reimbursement tiers), and prior-approval flags. Companion to the T&C tables, not a replacement.</p>
+  </div>
+
+  <h2>Non-movement covenant</h2>
+  <p>Registration reads land in Hawkins-owned Azure Postgres and are never syndicated. T&C tables and coverage-duration data are non-confidential public T&Cs and may be cached in the twin's data layer alongside the schema. No customer PII enters the mapping documents in this public repository.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="../">Warranty GENE — design canon</a></li>
+    <li><a href="../schema/">Schema v1 (rich-target row, coverage math, sample fixtures)</a></li>
+    <li><a href="../mappings/">Field mappings (SIR, SmartLINQ, PRWS)</a></li>
+    <li><a href="https://www2.cdkglobal.com/ht-oem">CDK Global Heavy Truck (PRWS on Fortellis)</a></li>
+    <li><a href="https://paccar.decisiv.net/">PACCAR Solutions Service Management on Decisiv</a></li>
+    <li><a href="https://paccarpowertrain.com/resources/">PACCAR Powertrain Resources</a></li>
+  </ul>
+
+  <footer>
+    © 2026 EVEglyphDesign. All rights reserved. Controlled copy.<br>
+    <em>Pour le bien-être du peuple.</em>
+  </footer>
+</div>
+</body>
+</html>
