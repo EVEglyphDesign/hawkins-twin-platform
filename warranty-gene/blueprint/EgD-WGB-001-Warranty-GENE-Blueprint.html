@@ -1,0 +1,389 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Warranty GENE — Sidecar Blueprint (EgD-WGB-001)</title></head>
+<body><div class="title-block"><div class="kicker">EVEglyphDesign · Hawkins Twin Platform</div><h1>Warranty GENE — Sidecar Blueprint</h1><div class="subtitle">EgD-WGB-001 · Modular plugin, integral to the Hawkins Twin, subscription for every other dealer · Follows the Epiq Document B architecture pattern</div><p><strong>Programme:</strong> EVEglyphDesign — Warranty GENE <strong>Document ID:</strong> EgD-WGB-001 · <strong>Key ID:</strong> EgD-KEY-2026-07 <strong>Status:</strong> Propose-only, v0.1 <strong>Posture:</strong> Modular sidecar. Integral to the Hawkins Twin; delivered to everyone else as a subscription service. <strong>Companion:</strong> <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/wireframe/">Warranty GENE — Wireframe v0</a> shows the three operator surfaces this blueprint stands up.</p></div>
+<p>Blueprint sibling to <a href="https://github.com/EVEglyphDesign/epiq-revenue-leakage/blob/main/DOCUMENT-B-architecture-extract.md">Epiq Revenue Leakage — Document B</a>. Same architectural spine — Source adapter → Reasoning → Delivery → Observability — retargeted from "post-commitment order edits" to "post-commitment warranty coverage."</p>
+<hr>
+<h2>1 · The mandate, and what it now does</h2>
+<p>Warranty GENE is commissioned under a single, narrow mandate: <strong>take a VIN, return whether the work about to be invoiced is covered by an active warranty or extended plan, and rank the recovery opportunity across a cohort of bookings.</strong> The dealer that runs it captures revenue that would otherwise close to customer-pay.</p>
+<p>The first thing the engine was pointed at was <strong>Peterbilt Atlantic's next four weeks of service bookings</strong>. Every time a work order is opened, edited, and closed against a VIN, coverage on that VIN is quietly consumed — sometimes correctly, often not. Aggregated across a rooftop's booking calendar, those quiet mis-classifications are where booked warranty revenue leaks out to customer-pay.</p>
+<p>We package this capability as the <strong>Warranty GENE</strong>: it decodes the VIN, joins public and dealer-side coverage data, ranks the jobs and line items where warranty recovery is available, and narrates the pattern in plain language so a service writer, a fixed-ops director, or a warranty administrator can act on it.</p>
+<p><strong>What the dealer leaves with.</strong> The engine runs the same way against any dealership's booking calendar. Pointing it at a new rooftop is a <strong>configuration change, not a new build</strong> — the coverage ledger, the scoring logic, the audit trail, and the delivery surface are reused unchanged. That is the fast, low-risk path to a measurable P&L result in fixed operations.</p>
+<p>In one paragraph: VINs and work-orders enter through a source adapter, a bounded reasoning layer joins them against the coverage ledger and returns ranked answers, the service team consumes those answers in a browser wizard, and every answer is recorded end-to-end so a warranty administrator can replay exactly how it was produced.</p>
+<hr>
+<h2>2 · The architecture, stripped to four parts</h2>
+<p><em>VIN · booking calendar · work-order table · public coverage ledger · dealer credentials</em></p>
+<pre><code>  1. Source adapter       2. Reasoning              3. Delivery
+  VIN + WO in         →   coverage join    →        Browser wizard
+  (Excel / paste /        + scoring +               (three modes)
+   DMS export)            uplift scan                   ⋮
+                              ⋮
+                        4. Observability — every join, decision, and
+                        provenance stamp recorded; any answer replayable
+
+           (all inside the dealer's browser tab, no server)</code></pre>
+<p>Four parts, each replaceable on its own:</p>
+<ul>
+<li><strong>Source adapter</strong> — crosses the boundary from the dealer's DMS or a paste-in and presents VINs, work orders, and cohort metadata in a single, uniform shape. Interchangeable across CDK Drive, Karmak, Procede Excede, SERTI, or a plain Excel drop (§5).</li>
+<li><strong>Reasoning</strong> — a bounded set of joins and scored answers. Not a language model making calls to tools; a deterministic pipeline whose every step is auditable (§3).</li>
+<li><strong>Delivery</strong> — the browser wizard published at <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/wireframe/">warranty-gene/wireframe/</a>. Three modes: single VIN, work-order uplift, VIN batch scan. No new tool to learn, no dashboard.</li>
+<li><strong>Observability</strong> — every field on every card carries a provenance stamp (<code>public_ledger</code>, <code>dms_upload</code>, <code>pending — PRWS</code>, etc.) and every scored answer records the coverage rows and job rows it read.</li>
+</ul>
+<p>Standing the platform up for a new dealership reuses the top three parts wholesale; only the source adapter, the dealer-specific credentials, and the rooftop list are set per engagement.</p>
+<table class="data"><thead><tr>
+<th>Component</th>
+<th>For Peterbilt Atlantic (Hawkins)</th>
+<th>What that involves</th>
+</tr></thead><tbody>
+<tr>
+<td>Reasoning engine (coverage math + scoring)</td>
+<td><strong>Live</strong></td>
+<td>Reused unchanged</td>
+</tr>
+<tr>
+<td>Browser wizard (three modes)</td>
+<td><strong>Live</strong></td>
+<td>Same page, same flow</td>
+</tr>
+<tr>
+<td>Public coverage ledger</td>
+<td><strong>Live</strong></td>
+<td>NHTSA CE033, MX 2025 Extended Warranty, Warranty Procedure Manual v2026.7</td>
+</tr>
+<tr>
+<td>Provenance / audit ledger</td>
+<td><strong>Live</strong></td>
+<td>Same stamp taxonomy on every field</td>
+</tr>
+<tr>
+<td>Source adapter</td>
+<td><strong>Configured</strong></td>
+<td>Point it at Hawkins' DMS export path (TCS365 or per-rooftop DMS)</td>
+</tr>
+<tr>
+<td>Dealer credential set</td>
+<td><strong>Configured</strong></td>
+<td>PRWS, PACCAR Solutions, PSSM Decisiv (invitation-only, per §6)</td>
+</tr>
+<tr>
+<td>Rooftop map</td>
+<td><strong>Configured</strong></td>
+<td>Eight Peterbilt Atlantic rooftops</td>
+</tr>
+</tbody></table>
+<p><em>Table 1: Four parts are reused as-is; three are configured. None is a new build.</em></p>
+<hr>
+<h2>3 · How it reasons, and why every answer is auditable</h2>
+<p>The engine follows a fixed six-step path rather than being left to improvise. That choice is deliberate: a predictable path is cheaper to run, easier to explain to a warranty administrator, and — critically for dealer accounting — fully auditable.</p>
+<pre><code>  Decode        Anchor        Coverage         Job           Uplift         Rank
+  the VIN   →   coverage  →   window   →       scoring   →   scan  →        and
+  (NHTSA)       to date        math                          (WO mode)      narrate
+                (DMS)          (public                                      (per VIN
+                               ledger)                                      or cohort)</code></pre>
+<p>Six steps, one answer per VIN — bounded every time. A worked example from Peterbilt Atlantic's booking calendar:</p>
+<pre><code>  SERVICE WRITER ASKS
+  Anything on today's book that should be warranty instead of customer-pay?
+
+  ANSWER
+  Three of today's twelve booked VINs have jobs sitting under an active
+  coverage bucket. VIN 1XPBSYN00…202 is booked for a DEF dosing valve —
+  the CE033 federal emissions extension covers this until 2033-09-05 and
+  it hasn't been claimed. Recovery-at-risk on today's book: $4,180
+  customer-pay that could be filed as warranty if the write-ups are
+  corrected before close.</code></pre>
+<p>Two properties make this safe to put in front of dealer accounting:</p>
+<ul>
+<li><strong>Bounded and auditable.</strong> Every coverage number cited on the card links to the source row. Every score decomposes into <code>recovery × urgency × margin</code> with the inputs visible. There is no open-ended language-model loop, so cost and behaviour are predictable and reviewable.</li>
+<li><strong>Zero data leakage, fully replayable.</strong> The engine runs inside the dealer's browser tab; VINs never leave the device. The public coverage ledger is fetched once from a public URL. When a warranty administrator asks "how do you know this VIN was still under CE033?", the honest answer is: replay it against the ledger row and see.</li>
+</ul>
+<h3>3.1 Built to pass a warranty audit</h3>
+<p>The audit question is finite by design. When the platform reaches for coverage data, it reads from the <strong>dealer's own PRWS session</strong> (invitation-only, credential held by the operator) or from the <strong>public NHTSA / PACCAR Powertrain ledger</strong> (no credential). Data handled during a run stays in the tab, provenance is stamped on every field, and every answer is exportable as PDF or CSV for the file. Nothing here requires trusting a black box: every value is scoped, sourced, and observable end-to-end.</p>
+<hr>
+<h2>4 · What is already built, and what it taught us</h2>
+<p>None of this is a whiteboard proposal. The pieces below are running in the <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene">Hawkins Twin Platform repository</a>, and each carries a lesson paid for once so the next dealer does not have to. The next dealer inherits the hardened version, not the first draft.</p>
+<table class="data"><thead><tr>
+<th>What was built</th>
+<th>What it taught us</th>
+</tr></thead><tbody>
+<tr>
+<td>A schema v1 that names the ten coverage buckets and the three-number score</td>
+<td>Coverage math is only as good as the anchor date. Without a real retail-sale date from PRWS, in-service date is the fallback and must be marked as such on every card.</td>
+</tr>
+<tr>
+<td>A public coverage ledger replicated anonymously from PACCAR and NHTSA</td>
+<td>Cite every row to a URL that resolves under <code>curl</code>. If the URL 4xx's, mark it as dealer-document provenance instead of pretending it's public. Verify before publishing.</td>
+</tr>
+<tr>
+<td>A field-mapping table naming SIR, SmartLINQ, PRWS, PSSM, and TCS365</td>
+<td>Most fields the twin needs live behind invitation-only PACCAR credentials. The registration path is a commercial conversation with the dealer principal, not a self-signup.</td>
+</tr>
+<tr>
+<td>A three-mode wireframe (single VIN, WO uplift, batch scan)</td>
+<td>Different roles ask different questions. A service writer wants one VIN, a warranty admin wants the WO uplift, a fixed-ops director wants the cohort scan. Same engine, three surfaces.</td>
+</tr>
+<tr>
+<td>A canon PDF for every published lane</td>
+<td>An artifact that only exists in a chat transcript has not been delivered. PDF + repo + public URL is the delivery contract.</td>
+</tr>
+</tbody></table>
+<p><em>Table 2: The stack is a set of paid-for lessons, not a set of promises.</em></p>
+<p>One lesson stated candidly: <strong>an early version cited PACCAR Powertrain product-page URLs as if they were canonical, without verifying they resolved.</strong> They did not — the site serves a versioned root and 403's <code>curl</code>. The production path cites only URLs that verify 200 and marks everything else as dealer-document provenance. Small, known correction made up front rather than discovered by a client.</p>
+<hr>
+<h2>5 · Where the data lives: read live, compute in-tab</h2>
+<p>The platform does not keep a standing copy of the dealer's data. It reads the live VINs and work orders on demand, joins them against a coverage ledger fetched once from public URLs, and builds the analysis in an ephemeral browser tab that exists for the session and then disappears. There is no second database of sensitive dealer records to secure, reconcile, or destroy — because there is no second database.</p>
+<h3>5.1 Read from the live source</h3>
+<p>The engine sees a uniform "VIN + coverage + work-order" interface; behind it, the adapter reads from whichever source the dealer supplies.</p>
+<table class="data"><thead><tr>
+<th>Live source</th>
+<th>Typical use</th>
+<th>Status</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Excel / CSV paste-in</strong></td>
+<td>Any dealer, any DMS, no integration</td>
+<td>Live today</td>
+</tr>
+<tr>
+<td><strong>NHTSA VIN decoder API</strong> (public)</td>
+<td>Identity for any VIN, no credential</td>
+<td>Live today, <a href="https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVin/1XPBSYN00N1000101?format=json">verified</a></td>
+</tr>
+<tr>
+<td><strong>NHTSA recalls-by-VIN API</strong> (public)</td>
+<td>Open recalls per VIN, no credential</td>
+<td>Live today</td>
+</tr>
+<tr>
+<td><strong>PACCAR public coverage ledger</strong></td>
+<td>Base warranty windows, extended plans, CE033</td>
+<td>Live today (dealer-document + NHTSA fallback)</td>
+</tr>
+<tr>
+<td><strong>PRWS (PACCAR Registration & Warranty System)</strong></td>
+<td>Retail-sale date, coverage codes, claim history</td>
+<td><strong>Pending — invitation</strong></td>
+</tr>
+<tr>
+<td><strong>PACCAR Solutions / SmartLINQ</strong></td>
+<td>Fault codes, telemetry, subscription state</td>
+<td><strong>Pending — invitation</strong></td>
+</tr>
+<tr>
+<td><strong>PSSM Decisiv</strong></td>
+<td>Point-of-service coverage read at the write-up bay</td>
+<td><strong>Pending — invitation</strong></td>
+</tr>
+<tr>
+<td><strong>DMS export (CDK / Karmak / Procede Excede / SERTI / TCS365)</strong></td>
+<td>Booking calendar, RO history, current mileage/hours</td>
+<td><strong>Pending — per rooftop</strong></td>
+</tr>
+</tbody></table>
+<p><em>Table 3: The adapter reads live. NHTSA + Excel + paste-in are live today. PACCAR-side credentials are invitation-only and provisioned via the dealer principal.</em></p>
+<h3>5.2 Compute in the browser tab</h3>
+<p>Once data is read, analysis happens entirely client-side. Two engines cover the two kinds of question:</p>
+<table class="data"><thead><tr>
+<th>Working engine</th>
+<th>Best at</th>
+<th>Lifespan</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Coverage-math kernel</strong> (deterministic)</td>
+<td>Anchor date + engine family → window remaining per bucket per VIN</td>
+<td>Per session</td>
+</tr>
+<tr>
+<td><strong>Uplift scanner</strong> (component-name matcher)</td>
+<td>Work-order line item → coverage bucket + confidence tier (High / Medium / Low)</td>
+<td>Per session</td>
+</tr>
+<tr>
+<td><strong>Cohort ranker</strong> (score sort)</td>
+<td>Batch of VINs → top-N by composite score, per-rooftop and per-engine breakdowns</td>
+<td>Per session</td>
+</tr>
+</tbody></table>
+<p><em>Table 4: Analysis is built in the tab and discarded. No persistent store.</em></p>
+<p>The coverage-math kernel is the workhorse: takes any VIN, any engine family, any in-service date, and returns the ten-bucket window snapshot. The uplift scanner is added only when a work-order file is present. Neither leaves anything behind.</p>
+<hr>
+<h2>6 · What it takes to point at a new dealer</h2>
+<p>Configuration, not build. Five items per dealership; three are self-serve, two need an invitation from within the dealer.</p>
+<table class="data"><thead><tr>
+<th>Item</th>
+<th>Who provisions</th>
+<th>Cost</th>
+<th>Blocker?</th>
+</tr></thead><tbody>
+<tr>
+<td>Rooftop list and Peterbilt/Kenworth brand map</td>
+<td>Dealer operations</td>
+<td>Free</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Excel/CSV of booking calendar or paste-in flow</td>
+<td>Dealer service manager</td>
+<td>Free</td>
+<td>No</td>
+</tr>
+<tr>
+<td>NHTSA API calls (VIN decode + recalls)</td>
+<td>Public</td>
+<td>Free</td>
+<td>No</td>
+</tr>
+<tr>
+<td>PRWS operator login</td>
+<td>Dealer principal / CFO — invitation</td>
+<td>Free</td>
+<td><strong>Yes — commercial</strong></td>
+</tr>
+<tr>
+<td>PACCAR Solutions / SmartLINQ dealer login</td>
+<td>Dealer principal / CFO — invitation</td>
+<td>Free</td>
+<td><strong>Yes — commercial</strong></td>
+</tr>
+<tr>
+<td>PSSM Decisiv seat</td>
+<td>Dealer principal — confirms existing contract or opens new one</td>
+<td>Contract-dependent</td>
+<td><strong>Yes — commercial</strong></td>
+</tr>
+<tr>
+<td>DMS export path (SFTP / API / CSV drop)</td>
+<td>Dealer IT</td>
+<td>Effort-dependent</td>
+<td>No — starts with paste-in</td>
+</tr>
+</tbody></table>
+<p>For Peterbilt Atlantic (Hawkins), items 1–3 are done. Items 4–6 are the subject of the <a href="mailto:pb.warsystem@paccar.com">access-request email to <code>pb.warsystem@paccar.com</code></a> — verbatim from Warranty Procedure Manual v2026.7 §Contacts. Item 7 is a per-rooftop conversation with dealer IT once the credentials are in hand.</p>
+<hr>
+<h2>7 · The delivery surfaces</h2>
+<p>Three surfaces, all on the same page, all client-side:</p>
+<table class="data"><thead><tr>
+<th>Surface</th>
+<th>Who uses it</th>
+<th>Question answered</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Single VIN wizard</strong></td>
+<td>Service writer, warranty administrator</td>
+<td>"Is this VIN still under warranty for the work I'm about to invoice?"</td>
+</tr>
+<tr>
+<td><strong>Work-order uplift</strong></td>
+<td>Warranty administrator, fixed-ops director</td>
+<td>"Which line items on today's ROs could shift from customer-pay to warranty?"</td>
+</tr>
+<tr>
+<td><strong>VIN batch scan</strong></td>
+<td>Fixed-ops director, dealer principal</td>
+<td>"Across the next four weeks of bookings, where are we not getting at the big warranty jobs?"</td>
+</tr>
+</tbody></table>
+<p>Every surface produces the same three exports: printable PDF (canon-styled, one page per VIN or one cohort brief), CSV (flat table for pasting back into the DMS), and JSON (the full twin card for downstream integration).</p>
+<hr>
+<h2>8 · How this scales beyond Peterbilt Atlantic</h2>
+<p>The Warranty GENE is designed to be a <strong>sidecar</strong> — an integral part of the Hawkins Twin solution, and a standalone subscription for every other dealership that wants to increase warranty recovery without building anything.</p>
+<table class="data"><thead><tr>
+<th>Subscription tier</th>
+<th>What the dealer gets</th>
+<th>What EgD does</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Public ledger only</strong></td>
+<td>The wireframe, the NHTSA APIs, the paste-in flow, exports. Any dealer, any brand, no PACCAR credentials required.</td>
+<td>Zero-touch. Dealer signs up, uses the tool.</td>
+</tr>
+<tr>
+<td><strong>Dealer-authorized</strong></td>
+<td>Above + a configured source adapter for the dealer's DMS + integration with the dealer's PRWS / PACCAR Solutions / PSSM sessions.</td>
+<td>One configuration engagement per rooftop family. Reasoning engine reused unchanged.</td>
+</tr>
+<tr>
+<td><strong>Twin-integrated (Hawkins tier)</strong></td>
+<td>Above + full integration with the Hawkins Twin: territory relationship, telemetry lane, PM/compliance overlay, historical claim ledger.</td>
+<td>The tier Peterbilt Atlantic is running. Sidecar becomes an integral organ of the twin.</td>
+</tr>
+</tbody></table>
+<p>The engine does not change between tiers — only the source adapter, the credentials, and the rooftop map do.</p>
+<hr>
+<h2>9 · Strategic frame — the industry-specific repository the twin is building</h2>
+<p>Warranty GENE is a first service, not the strategy. The strategy is what accumulates underneath it, one VIN at a time.</p>
+<p>Every VIN that flows through the engine leaves behind a <strong>structured record</strong> in the Hawkins Twin: identity, coverage windows, ownership history, service history, telemetry snapshots, recall closures, PM intervals, territory relationship, provenance stamps. That record is written to a schema — the <strong>rich-target row</strong> defined in <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/schema/">warranty-gene/schema</a> — and the schema is designed to hold the <strong>customer and equipment record data standard</strong> the industry lacks today.</p>
+<h3>9.1 The two record types the twin accumulates</h3>
+<p>The schema names two durable records; every other lane on the twin is a projection over one of them.</p>
+<table class="data"><thead><tr>
+<th>Record</th>
+<th>What it holds</th>
+<th>Why it compounds</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Customer twin</strong></td>
+<td>Legal entity, related entities, contact roster, fleet profile, purchase history, service history across rooftops, credit posture, territory relationship, communication preferences</td>
+<td>Customer records outlive any single vehicle. A fleet operator with 40 trucks becomes one durable customer record with 40 equipment records attached; the value of knowing that operator grows with every service event.</td>
+</tr>
+<tr>
+<td><strong>Equipment twin</strong></td>
+<td>VIN, identity decode, ownership chain, in-service date, coverage windows, claim history, telemetry, recall closures, PM history, retail-sale record, transfer record</td>
+<td>Equipment records outlive any single owner. A used-truck sale re-parents the equipment twin to a new customer twin without losing the service history.</td>
+</tr>
+</tbody></table>
+<p>The two are joined through <strong>ownership events</strong> — a retail sale, a lease transfer, a trade-in — each one a dated edge between a customer twin and an equipment twin.</p>
+<h3>9.2 Why the standard structure matters more than any one service</h3>
+<p>A Warranty GENE that runs on top of a proprietary CRM lasts as long as the CRM license. A Warranty GENE that runs on top of a <strong>standard-structured record repository</strong> is portable across DMS vendors, across brands, across dealer groups. The engine is not the moat — the standard is.</p>
+<p>Three properties make the schema worth building carefully:</p>
+<ul>
+<li><strong>Vendor-neutral.</strong> The record shape does not encode CDK Drive, Karmak, Procede Excede, TCS365, PRWS, or any other vendor's field names. Adapters translate from each vendor into the standard shape; the standard never bends to a vendor.</li>
+<li><strong>Time-anchored.</strong> Every field carries a <code>read_at</code> timestamp and a provenance stamp. The record reconstructs to any point in time — not just the latest state. This is what makes the repository a truth ledger rather than a database snapshot.</li>
+<li><strong>Extension-safe.</strong> New lanes (emissions telemetry, insurance events, resale valuations, driver-behaviour scores) attach as new record types with dated edges back to the customer or equipment twin. The core never changes when the world does.</li>
+</ul>
+<h3>9.3 The industry repository play</h3>
+<p>As the Hawkins Twin accumulates records across eight Peterbilt Atlantic rooftops, it becomes the <strong>first meaningful sample</strong> of the standard structure filled with real North American Class 8 truck operator data. That sample is valuable in three ways, each of which compounds over time:</p>
+<table class="data"><thead><tr>
+<th>Value</th>
+<th>Who realizes it</th>
+<th>How</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Operational</strong></td>
+<td>Hawkins first</td>
+<td>Every service event answers faster because prior events are queryable. Warranty GENE is the first proof of this.</td>
+</tr>
+<tr>
+<td><strong>Commercial</strong></td>
+<td>Hawkins next</td>
+<td>Every peer dealership that subscribes to a Warranty GENE tier (§8) also contributes back to the standard, growing the industry sample without exposing any dealer's private customer data.</td>
+</tr>
+<tr>
+<td><strong>Strategic</strong></td>
+<td>The industry, eventually</td>
+<td>The record standard becomes the substrate on which every future dealer-side service is built — recall recovery, resale valuation, insurance telematics, fleet-side maintenance planning — because it is the only vendor-neutral shape that already holds real data.</td>
+</tr>
+</tbody></table>
+<p>The Warranty GENE is the first tenant. The repository is the landlord. Peterbilt Atlantic is building the landlord.</p>
+<hr>
+<h2>10 · What is not in this blueprint</h2>
+<p>Called out explicitly so nothing is presumed:</p>
+<ul>
+<li><strong>Cross-brand support.</strong> Cummins-powered chassis need Cummins QuickServe / QSOL credentials, separate provisioning. DTNA, Volvo, and Kenworth read paths would each need their own source adapter. Not on the Peterbilt Atlantic critical path.</li>
+<li><strong>Write-back to PRWS.</strong> Read-only in this design. A warranty administrator files the claim through PRWS the normal way, using the twin card as the write-up input.</li>
+<li><strong>Warranty claim submission automation.</strong> Out of scope; regulated by PACCAR.</li>
+<li><strong>Customer PII handling.</strong> Retail-sale records may contain owner names. The current design masks owner by default and marks it <code>pending — policy decision</code> until the dealer principal signs off on the rendering rule.</li>
+</ul>
+<hr>
+<h2>11 · Provenance</h2>
+<p>Every claim in this document is traceable. The URLs below all verify 200 as of the document date:</p>
+<ul>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/wireframe/">Warranty GENE wireframe (public surface)</a></li>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/coverage-tables/">Warranty GENE coverage tables</a></li>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/schema/">Warranty GENE schema v1</a></li>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/mappings/">Warranty GENE field mappings</a></li>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/registration/">Warranty GENE registration inventory</a></li>
+<li><a href="https://static.nhtsa.gov/odi/tsbs/2025/MC-11021404-0001.pdf">NHTSA CE033 bulletin (federal emissions extension, EMY2023 MX-11/MX-13)</a></li>
+<li><a href="https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVin/1XPBSYN00N1000101?format=json">NHTSA VIN decoder API</a></li>
+<li><a href="https://github.com/EVEglyphDesign/epiq-revenue-leakage/blob/main/DOCUMENT-B-architecture-extract.md">Epiq Revenue Leakage — Document B (blueprint pattern this document follows)</a></li>
+</ul>
+<p>Dealer-document provenance (Peterbilt-issued, not publicly URL-addressable): Warranty Procedure Manual v2026.7 §7 and §Contacts, Warranty Quick Reference Guide 2025.4.</p>
+<hr>
+<p>© 2026 EVEglyphDesign. All rights reserved. Controlled copy. <em>Pour le bien-être du peuple.</em></p></body></html>

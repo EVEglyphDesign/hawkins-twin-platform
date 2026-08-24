@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Warranty GENE — Sidecar Blueprint (EgD-WGB-001) · EVEglyphDesign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:#fdfaf4; --cream2:#f7f2e7; --ink:#1a1a1a;
+    --line:#e7e1d3; --mute:#6b665c; --orange:#e87722;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--cream); color:var(--ink);
+    font-family: Inter, "Helvetica Neue", Arial, sans-serif; line-height:1.55; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 48px 24px 96px; }
+  header { border-bottom: 0.6pt solid var(--orange); padding-bottom: 22px; margin-bottom: 40px;
+           display: flex; justify-content: space-between; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  header .brand { color:var(--orange); font-weight:600; font-size:11px;
+                  letter-spacing:1.5px; text-transform:uppercase; }
+  header .meta { color:var(--mute); font-size:11px; font-family:"JetBrains Mono",monospace; }
+  .kicker { color:var(--orange); font-size:11px; letter-spacing:2px; text-transform:uppercase;
+            margin-bottom:8px; }
+  h1 { font-family: Fraunces, "Times New Roman", serif; font-size: 44px;
+       line-height: 1.05; margin: 0 0 6px; font-weight: 600; }
+  .subtitle { font-family: Fraunces, serif; font-style: italic; font-size: 20px;
+              color:var(--mute); margin-bottom: 28px; }
+  h2 { font-family: Fraunces, serif; font-size: 22px; margin: 40px 0 10px; font-weight:600; }
+  p { margin: 0 0 14px; }
+  a { color: var(--orange); text-decoration: none; border-bottom: 0.6pt solid var(--orange); }
+  a:hover { background: var(--cream2); }
+  .cta-row { display:flex; flex-wrap:wrap; gap: 12px; margin: 20px 0 8px; }
+  .cta { display:inline-block; padding: 10px 18px; border: 0.8pt solid var(--orange);
+         color: var(--orange); border-radius: 2px; font-weight: 600; font-size: 14px;
+         background: var(--cream2); }
+  .cta.primary { background: var(--orange); color: var(--cream); }
+  .cta:hover { background: var(--orange); color: var(--cream); }
+  ul { padding-left: 22px; }
+  ul li { margin-bottom: 8px; }
+  .caption { color: var(--mute); font-size: 13px; margin-top: 4px; }
+  footer { border-top: 0.4pt solid var(--line); padding-top: 20px; margin-top: 56px;
+           color: var(--mute); font-size: 12px; }
+  footer em { font-style: italic; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">EVEglyphDesign · Hawkins Twin Platform</div>
+    <div class="meta">EgD-WGB-001 · EgD-KEY-2026-07</div>
+  </header>
+
+  <div class="kicker">Blueprint</div>
+  <h1>Warranty GENE — Sidecar Blueprint</h1>
+  <div class="subtitle">Modular plugin. Integral to the Hawkins Twin. Subscription for every other dealer.</div>
+
+  <p>This blueprint follows the <a href="https://github.com/EVEglyphDesign/epiq-revenue-leakage/blob/main/DOCUMENT-B-architecture-extract.md">Epiq Revenue Leakage — Document B</a>
+  architecture pattern, retargeted from post-commitment order edits to post-commitment warranty coverage.
+  Same spine — Source adapter → Reasoning → Delivery → Observability — set on Peterbilt Atlantic's next
+  four weeks of service bookings.</p>
+
+  <div class="cta-row">
+    <a class="cta primary" href="EgD-WGB-001-Warranty-GENE-Blueprint.pdf">Read the blueprint (PDF, 10 pp.)</a>
+    <a class="cta" href="EgD-WGB-001-Warranty-GENE-Blueprint.md">Read the source (Markdown)</a>
+    <a class="cta" href="../wireframe/">Open the wireframe</a>
+  </div>
+
+  <h2>What the blueprint covers</h2>
+  <ul>
+    <li><strong>§1 The mandate</strong> — take a VIN, return whether the work about to be invoiced is covered, and rank the recovery opportunity across a cohort.</li>
+    <li><strong>§2 The four-part architecture</strong> — source adapter, reasoning, delivery, observability. Live vs. configured for Peterbilt Atlantic.</li>
+    <li><strong>§3 How it reasons</strong> — the six-step deterministic path and why every answer is auditable.</li>
+    <li><strong>§4 What is already built</strong> — schema, ledger, mappings, wireframe, canon PDFs, and the lessons paid for once.</li>
+    <li><strong>§5 Where the data lives</strong> — read live from NHTSA + PACCAR + DMS, compute in the browser tab, no persistent store.</li>
+    <li><strong>§6 Pointing at a new dealer</strong> — five configuration items, three self-serve, two need an invitation from the dealer principal.</li>
+    <li><strong>§7 The delivery surfaces</strong> — single VIN, work-order uplift, VIN batch scan. Same engine, three roles.</li>
+    <li><strong>§8 How this scales</strong> — three subscription tiers: public-ledger, dealer-authorized, twin-integrated (Hawkins tier).</li>
+    <li><strong>§9 Strategic frame</strong> — the industry-specific customer-and-equipment record repository the twin is building underneath.</li>
+    <li><strong>§10 What is not in this blueprint</strong> — cross-brand support, write-back to PRWS, PII policy, claim submission automation.</li>
+    <li><strong>§11 Provenance</strong> — every claim traceable to a URL that verifies 200 or a named dealer document.</li>
+  </ul>
+
+  <h2>Companion surfaces</h2>
+  <ul>
+    <li><a href="../wireframe/">Warranty GENE wireframe</a> — the three operator surfaces this blueprint stands up</li>
+    <li><a href="../coverage-tables/">Warranty GENE coverage tables</a> — the ten-bucket public ledger</li>
+    <li><a href="../schema/">Warranty GENE schema v1</a> — the rich-target row</li>
+    <li><a href="../mappings/">Warranty GENE field mappings</a> — SIR / SmartLINQ / PRWS / PSSM / TCS365</li>
+    <li><a href="../registration/">Warranty GENE registration inventory</a> — PRWS / PACCAR Connect / PSSM Decisiv / T&amp;Cs</li>
+  </ul>
+
+  <footer>
+    © 2026 EVEglyphDesign. All rights reserved. Controlled copy.
+    <em>Pour le bien-être du peuple.</em>
+  </footer>
+</div>
+</body>
+</html>
