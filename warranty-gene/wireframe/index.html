@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Warranty GENE — Wireframe · EVEglyphDesign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:#fdfaf4; --cream2:#f7f2e7; --ink:#1a1a1a;
+    --line:#e7e1d3; --mute:#6b665c; --orange:#e87722;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--cream); color:var(--ink);
+    font-family: Inter, "Helvetica Neue", Arial, sans-serif; line-height:1.55; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 40px 24px 96px; }
+
+  header.page { border-bottom: 0.6pt solid var(--orange); padding-bottom: 22px; margin-bottom: 32px;
+                display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  header.page .brand { color:var(--orange); font-weight:600; font-size:11px;
+                       letter-spacing:1.5px; text-transform:uppercase; }
+  header.page .meta { color:var(--mute); font-size:11px; font-family:"JetBrains Mono",monospace; }
+
+  h1 { font-family: Fraunces, "Times New Roman", serif; font-size: 40px;
+       line-height: 1.05; margin: 0 0 6px; font-weight: 600; }
+  .subtitle { font-family: Fraunces, serif; font-style: italic; font-size: 19px;
+              color:var(--mute); margin-bottom: 24px; }
+  h2 { font-family: Fraunces, serif; font-size: 24px; margin: 32px 0 8px; font-weight: 600; }
+  h3 { font-family: Fraunces, serif; font-size: 17px; margin: 18px 0 6px; font-weight: 600; }
+  p  { margin: 0 0 12px; }
+  a  { color: var(--orange); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Mode picker */
+  .modes { display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 8px 0 28px; }
+  .mode-card { background: var(--cream2); border: 1pt solid var(--line); border-left: 3px solid var(--orange);
+               padding: 18px; cursor: pointer; transition: all .15s ease; }
+  .mode-card:hover { border-color: var(--orange); }
+  .mode-card.active { background: #fff; border: 1pt solid var(--orange); border-left: 3px solid var(--orange); }
+  .mode-card h3 { margin-top: 0; font-size: 15px; }
+  .mode-card p  { margin-bottom: 0; font-size: 13px; color: var(--mute); }
+  .mode-num { color: var(--orange); font-weight: 600; font-size: 11px; letter-spacing: 1.5px;
+              text-transform: uppercase; }
+
+  /* Step chrome */
+  .step { display: none; background:#fff; border: 1pt solid var(--line); padding: 28px 30px; }
+  .step.active { display: block; }
+  .kicker { color: var(--orange); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .step-desc { color: var(--mute); font-size: 14.5px; margin-bottom: 20px; }
+  .step-desc code { font-family: "JetBrains Mono", monospace; font-size: 13px;
+                    background: var(--cream2); padding: 1px 5px; border-radius: 2px; }
+
+  /* Progress rail */
+  .progress { display:flex; gap: 6px; margin: 0 0 22px; }
+  .progress .tick { flex:1; height: 6px; background: var(--cream2); border-radius: 3px; }
+  .progress .tick.done { background: var(--orange); }
+  .progress .tick.current { background: var(--ink); }
+
+  /* Form controls */
+  label { display:block; font-size: 13px; font-weight: 600; margin: 12px 0 6px; color: var(--ink); }
+  input[type=text], textarea, input[type=file], select {
+    width: 100%; padding: 10px 12px; border: 1pt solid var(--line); background: var(--cream);
+    font-family: "JetBrains Mono", monospace; font-size: 14px;
+  }
+  textarea { min-height: 120px; resize: vertical; }
+  input[type=text]:focus, textarea:focus { outline: 2px solid var(--orange); outline-offset: -1px; }
+
+  /* Placeholder box — shows the shape of an output without inventing data */
+  .placeholder {
+    border: 1pt dashed var(--mute); background: var(--cream2);
+    padding: 18px; margin: 14px 0; color: var(--mute); font-size: 13.5px;
+  }
+  .placeholder strong { color: var(--ink); font-family: Fraunces, serif; font-weight: 600; }
+  .placeholder .fields { display:grid; grid-template-columns: 1fr 1fr; gap: 6px 24px;
+                         font-family: "JetBrains Mono", monospace; font-size: 12.5px;
+                         margin-top: 10px; }
+  .placeholder .fields div::before { content: "▢ "; color: var(--orange); }
+
+  /* Table wireframe */
+  table.wire { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 13px;
+               font-family: "JetBrains Mono", monospace; }
+  table.wire th { background: var(--cream2); text-align: left; padding: 8px 10px;
+                  border-bottom: 1pt solid var(--orange); font-weight: 600; }
+  table.wire td { padding: 6px 10px; border-bottom: 0.4pt solid var(--line); color: var(--mute); }
+
+  /* Callouts */
+  .callout { background: var(--cream2); border-left: 3px solid var(--orange);
+             padding: 12px 16px; margin: 14px 0; font-size: 13.5px; }
+  .callout strong { font-family: Fraunces, serif; }
+
+  /* Buttons */
+  .nav { margin-top: 26px; display:flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  button {
+    font-family: Inter, sans-serif; font-size: 14px; font-weight: 600;
+    padding: 11px 22px; border-radius: 3px; cursor: pointer; border: 1.5pt solid var(--orange);
+  }
+  button.primary { background: var(--orange); color: #fff; }
+  button.ghost   { background: transparent; color: var(--orange); }
+  button:disabled { opacity: .35; cursor: not-allowed; }
+
+  /* Filter bar for batch view */
+  .filters { display:flex; flex-wrap:wrap; gap: 10px; margin: 12px 0 18px;
+             padding: 12px 14px; background: var(--cream2); border-left: 3px solid var(--mute); }
+  .filters label { margin: 0; font-size: 12px; color: var(--mute); }
+  .filters select { padding: 6px 8px; font-size: 12.5px; width: auto; background: #fff; }
+
+  footer { margin-top: 60px; padding-top: 18px; border-top: 0.4pt solid var(--line);
+           color:var(--mute); font-size: 12px; font-style: italic; text-align:center; }
+  footer .hash { font-family: "JetBrains Mono", monospace; font-style: normal; color: var(--mute); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="page">
+    <span class="brand">EVEglyphDesign · Hawkins Twin Platform</span>
+    <span class="meta">EgD-KEY-2026-07 · wireframe v0</span>
+  </header>
+
+  <div class="kicker">Warranty GENE</div>
+  <h1>VIN coverage lookup — wireframe</h1>
+  <div class="subtitle">Boxes and labels only. No data, no live reads. Purpose: agree the language and flow before code runs.</div>
+
+  <div class="callout">
+    <strong>How to use this page.</strong> Pick one of the three modes below. Each mode walks you through the same underlying checks, in the order the operator needs to see them. Nothing is fetched. Nothing is stored. Every output box shows the <em>shape</em> of the answer, not a fake answer.
+  </div>
+
+  <h2>Pick a mode</h2>
+  <div class="modes">
+    <div class="mode-card active" data-mode="single" onclick="setMode('single')">
+      <div class="mode-num">Mode 1</div>
+      <h3>Single VIN</h3>
+      <p>Paste one VIN. Walk the five-step check. See the twin card at the end.</p>
+    </div>
+    <div class="mode-card" data-mode="wo" onclick="setMode('wo')">
+      <div class="mode-num">Mode 2</div>
+      <h3>Work-order uplift</h3>
+      <p>Upload a work-order file. See which line items could shift from customer-pay to warranty.</p>
+    </div>
+    <div class="mode-card" data-mode="batch" onclick="setMode('batch')">
+      <div class="mode-num">Mode 3</div>
+      <h3>VIN batch scan</h3>
+      <p>Upload or paste many VINs. Find the biggest warranty jobs across the whole cohort.</p>
+    </div>
+  </div>
+
+  <!-- =========================================================== -->
+  <!-- MODE 1 — SINGLE VIN                                          -->
+  <!-- =========================================================== -->
+
+  <div id="mode-single">
+
+    <div class="progress" id="prog-single">
+      <div class="tick current"></div>
+      <div class="tick"></div>
+      <div class="tick"></div>
+      <div class="tick"></div>
+      <div class="tick"></div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step active" data-step="1">
+      <div class="kicker">Step 1 of 5</div>
+      <h2>Paste a VIN</h2>
+      <p class="step-desc">A VIN is 17 characters. We validate the check digit locally in the browser. Nothing is sent anywhere yet.</p>
+      <label for="single-vin">VIN (17 characters)</label>
+      <input type="text" id="single-vin" placeholder="e.g. 1XPBSYN00N1000101" maxlength="17">
+      <div class="callout"><strong>What happens next.</strong> On <em>Next</em>, we decode the VIN against a public database and show the make, model, model year, and engine family. No dealer credentials involved at this step.</div>
+      <div class="nav">
+        <button class="ghost" disabled>← Back</button>
+        <button class="primary" onclick="nextStep('single')">Next: identify the vehicle →</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step" data-step="2">
+      <div class="kicker">Step 2 of 5</div>
+      <h2>Identify the vehicle</h2>
+      <p class="step-desc">Decoded from the VIN. If anything looks wrong, correct it inline. Fields we can't decode are marked <code>pending — DMS upload</code>.</p>
+      <div class="placeholder">
+        <strong>Vehicle identity</strong>
+        <div class="fields">
+          <div>Make</div><div>Model</div>
+          <div>Model year</div><div>Engine family</div>
+          <div>Transmission</div><div>Axle config</div>
+          <div>Cab type</div><div>Vocational use</div>
+          <div>In-service date <em>(pending DMS)</em></div><div>Current mileage <em>(pending DMS)</em></div>
+          <div>Current hours <em>(pending DMS)</em></div><div>Rooftop <em>(pending DMS)</em></div>
+        </div>
+      </div>
+      <div class="callout"><strong>What happens next.</strong> On <em>Next</em>, we take the engine family and in-service date and calculate how much room is left in each warranty coverage window.</div>
+      <div class="nav">
+        <button class="ghost" onclick="prevStep('single')">← Back</button>
+        <button class="primary" onclick="nextStep('single')">Next: check the coverage windows →</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step" data-step="3">
+      <div class="kicker">Step 3 of 5</div>
+      <h2>Check the coverage windows</h2>
+      <p class="step-desc">PACCAR publishes coverage by engine family. Each window has a months limit, a miles limit, and sometimes an hours limit — whichever runs out first ends coverage. Every row will link to its source.</p>
+      <table class="wire">
+        <thead><tr><th>Coverage bucket</th><th>Months remaining</th><th>Miles remaining</th><th>Hours remaining</th><th>Status</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>Base engine</td><td>—</td><td>—</td><td>—</td><td>—</td><td>Warranty Procedure Manual v2026.7</td></tr>
+          <tr><td>Major components</td><td>—</td><td>—</td><td>—</td><td>—</td><td>Warranty Procedure Manual v2026.7</td></tr>
+          <tr><td>Emissions (EPA)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>Warranty Procedure Manual v2026.7</td></tr>
+          <tr><td>Emissions (CARB)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>Warranty Procedure Manual v2026.7</td></tr>
+          <tr><td>Emissions extension (CE033)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>NHTSA CE033 (2025-07-02)</td></tr>
+          <tr><td>Towing</td><td>—</td><td>—</td><td>—</td><td>—</td><td>Warranty Procedure Manual v2026.7</td></tr>
+          <tr><td>Aftertreatment plan</td><td>—</td><td>—</td><td>—</td><td>—</td><td>MX Extended Warranty</td></tr>
+          <tr><td>PACCAR Protection</td><td>—</td><td>—</td><td>—</td><td>—</td><td>MX Extended Warranty</td></tr>
+          <tr><td>Major component plan</td><td>—</td><td>—</td><td>—</td><td>—</td><td>MX Extended Warranty</td></tr>
+          <tr><td>Component supplier</td><td>—</td><td>—</td><td>—</td><td>—</td><td>Supplier §7</td></tr>
+        </tbody>
+      </table>
+      <div class="callout"><strong>What happens next.</strong> On <em>Next</em>, we take any open jobs on this VIN and match each one to a coverage bucket, then score which claims are worth filing first.</div>
+      <div class="nav">
+        <button class="ghost" onclick="prevStep('single')">← Back</button>
+        <button class="primary" onclick="nextStep('single')">Next: score the open jobs →</button>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step" data-step="4">
+      <div class="kicker">Step 4 of 5</div>
+      <h2>Score the open jobs</h2>
+      <p class="step-desc">Every open job gets three scores: <em>recovery</em> (dollars we can shift to warranty), <em>urgency</em> (is the covering bucket expiring soon), and <em>margin</em> (parts on hand, right technician). Higher composite means "file this first."</p>
+      <table class="wire">
+        <thead><tr><th>Job</th><th>Component</th><th>Coverage bucket</th><th>Recovery $</th><th>Urgency</th><th>Margin</th><th>Score</th></tr></thead>
+        <tbody>
+          <tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div class="callout"><strong>What happens next.</strong> On <em>Next</em>, we overlay open recalls, field campaigns, and preventive-maintenance items due in the same bay visit.</div>
+      <div class="nav">
+        <button class="ghost" onclick="prevStep('single')">← Back</button>
+        <button class="primary" onclick="nextStep('single')">Next: recalls and PM →</button>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step" data-step="5">
+      <div class="kicker">Step 5 of 5</div>
+      <h2>Twin card — the write-up worklist</h2>
+      <p class="step-desc">This is what walks into the write-up meeting. Every field is stamped with where it came from — <code>public ledger</code>, <code>DMS upload</code>, or <code>pending</code> (PRWS / SmartLINQ walkthrough not yet available).</p>
+      <div class="placeholder">
+        <strong>Twin card sections</strong>
+        <div class="fields">
+          <div>Identity</div><div>Coverage windows (10 buckets)</div>
+          <div>Open jobs, ordered by score</div><div>Open recalls (NHTSA)</div>
+          <div>Field campaigns (SIR)</div><div>PM due in ≤ 5,000 mi</div>
+          <div>Telemetry (last ping, faults)</div><div>Territory (last visit, in-region)</div>
+          <div>Provenance ledger</div><div>Export: print / CSV / JSON</div>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="ghost" onclick="prevStep('single')">← Back</button>
+        <button class="primary" onclick="resetMode('single')">Start another VIN →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- =========================================================== -->
+  <!-- MODE 2 — WORK-ORDER UPLIFT                                   -->
+  <!-- =========================================================== -->
+
+  <div id="mode-wo" style="display:none;">
+
+    <div class="progress" id="prog-wo">
+      <div class="tick current"></div>
+      <div class="tick"></div>
+      <div class="tick"></div>
+      <div class="tick"></div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step active" data-step="1">
+      <div class="kicker">Step 1 of 4</div>
+      <h2>Upload work orders</h2>
+      <p class="step-desc">Excel or CSV. One row per line item. Minimum columns: <code>RO</code>, <code>VIN</code>, <code>complaint or cause</code>, <code>customer-pay amount</code>. Extra columns are preserved.</p>
+      <label for="wo-file">Work-order file</label>
+      <input type="file" id="wo-file" accept=".xlsx,.xls,.csv">
+      <label for="wo-paste">Or paste the table</label>
+      <textarea id="wo-paste" placeholder="RO, VIN, complaint, cause, customer_pay_cad&#10;..."></textarea>
+      <div class="callout"><strong>What happens next.</strong> We parse the file, group line items by VIN, and pull each VIN's coverage windows in the background.</div>
+      <div class="nav">
+        <button class="ghost" disabled>← Back</button>
+        <button class="primary" onclick="nextStep('wo')">Next: parse and validate →</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step" data-step="2">
+      <div class="kicker">Step 2 of 4</div>
+      <h2>Parse and validate</h2>
+      <p class="step-desc">Every VIN is check-digit-validated. Rows with a bad VIN, missing complaint, or missing dollar amount are flagged and held aside — nothing gets silently dropped.</p>
+      <table class="wire">
+        <thead><tr><th>Row</th><th>RO</th><th>VIN</th><th>Line-item text</th><th>Customer $</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div class="callout"><strong>What happens next.</strong> For each line item we ask: is the component named on this line covered by any active warranty bucket on this VIN? If yes, we mark it as an uplift candidate.</div>
+      <div class="nav">
+        <button class="ghost" onclick="prevStep('wo')">← Back</button>
+        <button class="primary" onclick="nextStep('wo')">Next: match line items to coverage →</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step" data-step="3">
+      <div class="kicker">Step 3 of 4</div>
+      <h2>Uplift candidates</h2>
+      <p class="step-desc">Line items where the component appears in an active coverage bucket. These are the invoices to review before they close to customer-pay.</p>
+      <div class="filters">
+        <div><label>Rooftop</label><select><option>All</option></select></div>
+        <div><label>Coverage bucket</label><select><option>All</option></select></div>
+        <div><label>Confidence</label><select><option>All</option><option>High</option><option>Medium</option><option>Low</option></select></div>
+        <div><label>Min $ amount</label><select><option>Any</option><option>$500+</option><option>$1,000+</option><option>$2,500+</option></select></div>
+      </div>
+      <table class="wire">
+        <thead><tr><th>RO</th><th>VIN</th><th>Line item</th><th>Bucket matched</th><th>Confidence</th><th>Customer $</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div class="callout"><strong>Confidence levels.</strong> <em>High</em> = component name is verbatim in the coverage-bucket parts list. <em>Medium</em> = component name is a known synonym (e.g. "DEF injector" → "DEF Dosing Valve"). <em>Low</em> = category match only (e.g. "aftertreatment work"). Low-confidence rows need a human to confirm before filing.</div>
+      <div class="nav">
+        <button class="ghost" onclick="prevStep('wo')">← Back</button>
+        <button class="primary" onclick="nextStep('wo')">Next: uplift summary →</button>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step" data-step="4">
+      <div class="kicker">Step 4 of 4</div>
+      <h2>Uplift summary</h2>
+      <p class="step-desc">How much customer-pay revenue is sitting on the shop floor right now that could be a warranty claim instead.</p>
+      <div class="placeholder">
+        <strong>Summary card</strong>
+        <div class="fields">
+          <div>Total line items scanned</div><div>Uplift candidates (all confidences)</div>
+          <div>High-confidence dollars</div><div>Medium-confidence dollars</div>
+          <div>Low-confidence dollars (needs review)</div><div>Per-rooftop breakdown</div>
+          <div>Per-bucket breakdown</div><div>Export: CSV / PDF</div>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="ghost" onclick="prevStep('wo')">← Back</button>
+        <button class="primary" onclick="resetMode('wo')">Upload another file →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- =========================================================== -->
+  <!-- MODE 3 — VIN BATCH SCAN                                      -->
+  <!-- =========================================================== -->
+
+  <div id="mode-batch" style="display:none;">
+
+    <div class="progress" id="prog-batch">
+      <div class="tick current"></div>
+      <div class="tick"></div>
+      <div class="tick"></div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step active" data-step="1">
+      <div class="kicker">Step 1 of 3</div>
+      <h2>Upload or paste VINs</h2>
+      <p class="step-desc">Excel, CSV, or paste-in — one VIN per line. Optional columns preserved: <code>booking_date</code>, <code>rooftop</code>, <code>mileage</code>, <code>hours</code>.</p>
+      <label for="batch-file">Booking file</label>
+      <input type="file" id="batch-file" accept=".xlsx,.xls,.csv">
+      <label for="batch-paste">Or paste VINs</label>
+      <textarea id="batch-paste" placeholder="One VIN per line&#10;1XPBSYN00N1000101&#10;1XPBSYN00R1000505&#10;..."></textarea>
+      <div class="callout"><strong>What happens next.</strong> Every VIN is validated, decoded, and coverage-checked. VINs with expired-or-expiring buckets sitting under known-common-failure components get flagged as <em>big warranty jobs we should chase</em>.</div>
+      <div class="nav">
+        <button class="ghost" disabled>← Back</button>
+        <button class="primary" onclick="nextStep('batch')">Next: scan the cohort →</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step" data-step="2">
+      <div class="kicker">Step 2 of 3</div>
+      <h2>Scan results — one row per VIN</h2>
+      <p class="step-desc">Sorted by the biggest opportunity first. Click any row to open that VIN's twin card.</p>
+      <div class="filters">
+        <div><label>Engine family</label><select><option>All</option><option>MX-13</option><option>MX-11</option><option>PX</option><option>BEV</option></select></div>
+        <div><label>Rooftop</label><select><option>All</option></select></div>
+        <div><label>Coverage status</label><select><option>Any</option><option>Expired</option><option>Expiring</option><option>Active</option></select></div>
+        <div><label>CE033 eligible</label><select><option>Any</option><option>Yes</option><option>No</option></select></div>
+        <div><label>Min score</label><select><option>Any</option><option>1.0+</option><option>3.0+</option><option>5.0+</option></select></div>
+        <div><label>Sort by</label><select><option>Composite score</option><option>Recovery $</option><option>Days since last visit</option><option>VIN</option></select></div>
+      </div>
+      <table class="wire">
+        <thead><tr><th>VIN</th><th>Model / year / engine</th><th>Rooftop</th><th>Expired buckets</th><th>Top job</th><th>Recovery at risk $</th><th>Score</th></tr></thead>
+        <tbody>
+          <tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div class="callout"><strong>Big warranty jobs we might not be getting at.</strong> Rows where a coverage bucket is still active AND a known-common-failure component for this engine family is showing telemetry warnings — but no work order exists yet. These are the trucks to bring in <em>before</em> the customer takes them somewhere else.</div>
+      <div class="nav">
+        <button class="ghost" onclick="prevStep('batch')">← Back</button>
+        <button class="primary" onclick="nextStep('batch')">Next: cohort summary →</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step" data-step="3">
+      <div class="kicker">Step 3 of 3</div>
+      <h2>Cohort summary</h2>
+      <p class="step-desc">The whole four-week window on one card. What to walk into the Monday service meeting with.</p>
+      <div class="placeholder">
+        <strong>Cohort summary card</strong>
+        <div class="fields">
+          <div>VINs scanned</div><div>VINs with ≥ 1 expired bucket</div>
+          <div>VINs with ≥ 1 expiring bucket</div><div>Total recovery at risk (all VINs)</div>
+          <div>Top 10 VINs by score</div><div>Per-rooftop breakdown</div>
+          <div>Per-engine-family breakdown</div><div>CE033-eligible count</div>
+          <div>"Big jobs we're missing" list</div><div>Export: CSV / PDF cohort brief</div>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="ghost" onclick="prevStep('batch')">← Back</button>
+        <button class="primary" onclick="resetMode('batch')">Scan another cohort →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    Warranty GENE — wireframe v0. Boxes and labels only.<br>
+    <span class="hash">© 2026 EVEglyphDesign · EgD-KEY-2026-07 · <em>Pour le bien-être du peuple</em></span>
+  </footer>
+
+</div>
+
+<script>
+  const MODES = { single: 5, wo: 4, batch: 3 };
+  let currentMode = 'single';
+  let currentStep = { single: 1, wo: 1, batch: 1 };
+
+  function setMode(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.mode-card').forEach(c =>
+      c.classList.toggle('active', c.dataset.mode === mode)
+    );
+    ['single','wo','batch'].forEach(m =>
+      document.getElementById('mode-'+m).style.display = (m===mode) ? 'block' : 'none'
+    );
+    renderStep(mode);
+  }
+
+  function renderStep(mode) {
+    const total = MODES[mode];
+    const step = currentStep[mode];
+    const container = document.getElementById('mode-'+mode);
+    container.querySelectorAll('.step').forEach(s => {
+      s.classList.toggle('active', parseInt(s.dataset.step) === step);
+    });
+    const prog = document.getElementById('prog-'+mode);
+    prog.querySelectorAll('.tick').forEach((t,i) => {
+      t.classList.remove('done', 'current');
+      if (i+1 < step) t.classList.add('done');
+      else if (i+1 === step) t.classList.add('current');
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function nextStep(mode) {
+    if (currentStep[mode] < MODES[mode]) {
+      currentStep[mode]++;
+      renderStep(mode);
+    }
+  }
+  function prevStep(mode) {
+    if (currentStep[mode] > 1) {
+      currentStep[mode]--;
+      renderStep(mode);
+    }
+  }
+  function resetMode(mode) {
+    currentStep[mode] = 1;
+    renderStep(mode);
+  }
+</script>
+
+</body>
+</html>
