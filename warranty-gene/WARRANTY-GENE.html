@@ -1,0 +1,236 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Warranty GENE</title></head>
+<body><div class="title-block"><div class="kicker">EVEglyphDesign · Hawkins Twin Platform</div><h1>Warranty GENE</h1><div class="subtitle">Peterbilt Atlantic Digital Twin — the rich-target lane</div><div class="meta"><strong>EVEglyphDesign</strong> · Hawkins Twin Platform · Warranty GENE v0.1 Prepared for Tim Hawkins and Luke Weatherbie · August 24, 2026</div></div>
+<hr>
+<h2>1. What the Warranty GENE is</h2>
+<p>The Warranty <strong>GENE</strong> — <em>G</em>ather, <em>E</em>ligibility, <em>N</em>otify, <em>E</em>arn — is the module of the Hawkins/Peterbilt twin that answers one question per VIN, per day, ahead of the customer's next visit:</p>
+<blockquote><em>What warranty jobs should be performed on this truck, and how do we get it into a Hawkins bay before someone else does?</em></blockquote>
+<p>Warranty labor is the highest-margin work in Tim's shop. A job that costs the customer nothing can still return several thousand dollars of margin per event to the dealership. The Warranty GENE exists so no eligible truck ever leaves the region unclaimed. It is a <em>rich-target identifier</em>, not a claim submission tool — PACCAR Registration and Warranty System (PRWS) remains the authority for filing<sup class="fn"><a href="#fn-1" id="fnref-1">[1]</a></sup>.</p>
+<p>The GENE reuses the twin's existing plumbing. It does not invent a parallel data model:</p>
+<ul>
+<li>VIN-keyed lookups against <strong>SIR</strong> (Service Information Record) and <strong>SmartLINQ Service Management</strong>, which already auto-display open recall, campaign, and warranty coverage against every VIN as it arrives at the dealership<sup class="fn"><a href="#fn-2" id="fnref-2">[2]</a></sup>.</li>
+<li>Coverage math against the <strong>2025.4 Warranty Quick Reference Guide</strong> (413 covered components across ten coverage buckets, plus the Coverage Time & Exclusions table)<sup class="fn"><a href="#fn-3" id="fnref-3">[3]</a></sup>.</li>
+<li>Emissions eligibility from the <strong>CARB / EPA / ECCC Emission Component Coverage</strong> register (60 mo / 350,000 mi Class 8 CARB; 60 mo / 100,000 mi (160,000 km) EPA/ECCC)<sup class="fn"><a href="#fn-4" id="fnref-4">[4]</a></sup>.</li>
+<li>The <strong>Warranty Bot</strong> prompt pattern already ratified in the twin: VIN-keyed booking-time scans flag <em>possible</em> OEM or aftermarket coverage for human review; the manufacturer system stays authoritative<sup class="fn"><a href="#fn-5" id="fnref-5">[5]</a></sup>.</li>
+</ul>
+<p>Everything downstream — the customer outreach, the shop schedule, the parts pre-order — is fed by the same VIN row.</p>
+<hr>
+<h2>2. Where the signal comes from — the earlier, the better</h2>
+<p>The GENE ranks its sources by how far ahead of the customer's next visit they see the truck. The earlier the signal, the more time Tim has to book the bay, stage the parts, and win the job.</p>
+<table class="data"><thead><tr>
+<th>Rung</th>
+<th>Source</th>
+<th>Latency</th>
+<th>What it tells us</th>
+<th>Who else sees it</th>
+</tr></thead><tbody>
+<tr>
+<td>1</td>
+<td><strong>SmartLINQ / PACCAR Solutions telematics</strong></td>
+<td>Live</td>
+<td>Fault codes, prognostics, geofence entry into the Hawkins region</td>
+<td>PACCAR + fleet + any Peterbilt dealer the truck rolls into</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>SIR + SmartLINQ Service Management</strong></td>
+<td>On arrival</td>
+<td>Every open recall, campaign, and warranty coverage flag against the VIN<sup class="fn"><a href="#fn-2" id="fnref-2">[2]</a></sup></td>
+<td>Any Peterbilt dealer that runs the VIN</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>PACCAR Prognostics bulletins</strong></td>
+<td>Proactive</td>
+<td>"Proactive Replacement Using PACCAR's Prognostic Prediction Algorithm to Maximize Uptime"<sup class="fn"><a href="#fn-2" id="fnref-2">[2]</a></sup></td>
+<td>Any Peterbilt dealer</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Fault-code stream via DAVIE / PRS files</strong></td>
+<td>On shop visit</td>
+<td>Confirmed fault codes and diagnostic log, required on Prior Approval and MX Engine work<sup class="fn"><a href="#fn-6" id="fnref-6">[6]</a></sup></td>
+<td>Only the servicing dealer</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Customer complaint (CCC) at booking</strong></td>
+<td>Booking call</td>
+<td>Complaint, Cause, Correction narrative<sup class="fn"><a href="#fn-1" id="fnref-1">[1]</a></sup></td>
+<td>Only the servicing dealer</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Post-repair audit trail</strong></td>
+<td>After the fact</td>
+<td>Retention, PRWS submission, RMA returns</td>
+<td>PACCAR audit</td>
+</tr>
+</tbody></table>
+<p>The rich-target discipline is rung 1. <strong>Any vehicle whose VIN matches a PACCAR-open warranty job and whose GPS track will put it inside the Hawkins region overnight is a booking to protect.</strong> That is the sentence the whole module is written to satisfy.</p>
+<h3>2.1 The PACCAR telemetry integration — where the twin adds value</h3>
+<p>PACCAR Solutions / SmartLINQ already streams truck-level events to the dealer network. Today, per Tim's read of the field: dealers can <em>see</em> trucks entering the network with some diagnostic context, but the surface is treated as an <strong>emergency system</strong> — it keeps a truck on the road, it does not proactively convert an inbound truck into a scheduled warranty appointment.</p>
+<p>The Warranty GENE closes that gap. For every VIN broadcasting into the Hawkins region:</p>
+<ol>
+<li><strong>Match</strong> the VIN against the SIR / SmartLINQ open-job set (recalls, campaigns, prognostics, active fault codes with warrantable ATA components).</li>
+<li><strong>Score</strong> the match against Hawkins bay availability, parts on hand, and coverage window remaining (months and miles/km against the Coverage Time & Exclusions table).</li>
+<li><strong>Alert</strong> the dispatcher when the VIN's projected overnight location is inside Tim's region <em>and</em> the score crosses a booking threshold — with enough lead time to place the parts order the same afternoon (per §4.1's parts-order-immediately rule for recalls<sup class="fn"><a href="#fn-2" id="fnref-2">[2]</a></sup>).</li>
+<li><strong>Present</strong> the customer contact as a rich target in the same three-tile decision surface the TELUS twin already uses (voicemail-not-returned, repeat-caller, never-reached)<sup class="fn"><a href="#fn-7" id="fnref-7">[7]</a></sup> — the fourth cohort becomes <em>"warrantable job available, no booking scheduled"</em>.</li>
+</ol>
+<p>The twin does not need to replace the PACCAR ePortal or SmartLINQ — it needs to consume their VIN-keyed truth and put it beside Hawkins's own booking calendar and parts on hand.</p>
+<hr>
+<h2>3. The VIN-by-VIN diagnostic set</h2>
+<p>For every VIN the GENE evaluates, it fills a single row with the following fields. This is the twin's on-disk contract; nothing else the GENE emits (dashboards, alerts, worklists) reads any other shape.</p>
+<h3>3.1 Identity</h3>
+<ul>
+<li><strong>VIN</strong> (17-char, PACCAR-validated)</li>
+<li><strong>Chassis series</strong> (Class 8, Class 6/7, Battery Electric, MX-equipped)</li>
+<li><strong>In-service date</strong> and <strong>odometer / hours</strong> (with source and as-of timestamp)</li>
+<li><strong>Registered owner</strong> and <strong>fleet parent</strong> (from Hawkins CDK customer master; DSFW/Direct-Fleet flag if applicable<sup class="fn"><a href="#fn-8" id="fnref-8">[8]</a></sup>)</li>
+<li><strong>Home rooftop</strong> (which of the eight Peterbilt Atlantic locations owns the relationship<sup class="fn"><a href="#fn-9" id="fnref-9">[9]</a></sup>)</li>
+</ul>
+<h3>3.2 Coverage window</h3>
+<p>For each of the ten coverage buckets in the Warranty Quick Reference Guide<sup class="fn"><a href="#fn-3" id="fnref-3">[3]</a></sup>:</p>
+<table class="data"><thead><tr>
+<th>Bucket</th>
+<th>Class 8</th>
+<th>Class 6/7</th>
+</tr></thead><tbody>
+<tr>
+<td>Base Emissions — CARB</td>
+<td>60 mo / 350,000 mi</td>
+<td>60 mo / 150,000 mi</td>
+</tr>
+<tr>
+<td>Base Emissions — EPA / ECCC</td>
+<td>60 mo / 100,000 mi (160,000 km)</td>
+<td>60 mo / 100,000 mi (160,000 km)</td>
+</tr>
+<tr>
+<td>Standard Vehicle</td>
+<td>12 mo / 100,000 mi (160,000 km)</td>
+<td>12 mo / Unlimited</td>
+</tr>
+<tr>
+<td>Standard MX Engine</td>
+<td>24 mo / 250,000 mi (400,000 km) / 6,250 hr</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>Engine Major Components</td>
+<td>60 mo / 500,000 mi (800,000 km) / 12,500 hr</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>Vehicle Major Components</td>
+<td>36 mo / 300,000 mi (480,000 km)</td>
+<td>24 mo / Unlimited</td>
+</tr>
+<tr>
+<td>Severe Service</td>
+<td>12 mo / 50,000 mi (80,000 km)</td>
+<td>12 mo / 50,000 mi (80,000 km)</td>
+</tr>
+<tr>
+<td>PACCAR Alternator & Starter</td>
+<td>36 mo / 350,000 mi (560,000 km)</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>PACCAR Front Axles</td>
+<td>60 mo / 750,000 mi (1,200,000 km)</td>
+<td>60 mo / 750,000 mi (1,200,000 km)</td>
+</tr>
+<tr>
+<td>Non-PACCAR Front Axles</td>
+<td>36 mo / 300,000 mi (480,000 km)</td>
+<td>48 mo / Unlimited</td>
+</tr>
+</tbody></table>
+<p>Each bucket carries <code>months_remaining</code> and <code>distance_remaining</code> (miles and km). Battery-electric powertrain buckets are tracked separately with the ESS 60 mo / 500,000 mi / 80%-charge floor<sup class="fn"><a href="#fn-3" id="fnref-3">[3]</a></sup>.</p>
+<h3>3.3 Open jobs</h3>
+<p>Every open job on the VIN, sourced in order of authority:</p>
+<ol>
+<li><strong>Recalls</strong> and <strong>field-repair campaigns</strong> (SIR-visible; parts order placed immediately when the VIN appears on an active list<sup class="fn"><a href="#fn-2" id="fnref-2">[2]</a></sup>)</li>
+<li><strong>Prognostic</strong> proactive-replacement bulletins (PACCAR's prognostic prediction algorithm, no warranty coverage gate)<sup class="fn"><a href="#fn-2" id="fnref-2">[2]</a></sup></li>
+<li><strong>Fix-as-fail</strong> with applicable warranty required<sup class="fn"><a href="#fn-2" id="fnref-2">[2]</a></sup></li>
+<li><strong>Live fault codes</strong> (ATA-decoded; only warrantable ATA components enter the target list)</li>
+<li><strong>Extended service agreements</strong> — 7/700 MX Engine ESA and Limited ESA where present<sup class="fn"><a href="#fn-10" id="fnref-10">[10]</a></sup></li>
+</ol>
+<h3>3.4 Job scoring</h3>
+<p>Per job, three numbers the dispatcher can read at a glance:</p>
+<ul>
+<li><strong>Margin estimate</strong> — SRT hours × Hawkins warranty labor rate + parts markup, all bounded by the Standard Repair Time table.</li>
+<li><strong>Time-to-expiry</strong> — the smaller of <code>months_remaining</code> and <code>distance_remaining</code> for the covering bucket.</li>
+<li><strong>Booking urgency</strong> — computed from telemetry: is the truck currently inbound to the Hawkins region, and how many hours until it leaves?</li>
+</ul>
+<h3>3.5 Compliance flags</h3>
+<p>The GENE refuses to score a job when the audit posture is not clean. Any of the following blocks the alert and routes the VIN to a review lane instead of a booking lane:</p>
+<ul>
+<li>Missing technician identity on prior claims</li>
+<li>Repair not documented against RMI</li>
+<li>Overlapping or unsupported labor time</li>
+<li>Repeat/ineffective repair pattern on the same VIN</li>
+<li>Prior Approval required and not yet obtained via TCS365<sup class="fn"><a href="#fn-1" id="fnref-1">[1]</a></sup></li>
+</ul>
+<p>This matters because Peterbilt's audit language is explicit: improper claims are chargeable back to the dealer, and the zero-tolerance rule on altered or misrepresented data can expand an audit's scope<sup class="fn"><a href="#fn-1" id="fnref-1">[1]</a></sup>. The GENE's job is to increase warranty <em>volume</em>, not audit <em>exposure</em>.</p>
+<hr>
+<h2>4. What "rich target" means, operationally</h2>
+<p>A rich target is one VIN that satisfies all four:</p>
+<ol>
+<li><strong>PACCAR-visible open job</strong> — recall, campaign, prognostic, or warrantable fault code on the SIR / SmartLINQ record.</li>
+<li><strong>Coverage window intact</strong> — months and miles/km remaining on the relevant bucket.</li>
+<li><strong>Hawkins-adjacent</strong> — either currently owned by a Hawkins customer, or telemetry says the truck is inbound and will sleep overnight in Tim's region.</li>
+<li><strong>Audit-clean</strong> — no open compliance flags against prior work on this VIN.</li>
+</ol>
+<p>Every rich target is a booking Hawkins should offer to the customer, framed the same way the twin has framed outreach from the beginning: <em>cards on the table, no pressure on staff to change how they schedule</em><sup class="fn"><a href="#fn-11" id="fnref-11">[11]</a></sup>. The recipient sees an offer of no-cost service; Hawkins sees several thousand dollars of margin per event.</p>
+<hr>
+<h2>5. Where it lands in the twin</h2>
+<p>The Warranty GENE ships as a module of the existing Hawkins Twin Platform. It reuses:</p>
+<ul>
+<li>The <strong>customer sphere index</strong> — GitHub records what exists, where it lives, and what governs it; customer data remains only in Hawkins-controlled Azure Postgres<sup class="fn"><a href="#fn-12" id="fnref-12">[12]</a></sup>.</li>
+<li>The <strong>ACDOCA / ACDOCI split</strong> — warranty jobs post to ACDOCA as transaction records; customer interactions around booking outreach post to ACDOCI as customer-interaction vectors<sup class="fn"><a href="#fn-12" id="fnref-12">[12]</a></sup>.</li>
+<li>The <strong>three-tile executive control surface</strong> — the warranty rich-target cohort becomes the fourth named cohort alongside the TELUS three, using the same fixed case shape and drilling into a capped worklist<sup class="fn"><a href="#fn-7" id="fnref-7">[7]</a></sup>.</li>
+<li>The <strong>twin MCP explicit-scope discipline</strong> — every GENE call names <code>peterbilt</code> or <code>torque</code>; no dealership is default-selected<sup class="fn"><a href="#fn-13" id="fnref-13">[13]</a></sup>.</li>
+<li>The <strong>Warranty Bot prompt pattern</strong> — GENE output is a review filter, not a verdict; the manufacturer system stays authoritative on eligibility<sup class="fn"><a href="#fn-5" id="fnref-5">[5]</a></sup>.</li>
+</ul>
+<p>Public surface: <code>warranty-gene/</code> under <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform">hawkins-twin-platform</a>. Private surface: rich-target worklists remain in Hawkins-owned Azure Postgres, indexed but not copied to the repository.</p>
+<hr>
+<h2>6. Build order</h2>
+<ol>
+<li><strong>Ingest</strong> the 2025.4 quick-reference matrix as coverage rules (buckets, months, miles, km).</li>
+<li><strong>Ingest</strong> the CARB/EPA/ECCC component register as emissions-bucket tags per ATA component.</li>
+<li><strong>Wire</strong> the SIR / SmartLINQ VIN lookup as a first-class read, with the PACCAR service-account credential (not a personal one, per the TELUS precedent<sup class="fn"><a href="#fn-14" id="fnref-14">[14]</a></sup>).</li>
+<li><strong>Consume</strong> the PACCAR Solutions telemetry stream — geofence + fault-code events — into an inbound-VIN queue.</li>
+<li><strong>Score</strong> each VIN using the fields in §3, emit the rich-target row.</li>
+<li><strong>Publish</strong> the worklist to the executive control surface as the fourth cohort.</li>
+<li><strong>Prove</strong> the loop end-to-end against ten historical Hawkins warranty claims before any customer-facing outreach.</li>
+</ol>
+<p>Nothing in this order requires new data movement out of PACCAR. It requires the twin to <em>listen</em> to what PACCAR already broadcasts and put the answer beside Hawkins's own booking calendar.</p>
+<hr>
+<h2>7. What this deliberately is not</h2>
+<ul>
+<li><strong>Not a claim submission tool.</strong> PRWS remains authoritative; the GENE flags candidates, humans file claims<sup class="fn"><a href="#fn-1" id="fnref-1">[1]</a></sup>.</li>
+<li><strong>Not a bypass of PACCAR authority.</strong> SIR and SmartLINQ Service Management remain the eligibility source of record; the GENE consumes them, it does not overrule them<sup class="fn"><a href="#fn-2" id="fnref-2">[2]</a></sup>.</li>
+<li><strong>Not a substitute for the Warranty Bot's human-review discipline.</strong> Every rich target is a prompt for a human to decide, not a booking made without a human in the loop<sup class="fn"><a href="#fn-5" id="fnref-5">[5]</a></sup>.</li>
+<li><strong>Not a data movement out of Hawkins.</strong> Customer data stays in Hawkins-owned Azure Postgres. The repository holds the index, the rules, and the schema — not the payload<sup class="fn"><a href="#fn-12" id="fnref-12">[12]</a></sup>.</li>
+</ul>
+<hr>
+<hr>
+<p class="closing">© 2026 EVEglyphDesign. All rights reserved. Controlled copy.<br>Key ID <code>EgD-KEY-2026-07</code>.<br><em>Pour le bien-être du peuple.</em></p>
+<section class="footnotes"><h2>Notes</h2><ol>
+<li id="fn-1">Peterbilt Motors Company, <em>Warranty Procedure Manual — Version 2026.7</em>, August 10, 2026. §1.6 Repair Story (Complaint, Cause, Correction); §11 Warranty Audit — improper-claim register and zero-tolerance policy on altered or misrepresented data. <a class="backref" href="#fnref-1">↩</a></li>
+<li id="fn-2">Peterbilt Motors Company, <em>Warranty Procedure Manual — Version 2026.7</em>, §4.1 Federal Safety Recall and Field Repair Campaigns — bulletin types (Recall, MX Component Specific Emissions Warranty, Government Agency Mandated, Retrofit, Prognostic, Campaign, Fix-as-Fail, Information Only); "SmartLINQ Service Management will automatically display open recall/campaign and warranty coverage." <a class="backref" href="#fnref-2">↩</a></li>
+<li id="fn-3">Peterbilt Motors Company, <em>Warranty Quick Reference Guide for 2025.4</em> — 413-row Warranty Coverage matrix across ten coverage buckets, plus the Coverage Time & Exclusions table (Class 8 / Class 6/7 months, miles, km) and Battery Electric Powertrain bucket. <a class="backref" href="#fnref-3">↩</a></li>
+<li id="fn-4">Peterbilt Motors Company, <em>CARB / EPA / ECCC Emission Component Coverage</em>, February 14, 2022 — component-to-emissions-family register across Aftertreatment, Engine, and Vehicle families; Class 8 CARB 60 mo / 350,000 mi; Class 6/7 CARB 60 mo / 150,000 mi; EPA/ECCC 60 mo / 100,000 mi (160,000 km). <a class="backref" href="#fnref-4">↩</a></li>
+<li id="fn-5">EVEglyphDesign, <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform">hawkins-twin-platform</a> — Warranty Bot as a booking-time VIN-keyed prompt, not an authority; Luke Weatherbie's dictated source record stays verbatim, interpretation lives in a separate lane. <a class="backref" href="#fnref-5">↩</a></li>
+<li id="fn-6">Peterbilt Motors Company, <em>Warranty Procedure Manual — Version 2026.7</em>, §4.2 Completing MX Engine Campaign Procedure — SIR / SmartLINQ pre-check, DAVIE PRS-file capture, TCS365 escalation, PDF log-file retention. <a class="backref" href="#fnref-6">↩</a></li>
+<li id="fn-7">EVEglyphDesign, <a href="https://github.com/EVEglyphDesign/eve-hawkins-telus-twin">eve-hawkins-telus-twin</a> — fixed three-tile decision surface (voicemail-not-returned-in-two-hours, repeat-caller-without-callback, never-reached) with one fixed case shape and capped worklists. <a class="backref" href="#fnref-7">↩</a></li>
+<li id="fn-8">Peterbilt Motors Company, <em>Warranty Procedure Manual — Version 2026.7</em>, §6.8 Dealer Sponsored Fleet (DSFW) & Direct Fleet Warranty Administration; §6.8.3 Fleet MX Addendums. <a class="backref" href="#fnref-8">↩</a></li>
+<li id="fn-9">EVEglyphDesign, hawkins-twin-platform — Peterbilt Atlantic has eight published locations; billing-account count and rooftop count are not a mapping until source-confirmed. <a class="backref" href="#fnref-9">↩</a></li>
+<li id="fn-10">Peterbilt Motors Company, <em>Warranty Procedure Manual — Version 2026.7</em>, §5.1 MX Engine Major Component Service Agreements — 7/700 Extended Service Agreement (option code 9485634) and 7/700 Limited Extended Service Agreement, effective for repair orders opened after November 15, 2024. <a class="backref" href="#fnref-10">↩</a></li>
+<li id="fn-11">EVEglyphDesign, hawkins-twin-platform — supportive outreach stance: cards on the table for Tim and Luke without pressuring staff to change schedules or processes. <a class="backref" href="#fnref-11">↩</a></li>
+<li id="fn-12">EVEglyphDesign, <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/customer-sphere/CUSTOMER-SPHERE-DESIGN.md">hawkins-twin-platform/customer-sphere/CUSTOMER-SPHERE-DESIGN.md</a> — repository is the index, customer data stays in Hawkins-owned Azure Postgres; ACDOCA preserved, ACDOCI added for customer interactions. <a class="backref" href="#fnref-12">↩</a></li>
+<li id="fn-13">EVEglyphDesign, hawkins-twin-platform — twin MCP names <code>peterbilt</code> or <code>torque</code> explicitly on every call; no dealership is default-selected. <a class="backref" href="#fnref-13">↩</a></li>
+<li id="fn-14">EVEglyphDesign, eve-hawkins-telus-twin — call-history ingestion uses a Peterbilt-owned service account rather than a personal credential, preserving company custody and audit trail. <a class="backref" href="#fnref-14">↩</a></li>
+</ol></section></body></html>
