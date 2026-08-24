@@ -1,0 +1,174 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Warranty GENE — Schema</title></head>
+<body><div class="title-block"><div class="kicker">EVEglyphDesign · Hawkins Twin Platform</div><h1>Warranty GENE — Schema v1</h1><div class="subtitle">VIN rich-target row, coverage math, and sample fixtures</div><p>The row that answers, per VIN, per day, whether the truck belongs on Tim's booking calendar this week.</p></div>
+<h2>What this schema is</h2>
+<p>A single JSON row per VIN, produced daily by the twin, consumed by two surfaces:</p>
+<ul>
+<li><strong>The executive control surface</strong> — the fourth cohort tile beside the three existing TELUS-style tiles, ordered by <code>score.total</code> descending.</li>
+<li><strong>The outbound-booking worklist</strong> — filtered to <code>compliance.clean == true</code> and <code>booking_urgency ∈ {inbound-tonight, inbound-this-week, in-region}</code>, handed to the counter for outreach.</li>
+</ul>
+<p>Any row failing <code>compliance.clean</code> routes to the <strong>review lane</strong> instead of the booking lane. A human decides what to do with it.</p>
+<h2>What this schema is not</h2>
+<ul>
+<li>Not a claim submission payload. PRWS remains authoritative; the GENE flags candidates, humans file claims.</li>
+<li>Not a copy of customer data. <code>owner.customer_id</code> is the CDK master id only; the payload — names, phones, VIN histories — stays in Hawkins-owned Azure Postgres.</li>
+<li>Not a source of coverage truth. SIR and SmartLINQ Service Management remain the eligibility source of record; the GENE reads them and encodes what it reads with <code>source_provenance</code> intact.</li>
+</ul>
+<h2>Files</h2>
+<ul>
+<li><code>rich-target.schema.json</code> — JSON Schema Draft 2020-12</li>
+<li><code>../samples/rich-targets.sample.json</code> — 7 synthetic VINs across Class 8 diesel, Class 8 MX, Class 6/7, and battery electric</li>
+<li><code>../samples/rich-targets.worklist.json</code> — compact projection for the fourth-cohort tile</li>
+<li><code>../scoring.md</code> — deterministic 0–100 score formula</li>
+<li><code>../scripts/build_samples.py</code> — reproduces the samples deterministically</li>
+<li><code>../scripts/validate.py</code> — validates every sample against the schema</li>
+</ul>
+<h2>The row at a glance</h2>
+<pre><code>record_id           sha1(vin + as_of_date)          idempotent per day
+vin                 17-char PACCAR-validated
+as_of               ISO-8601 UTC
+
+chassis             { model, class, series[], in_service_date, vocational_use }
+usage               { odometer_km, engine_hours?, as_of, source }
+owner               { customer_id, customer_type, fleet_id?, home_rooftop }
+
+coverage            { &lt;ten buckets&gt; } — only applicable ones present
+                     each: applies, months_remaining, distance_remaining_km,
+                           hours_remaining?, expiry_reason
+
+open_jobs[]         { job_id, authority, type, component, ata_code?,
+                      coverage_bucket, estimated_srt_hours, parts_on_hand?,
+                      customer_pay_at_risk_cad?, status, source_bulletin_url? }
+
+score               { margin_estimate_cad, time_to_expiry_days,
+                      booking_urgency, total }
+
+compliance          { clean, flags{5 booleans} }
+
+telemetry?          { last_ping, in_hawkins_region,
+                      projected_overnight_region, geofence_confidence }
+
+source_provenance[] { source, captured_at, note? }</code></pre>
+<h2>Coverage buckets</h2>
+<p>Modelled directly against the 2025.4 Warranty Quick Reference Guide, Coverage Time & Exclusions table:</p>
+<table class="data"><thead><tr>
+<th>Key</th>
+<th>Applies to</th>
+</tr></thead><tbody>
+<tr>
+<td><code>base_emissions_carb</code></td>
+<td>CARB-registered chassis</td>
+</tr>
+<tr>
+<td><code>base_emissions_epa_eccc</code></td>
+<td>EPA/ECCC-registered chassis</td>
+</tr>
+<tr>
+<td><code>standard_vehicle</code></td>
+<td>All chassis</td>
+</tr>
+<tr>
+<td><code>standard_mx_engine</code></td>
+<td>MX-equipped Class 8</td>
+</tr>
+<tr>
+<td><code>engine_major_components</code></td>
+<td>MX-equipped Class 8</td>
+</tr>
+<tr>
+<td><code>vehicle_major_components</code></td>
+<td>All chassis (definition varies by class)</td>
+</tr>
+<tr>
+<td><code>severe_service</code></td>
+<td>Chassis in a defined severe-service vocation</td>
+</tr>
+<tr>
+<td><code>paccar_alternator_starter</code></td>
+<td>Chassis with PACCAR-branded charging set</td>
+</tr>
+<tr>
+<td><code>paccar_front_axles</code></td>
+<td>Chassis with PACCAR-branded front axle</td>
+</tr>
+<tr>
+<td><code>non_paccar_front_axles</code></td>
+<td>Chassis with non-PACCAR front axle</td>
+</tr>
+<tr>
+<td><code>bev_ess</code></td>
+<td>Battery-electric chassis (energy storage)</td>
+</tr>
+</tbody></table>
+<p>Buckets that do not apply to a given chassis are simply omitted from the row.</p>
+<h2>Authority hierarchy for open jobs</h2>
+<p>Ordered from highest authority to lowest, matching the Warranty Procedure Manual v2026.7:</p>
+<ol>
+<li><code>Federal Safety Recall</code></li>
+<li><code>Field Repair Campaign</code></li>
+<li><code>MX Component Emissions</code></li>
+<li><code>Government Agency Mandated</code></li>
+<li><code>Retrofit</code></li>
+<li><code>Prognostic</code></li>
+<li><code>Fix-as-Fail</code></li>
+<li><code>Information Only</code></li>
+<li><code>Live Fault Code</code></li>
+<li><code>Extended Service Agreement</code></li>
+</ol>
+<p>A <code>Live Fault Code</code> becomes an open job only when the ATA component it names maps to a warrantable component. Every other authority is emitted directly from the SIR / SmartLINQ Service Management surface.</p>
+<h2>Sample fixture — what each VIN demonstrates</h2>
+<table class="data"><thead><tr>
+<th>VIN suffix</th>
+<th>Chassis</th>
+<th>Demonstrates</th>
+</tr></thead><tbody>
+<tr>
+<td><code>…0101</code></td>
+<td>579 MX, line haul</td>
+<td>Campaign + prognostic stacking, inbound-tonight</td>
+</tr>
+<tr>
+<td><code>…0202</code></td>
+<td>579 MX, regional haul</td>
+<td>Federal Safety Recall alone, inbound-this-week</td>
+</tr>
+<tr>
+<td><code>…0303</code></td>
+<td>567 severe service (logger)</td>
+<td>MX VGT job routes to <strong>review lane</strong> on missing Prior Approval</td>
+</tr>
+<tr>
+<td><code>…0404</code></td>
+<td>579 MX, line haul, aged</td>
+<td>Ineffective-repeat flag routes to <strong>review lane</strong>, out-of-region</td>
+</tr>
+<tr>
+<td><code>…0505</code></td>
+<td>537 Class 6/7</td>
+<td>Class 6/7 recall path, inbound-tonight</td>
+</tr>
+<tr>
+<td><code>…0606</code></td>
+<td>220EV battery electric</td>
+<td>BEV ESS campaign, <code>bev_ess</code> bucket</td>
+</tr>
+<tr>
+<td><code>…0707</code></td>
+<td>579 MX, regional</td>
+<td>Info-only bulletin scores 3.0 — no false urgency manufactured</td>
+</tr>
+</tbody></table>
+<h2>Validating a row</h2>
+<pre><code>cd warranty-gene
+python3 scripts/validate.py</code></pre>
+<p>Expected output: one line per row, all <code>OK</code>, all valid.</p>
+<h2>Rebuilding the samples</h2>
+<pre><code>cd warranty-gene
+python3 scripts/build_samples.py</code></pre>
+<p>Deterministic. The same VIN + <code>as_of</code> date always produces the same row id.</p>
+<h2>Landing</h2>
+<ul>
+<li>Public: <code>warranty-gene/schema/</code> under the Hawkins Twin Platform.</li>
+<li>Private: rich-target worklists remain in Hawkins-owned Azure Postgres.</li>
+</ul>
+<p class="closing">© 2026 EVEglyphDesign. All rights reserved. Controlled copy.<br>Key ID <code>EgD-KEY-2026-07</code>.<br><em>Pour le bien-être du peuple.</em></p></body></html>

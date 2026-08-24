@@ -1,0 +1,86 @@
+[
+  {
+    "vin": "1XPBSYN00N1000101",
+    "rooftop": "PA-MONCTON",
+    "customer_type": "Small Fleet",
+    "top_job": "Diesel Exhaust Fluid (DEF) Dosing Valve [Injector]",
+    "authority": "Field Repair Campaign",
+    "margin_estimate_cad": 1387.01,
+    "time_to_expiry_days": 0,
+    "booking_urgency": "inbound-tonight",
+    "score": 56.9,
+    "lane": "booking"
+  },
+  {
+    "vin": "1XPBSYN00R1000505",
+    "rooftop": "PA-DIEPPE",
+    "customer_type": "Owner-Operator",
+    "top_job": "Accelerator Pedal (Lever Position) Sensor",
+    "authority": "Federal Safety Recall",
+    "margin_estimate_cad": 215.04,
+    "time_to_expiry_days": 0,
+    "booking_urgency": "inbound-tonight",
+    "score": 51.1,
+    "lane": "booking"
+  },
+  {
+    "vin": "1XPBSYN00P1000202",
+    "rooftop": "PA-FREDERICTON",
+    "customer_type": "Owner-Operator",
+    "top_job": "Brake Pedal Position Switch",
+    "authority": "Federal Safety Recall",
+    "margin_estimate_cad": 241.92,
+    "time_to_expiry_days": 0,
+    "booking_urgency": "inbound-this-week",
+    "score": 43.2,
+    "lane": "booking"
+  },
+  {
+    "vin": "1XPBSYN00P1000606",
+    "rooftop": "PA-MONCTON",
+    "customer_type": "Small Fleet",
+    "top_job": "High Voltage Battery Junction Box (S-Box)",
+    "authority": "Field Repair Campaign",
+    "margin_estimate_cad": 1046.64,
+    "time_to_expiry_days": 345,
+    "booking_urgency": "inbound-tonight",
+    "score": 43.2,
+    "lane": "booking"
+  },
+  {
+    "vin": "1XPBSYN00M1000303",
+    "rooftop": "PA-BATHURST",
+    "customer_type": "DSFW Fleet",
+    "top_job": "Turbocharger \u2014 Variable Geometry (VGT) Assembly",
+    "authority": "Live Fault Code",
+    "margin_estimate_cad": 1435.39,
+    "time_to_expiry_days": 9999,
+    "booking_urgency": "in-region",
+    "score": 25.2,
+    "lane": "review"
+  },
+  {
+    "vin": "1XPBSYN00L1000404",
+    "rooftop": "PA-SAINT-JOHN",
+    "customer_type": "Direct Fleet",
+    "top_job": "Diesel Particulate Filter (DPF) Differential Pressure Sensor",
+    "authority": "Live Fault Code",
+    "margin_estimate_cad": 322.56,
+    "time_to_expiry_days": 0,
+    "booking_urgency": "out-of-region",
+    "score": 21.6,
+    "lane": "review"
+  },
+  {
+    "vin": "1XPBSYN00N1000707",
+    "rooftop": "PA-EDMUNDSTON",
+    "customer_type": "Small Fleet",
+    "top_job": "Engine Control Module (ECM) Software",
+    "authority": "Information Only",
+    "margin_estimate_cad": 0,
+    "time_to_expiry_days": 9999,
+    "booking_urgency": "out-of-region",
+    "score": 3.0,
+    "lane": "booking"
+  }
+]

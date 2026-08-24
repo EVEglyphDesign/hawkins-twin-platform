@@ -1,0 +1,341 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/schema/rich-target.schema.json",
+  "title": "Warranty GENE — VIN Rich Target",
+  "description": "One row per VIN evaluated by the Warranty GENE. Consumed by the executive control surface (fourth cohort) and by the outbound-booking worklist. Never a claim submission; PRWS remains authoritative.",
+  "type": "object",
+  "required": [
+    "record_id",
+    "vin",
+    "chassis",
+    "owner",
+    "coverage",
+    "open_jobs",
+    "score",
+    "compliance",
+    "as_of",
+    "source_provenance"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "description": "Deterministic id: sha1(vin + as_of_date). Idempotent across daily refreshes.",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "vin": {
+      "type": "string",
+      "description": "17-character VIN. PACCAR-validated; excludes I, O, Q.",
+      "pattern": "^[A-HJ-NPR-Z0-9]{17}$"
+    },
+    "as_of": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 UTC timestamp at which this row was computed."
+    },
+    "chassis": {
+      "type": "object",
+      "required": ["model", "class", "series", "in_service_date"],
+      "additionalProperties": false,
+      "properties": {
+        "model": { "type": "string", "examples": ["579", "567", "537", "220EV", "520EV"] },
+        "class": { "type": "string", "enum": ["Class 8", "Class 6/7"] },
+        "series": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["Diesel", "MX-Equipped", "Battery Electric", "Severe Service"] },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "in_service_date": { "type": "string", "format": "date" },
+        "vocational_use": {
+          "type": "string",
+          "enum": ["Line Haul", "Regional Haul", "Pickup Delivery", "Logger", "Mixer", "Dump", "Refuse", "Oil Field", "Construction", "Other"]
+        }
+      }
+    },
+    "usage": {
+      "type": "object",
+      "description": "As-of odometer/hours snapshot. Source and timestamp preserved so disagreement stays visible.",
+      "additionalProperties": false,
+      "required": ["odometer_km", "as_of", "source"],
+      "properties": {
+        "odometer_km": { "type": "integer", "minimum": 0 },
+        "engine_hours": { "type": "integer", "minimum": 0 },
+        "as_of": { "type": "string", "format": "date-time" },
+        "source": {
+          "type": "string",
+          "enum": ["SmartLINQ", "PACCAR Solutions", "CDK RO", "Customer Report", "Manual"]
+        }
+      }
+    },
+    "owner": {
+      "type": "object",
+      "required": ["customer_id", "customer_type", "home_rooftop"],
+      "additionalProperties": false,
+      "properties": {
+        "customer_id": {
+          "type": "string",
+          "description": "Hawkins CDK customer master id. Payload stays in Hawkins-owned Azure Postgres; this repo holds only the id."
+        },
+        "customer_type": {
+          "type": "string",
+          "enum": ["Owner-Operator", "Small Fleet", "DSFW Fleet", "Direct Fleet", "Lessee"]
+        },
+        "fleet_id": {
+          "type": ["string", "null"],
+          "description": "Parent fleet id when applicable (DSFW/Direct Fleet)."
+        },
+        "home_rooftop": {
+          "type": "string",
+          "description": "Which of the eight Peterbilt Atlantic locations owns the relationship. Location count and CDK billing-account count are not a mapping until source-confirmed.",
+          "enum": [
+            "PA-MONCTON",
+            "PA-FREDERICTON",
+            "PA-SAINT-JOHN",
+            "PA-DIEPPE",
+            "PA-EDMUNDSTON",
+            "PA-BATHURST",
+            "PA-CAMPBELLTON",
+            "PA-MIRAMICHI"
+          ]
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "description": "Per-bucket coverage remaining. Buckets are the ten defined in the 2025.4 Warranty Quick Reference Guide plus battery-electric buckets when applicable. n/a buckets are omitted.",
+      "additionalProperties": false,
+      "properties": {
+        "base_emissions_carb":       { "$ref": "#/$defs/coverage_bucket" },
+        "base_emissions_epa_eccc":   { "$ref": "#/$defs/coverage_bucket" },
+        "standard_vehicle":          { "$ref": "#/$defs/coverage_bucket" },
+        "standard_mx_engine":        { "$ref": "#/$defs/coverage_bucket" },
+        "engine_major_components":   { "$ref": "#/$defs/coverage_bucket" },
+        "vehicle_major_components":  { "$ref": "#/$defs/coverage_bucket" },
+        "severe_service":            { "$ref": "#/$defs/coverage_bucket" },
+        "paccar_alternator_starter": { "$ref": "#/$defs/coverage_bucket" },
+        "paccar_front_axles":        { "$ref": "#/$defs/coverage_bucket" },
+        "non_paccar_front_axles":    { "$ref": "#/$defs/coverage_bucket" },
+        "bev_ess":                   { "$ref": "#/$defs/coverage_bucket" }
+      }
+    },
+    "open_jobs": {
+      "type": "array",
+      "description": "Every open PACCAR-visible job on the VIN, in order of authority. Live fault codes only enter the list when they touch a warrantable ATA component.",
+      "items": { "$ref": "#/$defs/open_job" }
+    },
+    "score": {
+      "type": "object",
+      "required": ["margin_estimate_cad", "time_to_expiry_days", "booking_urgency", "total"],
+      "additionalProperties": false,
+      "properties": {
+        "margin_estimate_cad": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Sum of per-job margin estimate: SRT hours × Hawkins warranty labor rate + parts markup, bounded by the Standard Repair Time table."
+        },
+        "time_to_expiry_days": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Smallest of (months_remaining × 30, distance_remaining_km / assumed_daily_km) across the covering buckets of the open jobs."
+        },
+        "booking_urgency": {
+          "type": "string",
+          "enum": ["inbound-tonight", "inbound-this-week", "in-region", "out-of-region"],
+          "description": "Derived from telemetry: is the truck projected to sleep overnight in Tim's region, and how soon?"
+        },
+        "total": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Composite 0–100. Formula documented in warranty-gene/scoring.md; deterministic given the three inputs above."
+        }
+      }
+    },
+    "compliance": {
+      "type": "object",
+      "required": ["clean", "flags"],
+      "additionalProperties": false,
+      "properties": {
+        "clean": {
+          "type": "boolean",
+          "description": "True only when every flag below is false. When false, the row routes to the review lane instead of the booking lane."
+        },
+        "flags": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "missing_technician_id",
+            "rmi_undocumented",
+            "labor_time_unsupported",
+            "repeat_ineffective_repair",
+            "prior_approval_required_and_missing"
+          ],
+          "properties": {
+            "missing_technician_id":                { "type": "boolean" },
+            "rmi_undocumented":                     { "type": "boolean" },
+            "labor_time_unsupported":               { "type": "boolean" },
+            "repeat_ineffective_repair":            { "type": "boolean" },
+            "prior_approval_required_and_missing":  { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "telemetry": {
+      "type": "object",
+      "description": "Latest SmartLINQ / PACCAR Solutions position snapshot. Omitted when the truck is not broadcasting.",
+      "additionalProperties": false,
+      "required": ["last_ping", "in_hawkins_region"],
+      "properties": {
+        "last_ping":         { "type": "string", "format": "date-time" },
+        "in_hawkins_region": { "type": "boolean" },
+        "projected_overnight_region": {
+          "type": "string",
+          "enum": ["Hawkins-NB", "Adjacent-NS", "Adjacent-QC", "Adjacent-PE", "Out-of-region", "Unknown"]
+        },
+        "geofence_confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "source_provenance": {
+      "type": "array",
+      "description": "Every field this row depends on carries a source tag. Disagreement stays visible per the Customer Sphere design.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["source", "captured_at"],
+        "additionalProperties": false,
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "SIR",
+              "SmartLINQ Service Management",
+              "PACCAR Solutions Telematics",
+              "PACCAR Prognostics",
+              "DAVIE PRS",
+              "TCS365",
+              "CDK RO History",
+              "PRWS Claim History",
+              "Warranty Quick Reference Guide 2025.4",
+              "CARB/EPA/ECCC Emission Component Coverage",
+              "Warranty Procedure Manual v2026.7"
+            ]
+          },
+          "captured_at": { "type": "string", "format": "date-time" },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  },
+
+  "$defs": {
+    "coverage_bucket": {
+      "type": "object",
+      "required": ["applies", "months_remaining", "distance_remaining_km"],
+      "additionalProperties": false,
+      "properties": {
+        "applies": {
+          "type": "boolean",
+          "description": "False when the bucket does not apply to this chassis (e.g. MX buckets on a Class 6/7 without MX)."
+        },
+        "months_remaining": {
+          "type": ["integer", "null"],
+          "description": "Whole months to expiry from as_of. Null when 'Unlimited' months apply."
+        },
+        "distance_remaining_km": {
+          "type": ["integer", "null"],
+          "description": "Kilometres to expiry from as_of. Null when 'Unlimited' distance applies. Miles caps in the source table are converted at the published km value."
+        },
+        "hours_remaining": {
+          "type": ["integer", "null"],
+          "description": "Engine-hour cap where the bucket carries one (e.g. Standard MX Engine 6,250 hr; Engine Major Components 12,500 hr)."
+        },
+        "expiry_reason": {
+          "type": "string",
+          "enum": ["months", "distance", "hours", "ess_charge_floor", "unlimited"],
+          "description": "Which limit is currently the binding one."
+        }
+      }
+    },
+    "open_job": {
+      "type": "object",
+      "required": ["job_id", "authority", "type", "component", "coverage_bucket", "estimated_srt_hours", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "job_id": {
+          "type": "string",
+          "description": "PACCAR-issued campaign/recall id, prognostic id, or fault-code composite id."
+        },
+        "authority": {
+          "type": "string",
+          "enum": [
+            "Federal Safety Recall",
+            "Field Repair Campaign",
+            "MX Component Emissions",
+            "Government Agency Mandated",
+            "Retrofit",
+            "Prognostic",
+            "Fix-as-Fail",
+            "Information Only",
+            "Live Fault Code",
+            "Extended Service Agreement"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "enum": ["Safety", "Emissions", "Powertrain", "Aftertreatment", "Electrical", "BEV Powertrain", "Vehicle", "Sensor", "Other"]
+        },
+        "component": {
+          "type": "string",
+          "description": "Free-text component or system name matched against the CARB/EPA/ECCC register or the Warranty Quick Reference Guide row."
+        },
+        "ata_code": {
+          "type": ["string", "null"],
+          "description": "ATA/PACCAR fault code, when applicable.",
+          "pattern": "^[A-Za-z0-9\\-\\.]{3,20}$"
+        },
+        "coverage_bucket": {
+          "type": "string",
+          "description": "Which bucket key from coverage covers this job. Must match a key in the coverage object.",
+          "enum": [
+            "base_emissions_carb",
+            "base_emissions_epa_eccc",
+            "standard_vehicle",
+            "standard_mx_engine",
+            "engine_major_components",
+            "vehicle_major_components",
+            "severe_service",
+            "paccar_alternator_starter",
+            "paccar_front_axles",
+            "non_paccar_front_axles",
+            "bev_ess",
+            "none"
+          ]
+        },
+        "estimated_srt_hours": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Estimated Standard Repair Time hours from the published SRT table. Bounded, not invented."
+        },
+        "parts_on_hand": {
+          "type": "boolean",
+          "description": "Whether the parts required to complete the job are currently at the home rooftop. False triggers same-afternoon order per §4.1."
+        },
+        "customer_pay_at_risk_cad": {
+          "type": "number",
+          "minimum": 0,
+          "description": "If the job is not completed while under warranty, the estimated out-of-pocket cost to the customer once coverage lapses. Used only for the outreach message; never a fee to Hawkins."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Open", "Scheduled", "In Progress", "Completed", "Deferred"]
+        },
+        "source_bulletin_url": {
+          "type": ["string", "null"],
+          "format": "uri",
+          "description": "Link back to the PACCAR bulletin, campaign notice, or fault-code reference."
+        }
+      }
+    }
+  }
+}
