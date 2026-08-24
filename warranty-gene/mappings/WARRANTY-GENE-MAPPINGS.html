@@ -1,0 +1,81 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Warranty GENE — Field Mappings</title></head>
+<body><div class="title-block"><div class="kicker">EVEglyphDesign · Hawkins Twin Platform</div><h1>Warranty GENE — Field Mappings</h1><div class="subtitle">SIR, SmartLINQ, PACCAR Solutions, DAVIE/PRS, TCS365, PRWS</div><p><strong>Purpose.</strong> This lane names the PACCAR-owned surfaces that feed every field in the <a href="../schema/rich-target.schema.json">rich-target schema</a>, and it tags each mapping honestly. No field is invented. When a field label is not confirmed against a document I hold, it is marked <strong>pending</strong> and Tim will name it out loud when Luke opens the real screen.</p></div>
+<p><strong>Provenance tags.</strong></p>
+<ul>
+<li><strong>observed</strong> — the field name appears verbatim in an authoritative source held in <code>uploaded_attachments/</code> or on a public PACCAR page. Evidence line names the source, section, and page.</li>
+<li><strong>inferred</strong> — the field is named by category in an authoritative source and the twin encodes it under a working key. Marked as such so it is not mistaken for a live label.</li>
+<li><strong>pending</strong> — the field is needed but has not yet been source-confirmed. Waits on the SIR walkthrough with Luke or on the PACCAR Solutions API contract.</li>
+</ul>
+<h2>What the file says</h2>
+<p>The <a href="field-mappings.json">field-mappings.json</a> file is a single JSON document with four top-level parts.</p>
+<ol>
+<li><strong><code>authoritative_surfaces</code></strong> — the seven PACCAR-owned surfaces the twin reads from, each with an operator, an access path, the role it plays for warranty, and a citation into the <a href="https://www.peterbilt.com/">Peterbilt Warranty Procedure Manual v2026.7</a> or a public Peterbilt page.</li>
+<li><strong><code>mappings</code></strong> — one entry per schema field. Each entry names the surface, the source field, the provenance tag, the evidence line, and any notes. Twin-derived fields are labelled <code>surface: derived</code> so the reader knows the twin, not PACCAR, is the author.</li>
+<li><strong><code>smartlinq_severity_map</code></strong> — the four SmartLINQ Remote Diagnostics notification levels — <strong>Stop Now / Service Now / Service Soon / Informational</strong> — with their driver-facing dash indicators, verbatim from the SmartLINQ Operators Manual, and the twin action taken at each level.</li>
+<li><strong><code>authority_ladder_source_table</code></strong> — the eight bulletin types PACCAR distinguishes, verbatim from the Warranty Procedure Manual v2026.7 §4.1 (page 57): <strong>Recall</strong>, <strong>MX Component Specific</strong>, <strong>Government Agency Mandated</strong>, <strong>Retrofit</strong>, <strong>Prognostic</strong>, <strong>Campaign</strong>, <strong>Fix-as-Fail</strong>, <strong>Information Only</strong>. Each row carries the manual's own definition and whether applicable warranty coverage is required.</li>
+<li><strong><code>pending_walkthrough_items</code></strong> — the short list of things I still owe the walkthrough. This is the working agenda for the first SIR session with Luke.</li>
+</ol>
+<h2>The seven surfaces</h2>
+<table class="data"><thead><tr>
+<th>Surface</th>
+<th>Operator</th>
+<th>Role for Warranty GENE</th>
+</tr></thead><tbody>
+<tr>
+<td>Service Information Record (SIR)</td>
+<td>PACCAR</td>
+<td>Field of record for coverage, open recalls and campaigns, prior-approval status, and warranty coverage windows per chassis serial number.</td>
+</tr>
+<tr>
+<td>SmartLINQ Service Management</td>
+<td>PACCAR</td>
+<td>Dealership case surface. Auto-displays SIR content when a case opens; in-process campaigns show as "Quoted MM/DD/YYYY".</td>
+</tr>
+<tr>
+<td>PACCAR Solutions Portal</td>
+<td>PACCAR</td>
+<td>Telemetry surface. Four severity notifications, plain-English fault-code translations, dealer proximity. Fed by the on-truck PeopleNet Mobile Gateway.</td>
+</tr>
+<tr>
+<td>PACCAR Prognostics</td>
+<td>PACCAR</td>
+<td>Predictive-replacement bulletins delivered into SIR / SmartLINQ Service Management. Same authority ladder as Recall and Campaign.</td>
+</tr>
+<tr>
+<td>DAVIE + PRS</td>
+<td>PACCAR</td>
+<td>Bay-side diagnostic capture. Required for MX engine campaigns and for troubleshooting escalation.</td>
+</tr>
+<tr>
+<td>Total Customer Solutions (TCS365)</td>
+<td>PACCAR</td>
+<td>24×7 dealer support line; case number is a first-class field on PRWS claims.</td>
+</tr>
+<tr>
+<td>PACCAR Registration and Warranty System (PRWS)</td>
+<td>PACCAR</td>
+<td>Authoritative claim-submission and reimbursement surface. The Warranty GENE never submits to PRWS; it reads back historical claim status.</td>
+</tr>
+</tbody></table>
+<p>The <a href="https://www.peterbilt.com/why-peterbilt/connected-services">Peterbilt Connected Services page</a> confirms the SmartLINQ / PACCAR Solutions telemetry pipe publicly.</p>
+<h2>What is observed, what is inferred, what is pending</h2>
+<p>The current count across the schema is roughly:</p>
+<ul>
+<li><strong>observed</strong> — every coverage bucket named in the <a href="../schema/rich-target.schema.json">2025.4 Warranty Quick Reference Guide</a> and in the Warranty Procedure Manual §5.1 (in-service date, MX engine, Basic Vehicle, Extended Major Component 7/700 with option codes 9485633 and 9485634, and the SIR flag that eligible chassis carry Extended Major Component coverage); the four SmartLINQ severities; every bulletin type on the authority ladder; PRWS field labels named in §1.18 (Causal part model number, Causal part serial number, TCS365 case number, Diagnostic case number, DTC/SPN-FMI, Exit step, Prior Approval #); the SIR Campaign Field "I" code; the SmartLINQ Service Management "Quoted MM/DD/YYYY" display.</li>
+<li><strong>inferred</strong> — a small set of schema keys where the manual describes the field by category but never publishes the SIR-screen label (<code>chassis.model</code>, <code>chassis.vocational_use</code>, <code>owner.home_rooftop</code>), plus every twin-derived field (<code>chassis.class</code>, all <code>score.<em></code>, <code>open_jobs[].coverage_bucket</code>, <code>open_jobs[].customer_pay_at_risk_cad</code>, all <code>telemetry.</em></code> regionality computations, <code>source_provenance[].source</code>).</li>
+<li><strong>pending</strong> — the short list of SIR-screen labels and the PACCAR Solutions telemetry contract that the first walkthrough with Luke will close.</li>
+</ul>
+<h2>Non-movement covenant</h2>
+<p>This mapping file names PACCAR fields for the purpose of reading them into the twin. No customer PII, no VIN histories, and no coverage payload land in this public repository. The Warranty GENE's rich-target worklist stays in Hawkins-owned Azure Postgres; only the schema, the mapping, and the synthetic sample fixture are public.</p>
+<h2>References</h2>
+<ul>
+<li><a href="../WARRANTY-GENE.pdf">Warranty GENE design canon</a></li>
+<li><a href="../schema/rich-target.schema.json">Rich-target schema v1</a></li>
+<li><a href="../samples/rich-targets.sample.json">Sample worklist (synthetic, 7 VINs)</a></li>
+<li><a href="https://www.peterbilt.com/why-peterbilt/connected-services">Peterbilt Connected Services</a></li>
+<li><a href="https://www.peterbilt.com/static-assets/documents/resources/smartlinq_operators_manual.pdf">Peterbilt SmartLINQ Operators Manual (PDF)</a></li>
+<li><a href="https://www.peterbilt.com/static-assets/documents/resources/2%202%2023%20SmartLINQ_SalesSheet%20v10.pdf">Peterbilt SmartLINQ Sales Sheet, 2023 (PDF)</a></li>
+</ul>
+<hr>
+<p>© 2026 EVEglyphDesign. All rights reserved. Controlled copy. <em>Pour le bien-être du peuple.</em></p></body></html>

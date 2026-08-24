@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Warranty GENE — Field Mappings · EVEglyphDesign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:#fdfaf4; --cream2:#f7f2e7; --ink:#1a1a1a;
+    --line:#e7e1d3; --mute:#6b665c; --orange:#e87722;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; background:var(--cream); color:var(--ink);
+    font-family: Inter, "Helvetica Neue", Arial, sans-serif; line-height:1.55; }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 48px 24px 96px; }
+  header { border-bottom: 0.6pt solid var(--orange); padding-bottom: 22px; margin-bottom: 40px;
+           display: flex; justify-content: space-between; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  header .brand { color:var(--orange); font-weight:600; font-size:11px;
+                  letter-spacing:1.5px; text-transform:uppercase; }
+  header .meta { color:var(--mute); font-size:11px; font-family:"JetBrains Mono",monospace; }
+  .kicker { color:var(--orange); font-size:11px; letter-spacing:2px; text-transform:uppercase;
+            margin-bottom:8px; }
+  h1 { font-family: Fraunces, "Times New Roman", serif; font-size: 44px;
+       line-height: 1.05; margin: 0 0 6px; font-weight: 600; }
+  .subtitle { font-family: Fraunces, serif; font-style: italic; font-size: 20px;
+              color:var(--mute); margin-bottom: 28px; }
+  h2 { font-family: Fraunces, serif; font-size: 22px; margin: 40px 0 10px;
+       font-weight: 600; }
+  p { margin: 0 0 12px; }
+  a { color: var(--orange); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  ul { margin: 0 0 16px 20px; padding: 0; }
+  li { margin-bottom: 6px; }
+  .cta { display:inline-flex; align-items:center; gap:8px;
+         background:var(--orange); color:#fff !important;
+         padding:12px 22px; border-radius:4px; font-weight:600;
+         margin: 6px 12px 6px 0; }
+  .cta.ghost { background: transparent; color: var(--orange) !important;
+               border: 1.5pt solid var(--orange); }
+  .card { background: var(--cream2); border: 0.6pt solid var(--line);
+          border-radius: 4px; padding: 18px 22px; margin: 0 0 18px; }
+  .card h3 { font-family: Fraunces, serif; margin: 0 0 6px; font-size: 16px;
+             font-weight: 600; }
+  .card p { margin: 0; font-size: 14px; color: var(--mute); }
+  .tag { display:inline-block; background:var(--cream2); color:var(--ink);
+         font-size:11px; padding:2px 8px; border-radius: 3px;
+         border: 0.5pt solid var(--line); margin-right:4px;
+         font-family:"JetBrains Mono", monospace; }
+  footer { margin-top: 60px; padding-top: 18px; border-top: 0.4pt solid var(--line);
+           color:var(--mute); font-size: 12px; font-style: italic; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="brand">EVEglyphDesign · Hawkins Twin Platform</span>
+    <span class="meta">EgD-KEY-2026-07 · v1.0.0</span>
+  </header>
+
+  <div class="kicker">Warranty GENE</div>
+  <h1>Field Mappings</h1>
+  <div class="subtitle">SIR, SmartLINQ, PACCAR Solutions, DAVIE/PRS, TCS365, PRWS.</div>
+
+  <p>This lane names the PACCAR-owned surfaces that feed every field in the <a href="../schema/">rich-target schema</a>, and it tags each mapping honestly. No field is invented. Every entry is <span class="tag">observed</span>, <span class="tag">inferred</span>, or <span class="tag">pending</span> — pending fields wait on the first SIR walkthrough with Luke, so they can be named on the actual screen, not guessed at.</p>
+
+  <p style="margin-top:18px;">
+    <a class="cta" href="WARRANTY-GENE-MAPPINGS.pdf">Read the mappings PDF</a>
+    <a class="cta ghost" href="field-mappings.json">field-mappings.json</a>
+  </p>
+
+  <h2>What is in the file</h2>
+  <div class="card">
+    <h3>Seven authoritative surfaces</h3>
+    <p>SIR, SmartLINQ Service Management, PACCAR Solutions Portal, PACCAR Prognostics, DAVIE + PRS, TCS365, and PRWS — each with its role for the Warranty GENE and a citation into the Warranty Procedure Manual v2026.7 or a public Peterbilt page.</p>
+  </div>
+  <div class="card">
+    <h3>One mapping per schema field</h3>
+    <p>Surface, source-field name, provenance tag, evidence line, and notes. Twin-derived fields are labelled <code>surface: derived</code> so the reader knows the twin, not PACCAR, is the author.</p>
+  </div>
+  <div class="card">
+    <h3>SmartLINQ severity map</h3>
+    <p>The four notification levels — Stop Now, Service Now, Service Soon, Informational — with the driver-facing dash indicators from the SmartLINQ Operators Manual, and the twin action taken at each level.</p>
+  </div>
+  <div class="card">
+    <h3>Authority ladder source table</h3>
+    <p>The eight bulletin types PACCAR distinguishes — Recall, MX Component Specific, Government Agency Mandated, Retrofit, Prognostic, Campaign, Fix-as-Fail, Information Only — verbatim from the Warranty Procedure Manual §4.1 (page 57), each with the manual's own definition.</p>
+  </div>
+  <div class="card">
+    <h3>Pending walkthrough items</h3>
+    <p>The short working agenda for the first SIR session with Luke: the SIR-screen field labels still uncaptured, the PACCAR Solutions API contract terms, and the service-account provisioning path.</p>
+  </div>
+
+  <h2>Non-movement covenant</h2>
+  <p>This mapping file names PACCAR fields for the purpose of reading them into the twin. No customer PII, no VIN histories, and no coverage payload land in this public repository. The Warranty GENE's rich-target worklist stays in Hawkins-owned Azure Postgres; only the schema, the mapping, and the synthetic sample fixture are public.</p>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="../">Warranty GENE — design canon</a></li>
+    <li><a href="../schema/">Schema v1 (rich-target row, coverage math, sample fixtures)</a></li>
+    <li><a href="../samples/rich-targets.sample.json">Sample worklist (synthetic, 7 VINs)</a></li>
+    <li><a href="https://www.peterbilt.com/why-peterbilt/connected-services">Peterbilt Connected Services</a></li>
+    <li><a href="https://www.peterbilt.com/static-assets/documents/resources/smartlinq_operators_manual.pdf">Peterbilt SmartLINQ Operators Manual (PDF)</a></li>
+  </ul>
+
+  <footer>
+    © 2026 EVEglyphDesign. All rights reserved. Controlled copy.<br>
+    <em>Pour le bien-être du peuple.</em>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,468 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/mappings/field-mappings.json",
+  "title": "Warranty GENE — SIR / SmartLINQ / PACCAR Solutions field mappings",
+  "description": "How each field in rich-target.schema.json is sourced from PACCAR-owned surfaces. Every mapping carries a provenance tag: 'observed' (named verbatim in an authoritative source held in workspace/uploaded_attachments or fetched from a public PACCAR page), 'inferred' (named by category in an authoritative source, encoded here with a working key), or 'pending' (needed but not yet source-confirmed — waits on Tim's SIR walkthrough with Luke or on the PACCAR Solutions API contract). Nothing is invented. Pending fields are named honestly so Tim can strike them or rename them when he opens the real screen.",
+  "version": "1.0.0",
+  "as_of": "2026-08-24",
+  "authoritative_surfaces": [
+    {
+      "id": "sir",
+      "name": "Service Information Record (SIR)",
+      "operator": "PACCAR / Peterbilt Motors Company",
+      "access": "Peterbilt.com dealer portal, entitlement per dealer service account",
+      "role": "Field-of-record for coverage, open recalls and campaigns, prior-approval status, and warranty coverage windows per VIN. SmartLINQ Service Management auto-displays this content so dealers are not required to verify in SIR separately.",
+      "reference_in_manual": "Warranty Procedure Manual v2026.7, §4.1 (pages 56-60), §5.1 (page 60)"
+    },
+    {
+      "id": "smartlinq_sm",
+      "name": "SmartLINQ Service Management",
+      "operator": "PACCAR",
+      "access": "Peterbilt.com dealer portal, entitlement per dealer service account",
+      "role": "Case-management surface at the dealership. Auto-displays open recall/campaign and warranty coverage for a VIN when a case is opened. In-process campaigns display as 'Quoted MM/DD/YYYY' and cannot be re-added.",
+      "reference_in_manual": "Warranty Procedure Manual v2026.7, §4.1 (page 57)"
+    },
+    {
+      "id": "paccar_solutions",
+      "name": "PACCAR Solutions Portal",
+      "operator": "PACCAR",
+      "access": "https://paccarsolutions.paccar.com/ — customer, fleet manager, and dealer entitlement",
+      "role": "Telemetry surface. Real-time notifications, plain-English fault-code translations, four severity tiers (Stop Now / Service Now / Service Soon / Informational), open-recall visibility, and dealer-proximity display. Fed by the SmartLINQ Remote Diagnostics hardware on the truck (PeopleNet Mobile Gateway).",
+      "reference_public": "https://www.peterbilt.com/why-peterbilt/connected-services"
+    },
+    {
+      "id": "prognostics",
+      "name": "PACCAR Prognostics",
+      "operator": "PACCAR",
+      "access": "Delivered as prognostic bulletins into SIR / SmartLINQ Service Management",
+      "role": "Predictive replacement recommendations under PACCAR's prognostic prediction algorithm. Classified as a bulletin type on the same authority ladder as Recall and Campaign.",
+      "reference_in_manual": "Warranty Procedure Manual v2026.7, §4.1 (page 57), §5.1 (page 60)"
+    },
+    {
+      "id": "davie_prs",
+      "name": "DAVIE + PRS",
+      "operator": "PACCAR",
+      "access": "Dealer service tool, on-vehicle capture",
+      "role": "Diagnostic capture at the bay. PRS file downloaded to the vehicle profile, DAVIE connects for fault-code capture and log-file generation. Required for MX engine campaigns and troubleshooting.",
+      "reference_in_manual": "Warranty Procedure Manual v2026.7, §4.2 (page 60)"
+    },
+    {
+      "id": "tcs365",
+      "name": "Total Customer Solutions (TCS365)",
+      "operator": "PACCAR",
+      "access": "24×7 dealer support line",
+      "role": "Troubleshooting-assistance service. Case number is a first-class field on PRWS claims; the Warranty GENE reads it back but does not create TCS365 cases.",
+      "reference_in_manual": "Warranty Procedure Manual v2026.7, §4.2 (page 60), §1.18 (page 45)"
+    },
+    {
+      "id": "prws",
+      "name": "PACCAR Registration and Warranty System (PRWS)",
+      "operator": "PACCAR",
+      "access": "Dealer portal",
+      "role": "Authoritative claim-submission and reimbursement surface. The Warranty GENE never submits to PRWS; it only reads back historical claim status and RMA/CARE numbers to detect ineffective-repeat patterns and to close the loop after a job books.",
+      "reference_in_manual": "Warranty Procedure Manual v2026.7, throughout §1"
+    }
+  ],
+
+  "mappings": {
+    "vin": {
+      "surface": "sir",
+      "source_field": "Chassis Serial Number",
+      "provenance": "observed",
+      "evidence": "Warranty Procedure Manual v2026.7, page 57: 'Check the chassis serial number monthly against the Service Information Record (SIR) system for open field campaigns and federal safety recalls.'",
+      "notes": "Peterbilt and PACCAR documentation uses 'chassis serial number' where the schema uses 'vin'. They are the same identifier."
+    },
+    "chassis.model": {
+      "surface": "sir",
+      "source_field": "Model",
+      "provenance": "inferred",
+      "evidence": "Model appears throughout the Warranty Procedure Manual and on every SIR-driven form (Recall Notification, Owner Information, Emission Service Action). SIR-screen field label not yet confirmed verbatim.",
+      "notes": "Working key. Confirm on Tim's SIR walkthrough."
+    },
+    "chassis.class": {
+      "surface": "derived",
+      "source_field": "chassis.model → class table",
+      "provenance": "inferred",
+      "evidence": "Class 6/7 vs Class 8 is derived from the model number using the Warranty Quick Reference Guide 2025.4 chassis-class table (579/567/565/389/367/365 → Class 8; 537/536/535/548/337/330/325/220EV/520EV → Class 6/7).",
+      "notes": "Not a PACCAR field; computed at the twin."
+    },
+    "chassis.series": {
+      "surface": "sir",
+      "source_field": "Powertrain / body-builder configuration + Severe Service designation",
+      "provenance": "pending",
+      "evidence": "The MX-Equipped, Battery Electric, and Severe Service series distinctions determine which coverage buckets apply, per the Warranty Quick Reference Guide 2025.4. Confirmed as inputs; SIR-screen field label not yet held.",
+      "notes": "Likely stitched from SIR chassis configuration and warranty coverage summary — confirm with Tim."
+    },
+    "chassis.in_service_date": {
+      "surface": "sir",
+      "source_field": "In-Service Date",
+      "provenance": "observed",
+      "evidence": "Warranty Procedure Manual v2026.7, page 60 (§5.1.1) and page 61 (§5.1.2): '7 years or 700,000 miles (1,120,000 kilometers) from the in-service date.' In-service date is the coverage-window anchor and is per-VIN in SIR.",
+      "notes": null
+    },
+    "chassis.vocational_use": {
+      "surface": "sir",
+      "source_field": "Vocational Application",
+      "provenance": "pending",
+      "evidence": "Severe-service coverage bucket (Warranty Quick Reference Guide 2025.4) requires a vocation classification; SIR carries this. Field label to be confirmed.",
+      "notes": "Working key. May live under a different SIR label."
+    },
+    "usage.odometer_km": {
+      "surface": "paccar_solutions",
+      "source_field": "Overall Mileage",
+      "provenance": "observed",
+      "evidence": "Peterbilt SmartLINQ Sales Sheet (2023, PETE-9904): 'SmartLINQ also gathers core truck information such as fuel economy, overall mileage, engine hours and idle time.'",
+      "notes": "Live telemetry from the PeopleNet Mobile Gateway. Twin normalizes miles → kilometres on ingest."
+    },
+    "usage.engine_hours": {
+      "surface": "paccar_solutions",
+      "source_field": "Engine Hours",
+      "provenance": "observed",
+      "evidence": "Peterbilt SmartLINQ Sales Sheet (2023, PETE-9904): same as above.",
+      "notes": null
+    },
+    "usage.source": {
+      "surface": "derived",
+      "source_field": "Provenance tag written by the twin at ingest",
+      "provenance": "inferred",
+      "evidence": "Enumerated values: SmartLINQ, PACCAR Solutions, CDK RO, Customer Report, Manual. Not a PACCAR field.",
+      "notes": null
+    },
+    "owner.customer_id": {
+      "surface": "cdk",
+      "source_field": "CDK Customer Master ID",
+      "provenance": "observed",
+      "evidence": "Precedent set by the Warranty Bot / customer-sphere design (twin decision log). CDK is Hawkins's dealer management system; the customer master id lives there and never in PACCAR.",
+      "notes": "Field of record for customer identity is Hawkins-side, not PACCAR-side."
+    },
+    "owner.customer_type": {
+      "surface": "sir",
+      "source_field": "Customer Type (Owner-Operator / Small Fleet / DSFW Fleet / Direct Fleet / Lessee)",
+      "provenance": "pending",
+      "evidence": "The Warranty Procedure Manual references DSFW and Direct Fleet distinctions (page 59) but does not publish the exact SIR field label.",
+      "notes": "Confirm on walkthrough. Direct Fleet is significant because those customers may perform their own recall/campaign work per §4.1."
+    },
+    "owner.fleet_id": {
+      "surface": "sir",
+      "source_field": "Fleet Code / Parent Customer",
+      "provenance": "pending",
+      "evidence": "Implied by fleet-level warranty administration but exact label unknown until walkthrough.",
+      "notes": null
+    },
+    "owner.home_rooftop": {
+      "surface": "cdk",
+      "source_field": "Selling / Servicing Dealer",
+      "provenance": "inferred",
+      "evidence": "The Warranty Procedure Manual references dealer-of-record throughout §1 (claim filing) and §4 (recall follow-up). Hawkins-side; not a PACCAR field.",
+      "notes": "Enumerated to the eight Peterbilt Atlantic rooftops."
+    },
+
+    "coverage.base_emissions_carb": {
+      "surface": "sir",
+      "source_field": "CARB Emission Component Coverage",
+      "provenance": "observed",
+      "evidence": "CARB / EPA / ECCC Emission Component Coverage register (workspace/uploaded_attachments, Feb 14 2022). Bucket months/miles from the 2025.4 Warranty Quick Reference Guide, Coverage Time & Exclusions table.",
+      "notes": "Applies only to CARB-registered chassis; SIR encodes the coverage bucket applicability."
+    },
+    "coverage.base_emissions_epa_eccc": {
+      "surface": "sir",
+      "source_field": "EPA / ECCC Emission Component Coverage",
+      "provenance": "observed",
+      "evidence": "Same as above (EPA/ECCC path).",
+      "notes": null
+    },
+    "coverage.standard_vehicle": {
+      "surface": "sir",
+      "source_field": "Basic Vehicle Warranty",
+      "provenance": "observed",
+      "evidence": "Named throughout the Warranty Procedure Manual (e.g. page 175, §7.52: 'covered under the Basic Vehicle 12 months/100,000 miles (160,000 kilometers) warranty'). Bucket months/miles from the 2025.4 Quick Reference Guide.",
+      "notes": null
+    },
+    "coverage.standard_mx_engine": {
+      "surface": "sir",
+      "source_field": "MX Engine Warranty",
+      "provenance": "observed",
+      "evidence": "Section 4.2 of the Warranty Procedure Manual (page 60) and Section 5.1 (pages 60-62) name the MX engine warranty as distinct from vehicle coverage. Bucket months/miles/hours from the 2025.4 Quick Reference Guide.",
+      "notes": null
+    },
+    "coverage.engine_major_components": {
+      "surface": "sir",
+      "source_field": "Engine Major Component Extended Coverage",
+      "provenance": "observed",
+      "evidence": "Warranty Procedure Manual v2026.7, §5.1.1 and §5.1.2 (pages 60-62). The 7/700 Limited Extended Service Agreement (option code 9485633) and 7/700 Extended Service Agreement (option code 9485634) are explicitly recorded to SIR: 'Eligible chassis will have Extended Major Component coverage applied to the Service Information Record (SIR).' (page 62)",
+      "notes": "The option codes are observed verbatim."
+    },
+    "coverage.vehicle_major_components": {
+      "surface": "sir",
+      "source_field": "Vehicle Major Component Coverage",
+      "provenance": "observed",
+      "evidence": "Named as a coverage bucket in the 2025.4 Warranty Quick Reference Guide Coverage Time & Exclusions table.",
+      "notes": null
+    },
+    "coverage.severe_service": {
+      "surface": "sir",
+      "source_field": "Severe Service Coverage",
+      "provenance": "observed",
+      "evidence": "Named as a coverage bucket in the 2025.4 Warranty Quick Reference Guide.",
+      "notes": null
+    },
+    "coverage.paccar_alternator_starter": {
+      "surface": "sir",
+      "source_field": "PACCAR Alternator / Starter Extended Coverage",
+      "provenance": "observed",
+      "evidence": "Named as a coverage bucket in the 2025.4 Warranty Quick Reference Guide.",
+      "notes": null
+    },
+    "coverage.paccar_front_axles": {
+      "surface": "sir",
+      "source_field": "PACCAR Front Axle Coverage",
+      "provenance": "observed",
+      "evidence": "Named as a coverage bucket in the 2025.4 Warranty Quick Reference Guide.",
+      "notes": null
+    },
+    "coverage.non_paccar_front_axles": {
+      "surface": "sir",
+      "source_field": "Non-PACCAR Front Axle Coverage",
+      "provenance": "observed",
+      "evidence": "Named as a coverage bucket in the 2025.4 Warranty Quick Reference Guide.",
+      "notes": null
+    },
+    "coverage.bev_ess": {
+      "surface": "sir",
+      "source_field": "Battery-Electric Vehicle ESS Coverage",
+      "provenance": "inferred",
+      "evidence": "The Warranty Procedure Manual, page 56 §3.5, references battery-electric-vehicle bulletins (46-014, BEV storage guidelines). Coverage bucket named in the 2025.4 Quick Reference Guide. SIR field label to be confirmed at walkthrough.",
+      "notes": "May be recorded under a chassis-specific coverage code (e.g. per 220EV / 520EV)."
+    },
+
+    "open_jobs[].job_id": {
+      "surface": "sir",
+      "source_field": "Recall/Campaign Number (or Prognostic Bulletin ID)",
+      "provenance": "observed",
+      "evidence": "Warranty Procedure Manual v2026.7, page 58: 'Designated campaign number' is called out as an itemized data element on every campaign claim.",
+      "notes": null
+    },
+    "open_jobs[].authority": {
+      "surface": "sir",
+      "source_field": "Bulletin Type",
+      "provenance": "observed",
+      "evidence": "Warranty Procedure Manual v2026.7, page 57 Bulletin Types table names every allowed value verbatim: Recall, MX Component Specific Emissions Warranty, Government Agency Mandated, Retrofit, Prognostic, Campaign, Fix-as-Fail, Information Only.",
+      "notes": "The schema also adds 'Live Fault Code' and 'Extended Service Agreement' for jobs that originate outside the bulletin ladder."
+    },
+    "open_jobs[].component": {
+      "surface": "sir",
+      "source_field": "Repair Description / Affected Component",
+      "provenance": "inferred",
+      "evidence": "Named by category throughout the Warranty Procedure Manual; SIR-screen field label to be confirmed on walkthrough.",
+      "notes": null
+    },
+    "open_jobs[].ata_code": {
+      "surface": "davie_prs",
+      "source_field": "DTC / SPN-FMI",
+      "provenance": "observed",
+      "evidence": "Warranty Procedure Manual v2026.7, page 45 (§1.18 Copy Claim restrictions): 'The system will not copy the following: ... DTC/SPN-FMI, Exit step.' DTC and SPN-FMI are the observed PACCAR field names for fault-code identifiers.",
+      "notes": "The twin normalizes these to a single 'ata_code' string with the original separator preserved."
+    },
+    "open_jobs[].coverage_bucket": {
+      "surface": "derived",
+      "source_field": "computed at twin from open_jobs[].component ↔ coverage keys",
+      "provenance": "inferred",
+      "evidence": "Not a PACCAR field. Derived by mapping the CARB/EPA/ECCC register and the 2025.4 Warranty Quick Reference Guide.",
+      "notes": null
+    },
+    "open_jobs[].estimated_srt_hours": {
+      "surface": "sir",
+      "source_field": "SRT (Standard Repair Time)",
+      "provenance": "observed",
+      "evidence": "Warranty Procedure Manual v2026.7, page 59: 'The dealer must file a standard campaign claim, using the applicable ATA codes and SRT for the repair.' Also referenced on page 176 §7.53: 'SRT: 036-040'.",
+      "notes": "Twin never inflates SRT; it reads the published SRT and applies it verbatim."
+    },
+    "open_jobs[].parts_on_hand": {
+      "surface": "cdk",
+      "source_field": "Parts Inventory",
+      "provenance": "observed",
+      "evidence": "Hawkins-side. Precedent: the Warranty Procedure Manual §4.1 (page 56) directs dealers to 'estimate the quantity of replacement parts required, and place a parts order immediately' — implying real-time inventory readback.",
+      "notes": null
+    },
+    "open_jobs[].customer_pay_at_risk_cad": {
+      "surface": "derived",
+      "source_field": "computed at twin",
+      "provenance": "inferred",
+      "evidence": "Estimated out-of-pocket cost if the coverage lapses. Used only in the outreach message. Not a PACCAR field.",
+      "notes": null
+    },
+    "open_jobs[].status": {
+      "surface": "smartlinq_sm",
+      "source_field": "Case Status (with SIR Campaign Field 'I' meaning In-Process)",
+      "provenance": "observed",
+      "evidence": "Warranty Procedure Manual v2026.7, page 58: 'If an \"I\" is listed in SIR in the Campaign Field, this signifies that there is a claim \"In Process\" for the recall/campaign, and the repair should not be performed.' Also: 'SmartLINQ Service Management will display \"in process\" recall/campaigns as \"Quoted MM/DD/YYYY\" in the case.'",
+      "notes": null
+    },
+    "open_jobs[].source_bulletin_url": {
+      "surface": "sir",
+      "source_field": "Bulletin Link",
+      "provenance": "pending",
+      "evidence": "Bulletins are accessible from within SIR and PACCAR.net; exact deep-link URL pattern to be captured at walkthrough.",
+      "notes": null
+    },
+
+    "score.margin_estimate_cad": {
+      "surface": "derived",
+      "source_field": "computed at twin (SRT × labor rate + parts)",
+      "provenance": "inferred",
+      "evidence": "Not a PACCAR field. Uses Hawkins-side labor rate from CDK.",
+      "notes": null
+    },
+    "score.time_to_expiry_days": {
+      "surface": "derived",
+      "source_field": "computed at twin (min across coverage buckets)",
+      "provenance": "inferred",
+      "evidence": "Not a PACCAR field.",
+      "notes": null
+    },
+    "score.booking_urgency": {
+      "surface": "derived",
+      "source_field": "computed at twin from telemetry",
+      "provenance": "inferred",
+      "evidence": "Not a PACCAR field.",
+      "notes": null
+    },
+    "score.total": {
+      "surface": "derived",
+      "source_field": "computed at twin per scoring.md",
+      "provenance": "inferred",
+      "evidence": "Not a PACCAR field.",
+      "notes": null
+    },
+
+    "compliance.flags.missing_technician_id": {
+      "surface": "prws",
+      "source_field": "Technician ID (audit register)",
+      "provenance": "observed",
+      "evidence": "Warranty Procedure Manual v2026.7, §11 (Warranty Audit, pages 185+) names Technician ID as an audit-register element on every claim.",
+      "notes": null
+    },
+    "compliance.flags.rmi_undocumented": {
+      "surface": "prws",
+      "source_field": "Repair & Maintenance Information (RMI) attachment",
+      "provenance": "observed",
+      "evidence": "Warranty Procedure Manual v2026.7, page 60 (§4.2): 'Record all fault codes and create a log file in PDF format (not TXT). (Refer to Repair & Maintenance Information (RMI) for instructions on creating a log file.)'",
+      "notes": "Twin flags absent RMI attachment on covered MX engine work."
+    },
+    "compliance.flags.labor_time_unsupported": {
+      "surface": "prws",
+      "source_field": "Labor Hours vs SRT",
+      "provenance": "observed",
+      "evidence": "Warranty Procedure Manual v2026.7, page 59: 'All warranty claims are to be completed with the appropriate labor and parts allowances as indicated in the dealer notification letter.'",
+      "notes": "Twin flags claims that would file labor hours above published SRT without a documented reason."
+    },
+    "compliance.flags.repeat_ineffective_repair": {
+      "surface": "prws",
+      "source_field": "Prior Claim History (same VIN + same causal part)",
+      "provenance": "observed",
+      "evidence": "Warranty Procedure Manual v2026.7, §11 audit register names ineffective-repeat detection as a standing audit vector.",
+      "notes": "Twin computes across PRWS claim history and CDK RO history."
+    },
+    "compliance.flags.prior_approval_required_and_missing": {
+      "surface": "prws",
+      "source_field": "Prior Approval # field on the claim",
+      "provenance": "observed",
+      "evidence": "Warranty Procedure Manual v2026.7, §5.1.1 (page 61): 'Approved PA number must be included in the \"Prior Approval #\" field within your claim'. Also §5.1.2 (page 61): 'Include the PA number in the \"Prior Approval #\" field within the claim if required for the component.'",
+      "notes": "Verbatim PRWS field name is 'Prior Approval #'."
+    },
+
+    "telemetry.last_ping": {
+      "surface": "paccar_solutions",
+      "source_field": "Last Communication Timestamp",
+      "provenance": "inferred",
+      "evidence": "Peterbilt SmartLINQ Operators Manual: 'SmartLINQ immediately communicates with PACCAR's back office by wirelessly sending detailed data about the event.' Timestamp field label not published in customer-facing docs.",
+      "notes": "Confirm on the PACCAR Solutions API contract."
+    },
+    "telemetry.in_hawkins_region": {
+      "surface": "derived",
+      "source_field": "computed at twin from PACCAR Solutions position + Hawkins regional polygon",
+      "provenance": "inferred",
+      "evidence": "PACCAR Solutions provides GPS position (Peterbilt Connected Services page: 'the location of the nearest Peterbilt dealers'); the Hawkins region polygon is defined by the eight Peterbilt Atlantic rooftop footprints.",
+      "notes": null
+    },
+    "telemetry.projected_overnight_region": {
+      "surface": "derived",
+      "source_field": "computed at twin",
+      "provenance": "inferred",
+      "evidence": "Route-projection heuristic on 24-72 hour position track.",
+      "notes": null
+    },
+    "telemetry.geofence_confidence": {
+      "surface": "derived",
+      "source_field": "computed at twin",
+      "provenance": "inferred",
+      "evidence": "Twin-side confidence score.",
+      "notes": null
+    },
+
+    "source_provenance[].source": {
+      "surface": "derived",
+      "source_field": "written by twin at ingest",
+      "provenance": "inferred",
+      "evidence": "Enumerated to the eleven values in rich-target.schema.json.",
+      "notes": null
+    }
+  },
+
+  "smartlinq_severity_map": {
+    "description": "Every SmartLINQ Remote Diagnostics notification carries one of four severities. The twin uses this severity, unchanged, to prioritize the outbound-VIN queue.",
+    "provenance": "observed",
+    "evidence": "Peterbilt Connected Services page and SmartLINQ Sales Sheet (2023, PETE-9904): 'Four levels of notification are generated – Stop Now, Service Now, Service Soon and Informational.' The operator manual additionally names the driver-facing dash indicators: 'Stop Engine Immediately' (Stop Now), 'Seek Service Immediately' (Service Now), 'Service Advised' (Service Soon).",
+    "levels": [
+      {
+        "name": "Stop Now",
+        "operator_indicator": "Stop Engine Immediately",
+        "meaning": "Shut down the truck; conditions may damage the engine. Examples: low oil pressure, high oil temperature, low fuel pressure.",
+        "twin_action": "Immediate telemetry alert; do not schedule a routine warranty visit — this is roadside."
+      },
+      {
+        "name": "Service Now",
+        "operator_indicator": "Seek Service Immediately",
+        "meaning": "Drive to a nearby dealership. Turbocharger faults, ECU errors, aftertreatment faults, high fuel temperatures. Some may be emissions-related.",
+        "twin_action": "Highest booking-urgency, route to nearest Hawkins rooftop."
+      },
+      {
+        "name": "Service Soon",
+        "operator_indicator": "Service Advised",
+        "meaning": "Not-as-expected performance; continue delivering the load. DEF quality and minor ECU faults.",
+        "twin_action": "Standard rich-target lane."
+      },
+      {
+        "name": "Informational",
+        "operator_indicator": null,
+        "meaning": "Informational only; no immediate service action.",
+        "twin_action": "Emitted to the audit lane, never the booking lane, unless it maps to an open warrantable job through another authority."
+      }
+    ]
+  },
+
+  "authority_ladder_source_table": {
+    "description": "The eight bulletin types PACCAR distinguishes, verbatim from the Warranty Procedure Manual v2026.7 §4.1 (page 57).",
+    "provenance": "observed",
+    "types": [
+      {"name": "Recall",                              "definition": "Safety or Emissions",                                                            "warranty_coverage_required": false},
+      {"name": "MX Component Specific",               "definition": "Emissions Warranty",                                                             "warranty_coverage_required": true},
+      {"name": "Government Agency Mandated",          "definition": "Applicable Warranty Required",                                                   "warranty_coverage_required": true},
+      {"name": "Retrofit",                            "definition": "Replacing Pre-Production Parts",                                                 "warranty_coverage_required": false},
+      {"name": "Prognostic",                          "definition": "Proactive Replacement Using PACCAR's Prognostic Prediction Algorithm to Maximize Uptime", "warranty_coverage_required": false},
+      {"name": "Campaign",                            "definition": "Proactive Repair, Expires After One Year",                                       "warranty_coverage_required": false},
+      {"name": "Fix-as-Fail",                         "definition": "Repair Upon Failure",                                                            "warranty_coverage_required": true},
+      {"name": "Information Only",                    "definition": "Basic Repair Information for Dealers and Technicians",                           "warranty_coverage_required": false}
+    ]
+  },
+
+  "pending_walkthrough_items": [
+    "Verbatim SIR-screen field labels for: chassis.model, chassis.series, chassis.vocational_use, owner.customer_type, owner.fleet_id.",
+    "Verbatim SIR label for coverage.bev_ess (may be encoded per chassis code, not as a distinct coverage row).",
+    "Deep-link URL pattern for open_jobs[].source_bulletin_url (SIR bulletin link).",
+    "PACCAR Solutions API contract terms — telemetry frequency, retention window, and last-ping timestamp field name.",
+    "Service-account credential provisioning path for PACCAR Solutions (per the TELUS service-account precedent — never a personal credential)."
+  ],
+
+  "non_movement_covenant": "This mapping file names PACCAR fields for the purpose of reading them into the twin. No customer PII, no VIN histories, and no coverage payload land in this public repository. The Warranty GENE's rich-target worklist stays in Hawkins-owned Azure Postgres; only the schema, the mapping, and the synthetic sample fixture are public."
+}
