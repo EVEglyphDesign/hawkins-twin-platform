@@ -28,10 +28,12 @@ from playwright.sync_api import sync_playwright
 
 # Reader dispatch
 import cdk
+import brp
 import lightspeed
 
 READERS = {
     "cdk": cdk.pull,
+    "brp": brp.pull,
     "lightspeed": lightspeed.pull,
 }
 
@@ -46,7 +48,7 @@ def main() -> int:
     args = ap.parse_args()
 
     creds = json.loads(args.creds.read_text())
-    creds_for_side = creds[args.side if args.side != "cdk" else "cdk"] if args.side == "cdk" else creds["lightspeed"]
+    creds_for_side = creds[args.side]
 
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     args.out.mkdir(parents=True, exist_ok=True)

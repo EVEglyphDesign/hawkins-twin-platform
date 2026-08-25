@@ -95,17 +95,17 @@
     <fieldset>
       <legend>CDK Drive — Peterbilt Atlantic</legend>
       <label for="cdk_url">Login URL</label>
-      <input type="url" id="cdk_url" placeholder="https://drive.cdk.com/... (Luke fills in the exact URL he uses)" required>
+      <input type="url" id="cdk_url" placeholder="https://drive.cdk.com/... (Luke fills in the exact URL he uses)">
       <div class="hint">The exact URL Luke lands on when he opens CDK Drive.</div>
 
       <label for="cdk_user">Username</label>
-      <input type="text" id="cdk_user" autocomplete="off" required>
+      <input type="text" id="cdk_user" autocomplete="off">
 
       <label for="cdk_pass">Password</label>
-      <input type="password" id="cdk_pass" autocomplete="off" required>
+      <input type="password" id="cdk_pass" autocomplete="off">
 
       <label for="cdk_mfa">MFA method</label>
-      <select id="cdk_mfa" required>
+      <select id="cdk_mfa">
         <option value="">— select —</option>
         <option value="none">None</option>
         <option value="totp">TOTP (authenticator app)</option>
@@ -120,18 +120,44 @@
     </fieldset>
 
     <fieldset>
+      <legend>BRP Dealer Portal — Torque Motorsports</legend>
+      <label for="brp_url">Login URL</label>
+      <input type="url" id="brp_url" placeholder="https://... (Luke's exact BRP dealer login URL)">
+      <div class="hint">The URL Luke opens to sign into the BRP dealer portal. Not the marketing site.</div>
+
+      <label for="brp_user">Username</label>
+      <input type="text" id="brp_user" autocomplete="off">
+
+      <label for="brp_pass">Password</label>
+      <input type="password" id="brp_pass" autocomplete="off">
+
+      <label for="brp_mfa">MFA method</label>
+      <select id="brp_mfa">
+        <option value="">— select —</option>
+        <option value="none">None</option>
+        <option value="totp">TOTP (authenticator app)</option>
+        <option value="sms">SMS</option>
+        <option value="push">Push notification</option>
+        <option value="sso">SSO through BRP identity</option>
+      </select>
+
+      <label for="brp_totp">TOTP seed (only if MFA = TOTP)</label>
+      <input type="text" id="brp_totp" autocomplete="off" placeholder="Base32 secret">
+    </fieldset>
+
+    <fieldset>
       <legend>Lightspeed EVO — Torque Motorsports</legend>
       <label for="ls_url">Login URL</label>
-      <input type="url" id="ls_url" placeholder="https://evosvc.lightspeeddms.com/... (Luke fills in the exact URL)" required>
+      <input type="url" id="ls_url" placeholder="https://evosvc.lightspeeddms.com/... (Luke fills in the exact URL)">
 
       <label for="ls_user">Username</label>
-      <input type="text" id="ls_user" autocomplete="off" required>
+      <input type="text" id="ls_user" autocomplete="off">
 
       <label for="ls_pass">Password</label>
-      <input type="password" id="ls_pass" autocomplete="off" required>
+      <input type="password" id="ls_pass" autocomplete="off">
 
       <label for="ls_mfa">MFA method</label>
-      <select id="ls_mfa" required>
+      <select id="ls_mfa">
         <option value="">— select —</option>
         <option value="none">None</option>
         <option value="totp">TOTP (authenticator app)</option>
@@ -160,23 +186,20 @@
   const AGE_PUBLIC_KEY = window.AGE_PUBLIC_KEY || 'REPLACE_WITH_AGE_RECIPIENT_PUBLIC_KEY';
 
   document.getElementById('encrypt').addEventListener('click', async () => {
+    const val = (id) => document.getElementById(id).value;
+    const section = (prefix) => ({
+      url: val(prefix + '_url'),
+      username: val(prefix + '_user'),
+      password: val(prefix + '_pass'),
+      mfa: val(prefix + '_mfa'),
+      totp_seed: val(prefix + '_totp') || null,
+    });
     const payload = {
-      schema: 'warranty-gene/credentials/v1',
+      schema: 'warranty-gene/credentials/v2',
       created_at: new Date().toISOString(),
-      cdk: {
-        url: document.getElementById('cdk_url').value,
-        username: document.getElementById('cdk_user').value,
-        password: document.getElementById('cdk_pass').value,
-        mfa: document.getElementById('cdk_mfa').value,
-        totp_seed: document.getElementById('cdk_totp').value || null,
-      },
-      lightspeed: {
-        url: document.getElementById('ls_url').value,
-        username: document.getElementById('ls_user').value,
-        password: document.getElementById('ls_pass').value,
-        mfa: document.getElementById('ls_mfa').value,
-        totp_seed: document.getElementById('ls_totp').value || null,
-      },
+      cdk: section('cdk'),
+      brp: section('brp'),
+      lightspeed: section('ls'),
     };
 
     // Wireframe encryption: we emit the JSON as a base64 blob wrapped in an
