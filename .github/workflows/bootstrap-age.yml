@@ -31,11 +31,11 @@ jobs:
 
       - name: Guard against overwrite
         env:
-          GH_TOKEN: ${{ secrets.SECRETS_ADMIN_TOKEN }}
+          GH_TOKEN: ${{ secrets.LUKELOGIN }}
           FORCE: ${{ inputs.force }}
         run: |
           if [ -z "$GH_TOKEN" ]; then
-            echo "::error::SECRETS_ADMIN_TOKEN not set. Create a fine-scoped PAT with 'Actions: read/write' + 'Secrets: read/write' on this repo and add it as a repo secret named SECRETS_ADMIN_TOKEN, then re-run."
+            echo "::error::LUKELOGIN secret not set. Create a fine-grained PAT with Secrets: read/write on this repo and add it as a repo secret named LUKELOGIN, then re-run."
             exit 1
           fi
 
@@ -69,7 +69,7 @@ jobs:
 
       - name: Store both halves as repo secrets
         env:
-          GH_TOKEN: ${{ secrets.SECRETS_ADMIN_TOKEN }}
+          GH_TOKEN: ${{ secrets.LUKELOGIN }}
           PUBLIC: ${{ steps.keygen.outputs.public }}
         run: |
           set -e
