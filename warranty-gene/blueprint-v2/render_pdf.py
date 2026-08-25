@@ -300,7 +300,7 @@ html_body = re.sub(
         '<div class="title-block">'
         '<div class="kicker">EVEglyphDesign · Hawkins Twin Platform</div>'
         '<h1>Warranty GENE — Blueprint v2</h1>'
-        '<div class="subtitle">EgD-WGB-006 · Two rooftops, Azure custody, POC on the current book · For Tobias review</div>'
+        '<div class="subtitle">EgD-WGB-006 · Two-step operating model · Two rooftops · Azure custody · For Tobias review</div>'
         f'<p>{m.group(1)}</p>'
         '</div>'
     ),

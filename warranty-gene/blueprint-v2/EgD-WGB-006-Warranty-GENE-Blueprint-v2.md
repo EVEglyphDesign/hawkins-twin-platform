@@ -4,24 +4,55 @@
 **Document ID:** EgD-WGB-006 · **Key ID:** EgD-KEY-2026-07
 **Status:** For Tobias review, v0.2
 **Posture:** Modular sidecar to the Hawkins Twin. Business data lives in the client-owned Azure server. Public replica of record lives in the [Hawkins Twin GitHub repository](https://github.com/EVEglyphDesign/hawkins-twin-platform). **EVE holds custody of nothing at rest.**
-**Supersedes:** [EgD-WGB-001](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/blueprint/EgD-WGB-001-Warranty-GENE-Blueprint.pdf) — same architectural spine, retargeted to two rooftops (Peterbilt Atlantic + Torque Motorsports), custody split made explicit, AI surface made interchangeable.
+**Operating model:** Warranty GENE runs as a **two-step process on every VIN, every visit** — step 1 is an automated OEM coverage check from the DMS record, step 2 is a human-driven third-party check by the customer and the Hawkins service writer. Integrations tighten step 2 over time; they do not gate it.
+**Supersedes:** [EgD-WGB-001](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/blueprint/EgD-WGB-001-Warranty-GENE-Blueprint.pdf) — same architectural spine, retargeted to two rooftops (Peterbilt Atlantic + Torque Motorsports), custody split made explicit, AI surface made interchangeable, **two-step operating model made primary**.
 **Companions:** [Wireframe v0](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/wireframe/) · [Schema v1](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/schema/) · [Luke access prep (Peterbilt)](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep/EgD-WGB-003-Luke-Access-Prep.pdf) · [Luke access prep (BRP)](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep-brp/EgD-WGB-004-Luke-Access-Prep-BRP.pdf) · [Luke contact table](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-contacts/EgD-WGB-005-Luke-Contact-Table.pdf)
 
 ---
 
-## 1 · The POC mandate — automated OEM check first, human second step for the rest
+## 1 · Operating model — two steps on every VIN, every visit
 
-**The POC has one job: surface, on the current book, the warranty coverage that is still valid on each VIN so the service writer knows it exists before the job closes to customer-pay.** Everything else in this blueprint is downstream of that.
+**Warranty GENE operates as a two-step check on every VIN with an active work order, at both rooftops, every visit.** The two steps are the primary operating model, not a POC scaffold. Integrations tighten step 2 over time; they do not gate it and they do not replace it. The customer's own knowledge stays in the loop even after every third-party portal is wired up, because the customer is the highest-confidence source of what they actually hold.
 
-The POC runs in two steps.
+### 1.1 The two steps
 
-**Step 1 — automated OEM check.** For every VIN with an active work order on the current book at either rooftop, the engine reads what CDK Drive already carries on the Peterbilt Atlantic side and what Lightspeed EVO already carries on the Torque Motorsports side, joins it against the public OEM coverage references, and returns which OEM warranty buckets are still active on that VIN. On the Peterbilt side that is PACCAR base and extended warranty windows and the CE033 federal emissions extension. On the Torque Motorsports side that is BRP base warranty and any B.E.S.T. extended coverage the DMS record already reflects. **This step touches no third party, requires no new credential, and needs no integration built.** It uses the DMS logins Luke has today and the public references already committed to the repository.
+**Step 1 — automated OEM coverage check.** For every VIN with an active work order at either rooftop, the engine reads what CDK Drive already carries on the Peterbilt Atlantic side and what Lightspeed EVO already carries on the Torque Motorsports side, joins it against the public OEM coverage references, and returns which OEM warranty buckets are still active on that VIN. On the Peterbilt side that is PACCAR base and extended warranty windows and the CE033 federal emissions extension. On the Torque Motorsports side that is BRP base warranty and any B.E.S.T. extended coverage the DMS record already reflects. **This step touches no third party, requires no new credential, and needs no integration built.** It uses the DMS logins Luke has today and the public references already committed to the repository. It runs on every VIN, every visit, forever — not just during the POC.
 
-**Step 2 — human-driven third-party check.** Third-party and extended coverage the DMS does not know about is surfaced by the humans in the loop. The service writer asks the customer whether they hold any extended warranty, service contract, or VSC on the unit — the customer knows what they bought, they usually have the paperwork with them, and if they do not know we can rely on them to check. Hawkins staff then verify manually against whichever administrator the customer names (phone or portal, whichever exists). The engine records what the customer surfaced, what Hawkins verified, and against which administrator, so the sovereign replica grows one VIN at a time — tier-3 (unknown) moves to tier-1/2 (known) for that VIN's next visit.
+**Step 2 — human-driven third-party check.** Everything the DMS record does not know about is surfaced by the humans in the loop. The service writer asks the customer whether they hold any extended warranty, service contract, or VSC on the unit — the customer knows what they bought, they usually have the paperwork with them, and if they do not know we can rely on them to check. Hawkins staff then verify against whichever administrator the customer names, using whatever channel is fastest at that moment (customer-provided paperwork, a phone call to the administrator, a portal login if Hawkins already has one). The engine records what the customer surfaced, what Hawkins verified, and against which administrator, so the sovereign replica grows one VIN at a time — tier-3 (unknown) moves to tier-1/2 (known) for that VIN's next visit. **Step 2 runs on every VIN, every visit, forever — even after every third-party integration is wired up, because the customer's knowledge is upstream of every portal.**
 
-**Why this split is right for the POC.** Step 1 is where the automation earns its keep: the engine is faster than the service writer at seeing which OEM bucket is still open on a VIN, and it is doing that already-visible check on every VIN on the book rather than only the ones the writer thought to check. Step 2 is where the humans earn theirs: customers know their own coverage, and Hawkins staff can verify a named administrator in a minute or two. Automating step 2 needs the third-party integrations in [EgD-WGB-005](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-contacts/EgD-WGB-005-Luke-Contact-Table.pdf); the POC does not.
+### 1.2 Why two steps, not one
 
-**Inputs the POC uses — all in hand today.**
+The automation and the human are good at different things and the operating model has to reflect that.
+
+- **Step 1** is where the automation earns its keep. The engine is faster than the service writer at seeing which OEM bucket is still open on a VIN, and it is doing that already-visible check on every VIN on the book rather than only the ones the writer thought to check. It also does not tire, does not forget CE033 exists on EMY2023 MX engines, and does not miss a B.E.S.T. plan the DMS record already reflects.
+- **Step 2** is where the humans earn theirs. Customers know their own coverage — they signed the contract, they hold the booklet, they remember what the finance manager sold them. Hawkins staff can verify a named administrator in a minute or two. And when the DMS record and the customer disagree, the human is the tiebreaker, not the machine.
+
+Every third-party portal integration in [EgD-WGB-005](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-contacts/EgD-WGB-005-Luke-Contact-Table.pdf) makes step 2 faster and more precise — same call, done from a screen instead of a phone — but none of them replaces step 2. The customer's own knowledge is upstream of every portal.
+
+### 1.3 What each step writes back
+
+Every run of the two-step check writes back to the sovereign replica exactly what it saw, so the next visit for the same VIN starts closer to complete than the last one did.
+
+- **Step 1 writes back:** the OEM buckets still active for this VIN, the anchor date, the window remaining, the coverage row cited, and the DMS record that fed it.
+- **Step 2 writes back:** the third-party administrator the customer named, the contract identifier if produced, the coverage the administrator confirmed, the human who verified it, the channel used (paperwork / phone / portal), and the time it took. Every negative answer ("customer holds no third-party coverage on this VIN") is written back with the same rigour, because a confirmed negative is what keeps step 2 from re-asking on the next visit.
+
+### 1.4 The POC — first four weeks of the operating model
+
+The POC is not a different mode of operation. It is the first four weeks of the two-step model running on the current booking calendar at both rooftops, measured. The economic formula the POC tests is the formula the operating model runs on forever:
+
+```
+  additional_margin =
+    Σ (line items where step 1 flagged an active OEM warranty bucket
+       AND the current write-up path is billing customer-pay)
+    + Σ (line items where step 2 surfaced a third-party or extended
+         contract AND the current write-up path is billing customer-pay)
+    × (labour + parts recovered at the coverage payer's rate)
+    − (time cost of the automated step + the human second step)
+```
+
+The POC exists to make the number legible so Peter can set the bar for how much margin justifies the ongoing operation. If the first four weeks clear that bar, the two-step model keeps running as-is. Integrations named in §10 are added over time to compress the time cost of step 2, one counterparty at a time, with each addition paid for by the margin it reduces the friction of collecting.
+
+**Inputs required today — all in hand.**
 
 - Luke's existing **CDK Drive** login (Peterbilt Atlantic).
 - Luke's existing **Lightspeed EVO** login (Torque Motorsports).
@@ -30,30 +61,12 @@ The POC runs in two steps.
 - The **public BRP base-warranty and B.E.S.T. component references**.
 - The **customer's own knowledge and paperwork** for anything the DMS record does not carry — read by Hawkins staff, verified manually.
 
-**The economic formula being tested.**
+**What proof looks like at the end of the first four weeks.** A one-page rollup Tobias and Peter can read in one sitting:
 
-```
-  additional_margin =
-    Σ (line items on the current book that the engine flags in step 1 as
-       covered under an active OEM warranty bucket AND that the current
-       write-up path is billing customer-pay)
-    + Σ (line items the customer or Hawkins staff surface in step 2 as
-         covered under a third-party or extended contract AND that the
-         current write-up path is billing customer-pay)
-    × (labour + parts recovered at the coverage payer's rate)
-    − (time cost of the automated step + the human second step)
-```
-
-The test passes if `additional_margin` is a number that clearly rewards the effort of running the POC and justifies the integration work behind it. The exact bar is Peter's to set; the POC's job is to make the number legible so Peter can set it.
-
-**Test population.** The current booking calendar at both rooftops for a bounded window — the next few weeks the service writers are already working. Not a synthetic set, not a historical replay, not a subsample chosen to look favourable.
-
-**What proof looks like.** A one-page rollup Tobias and Peter can read in one sitting:
-
-- Ranked list of VINs on the current book with at least one flagged line, split into two columns: what step 1 caught automatically, what step 2 caught with a human in the loop.
-- For each flagged VIN, the delta: what the current write-up bills customer-pay versus what the engine and the second-step review believe should file against a coverage bucket, cited to the coverage row.
+- Ranked list of VINs seen in the window with at least one flagged line, split into two columns: what step 1 caught automatically, what step 2 caught with a human in the loop.
+- For each flagged VIN, the delta: what the current write-up bills customer-pay versus what the two-step check believes should file against a coverage bucket, cited to the coverage row.
 - A warranty-administrator review column: confirm, override with reason, or reject — recorded in the choice record (§9.1).
-- One rolled-up dollar figure: additional margin surfaced on the current book that the current process was not catching, over the tested window.
+- One rolled-up dollar figure: additional margin surfaced over the window that the previous process was not catching.
 - A projection to a full year at the current book's cadence.
 
 **Same engine, both rooftops.** The reasoning layer, the scoring math, the provenance stamps, and the export contract are shared. Only the source adapter and the coverage-feed roster change.
@@ -97,16 +110,18 @@ Three lanes, three custody rules:
 
 ---
 
-## 3 · The architecture, stripped to four parts (unchanged from v1)
+## 3 · The architecture, stripped to four parts (unchanged from v1, run in two steps)
 
 *VIN · booking calendar · work-order table · public coverage ledger · dealer credentials · third-party VSC feeds*
 
 ```
   1. Source adapter       2. Reasoning              3. Delivery
-  VIN + WO in         →   coverage join    →        Browser wizard
-  (CDK Drive /            + scoring +               (three modes)
-   Lightspeed EVO /       uplift scan                   ⋮
-   Excel drop)                ⋮
+  VIN + WO in         →   step 1: OEM      →        Browser wizard
+  (CDK Drive /            coverage join              (three modes,
+   Lightspeed EVO /       step 2: capture             each shows
+   Excel drop)            of human-verified           step-1 and
+                          third-party coverage        step-2 rows
+                                ⋮                     side by side)
                         4. Observability — every join, decision, and
                         provenance stamp recorded; every answer replayable
                         against the Azure record and the GitHub replica
@@ -114,12 +129,12 @@ Three lanes, three custody rules:
            (compute in-session; state in Azure + GitHub)
 ```
 
-Four parts, each replaceable on its own — identical to the v1 spine.
+Four parts, each replaceable on its own — identical to the v1 spine, wired through the two-step operating model (§1).
 
-- **Source adapter** — crosses the boundary from CDK Drive (Peterbilt side), Lightspeed EVO (BRP side), OEM portals, and third-party administrator portals into a uniform "VIN + coverage + work-order + owner + contract" shape.
-- **Reasoning** — a bounded set of joins and scored answers. Deterministic pipeline; no open-ended language-model loop. Same on both sides.
-- **Delivery** — the browser wizard (single VIN / work-order uplift / cohort scan). Same page, same flow, both rooftops.
-- **Observability** — provenance stamps on every field. Every answer replayable against the Azure record and the GitHub replica.
+- **Source adapter** — crosses the boundary from CDK Drive (Peterbilt side), Lightspeed EVO (BRP side), OEM portals, and third-party administrator portals into a uniform "VIN + coverage + work-order + owner + contract" shape. Public references feed step 1; third-party portal integrations (when they exist) accelerate step 2 without replacing the human check.
+- **Reasoning** — a bounded set of joins and scored answers. Deterministic pipeline; no open-ended language-model loop. Same on both sides. Runs step 1 automatically on every VIN; consumes the step-2 record the humans produce and re-scores the VIN once it lands.
+- **Delivery** — the browser wizard (single VIN / work-order uplift / cohort scan). Same page, same flow, both rooftops. **Every surface renders step 1 (automated) and step 2 (human-verified) as adjacent, equally-weighted rows** so the write-up decision sees both.
+- **Observability** — provenance stamps on every field. Every answer replayable against the Azure record and the GitHub replica. Step 1 provenance is `(coverage row, DMS record, timestamp)`; step 2 provenance is `(administrator named by customer, channel used, human verifier, timestamp)`.
 
 | Component | Peterbilt Atlantic | Torque Motorsports | What that involves |
 |-----------|:-------------:|:-------------:|--------------------|
@@ -137,31 +152,45 @@ Four parts, each replaceable on its own — identical to the v1 spine.
 
 ## 4 · How it reasons, and why every answer is auditable
 
-Fixed path, same on both sides:
+Fixed path, same on both sides, threaded through the two-step operating model.
 
 ```
-  Decode        Anchor        Coverage         Job           Uplift         Rank
-  the VIN   →   coverage  →   window   →       scoring   →   scan  →        and
-  (NHTSA on     to date        math                          (WO mode)      narrate
-   truck;       (DMS or        (public                                      (per VIN
-   BRP VIN      contract)      + private                                    or cohort)
-   decode                      ledger)
-   on power-
-   sports)
+  Decode VIN  →  Step 1: OEM check  →  Anchor date  →  Step 2: human
+  (NHTSA on      (DMS record +           (retail-sale     third-party
+   truck;         public PACCAR /         date or         check
+   BRP VIN        BRP ledger;             contract)       (customer +
+   decode on      automated,                              Hawkins staff,
+   powersports)   seconds/VIN)                            minutes/VIN)
+
+                                                              ↓
+
+              Rank + narrate  ←  Uplift scan  ←  Job scoring
+              (per VIN or        (work-order      (sums step-1
+               cohort)            mode)            + step-2 buckets)
 ```
 
-Two worked examples — one per side.
+Step 1 runs unattended and completes in seconds per VIN. Step 2 runs when the customer is at the counter, or asynchronously against paperwork already on file, and completes in minutes per VIN. The engine does not wait for step 2 to render step-1 answers, and it does not overwrite step-1 answers when step 2 lands; both steps write into the same VIN record and the score is the sum.
+
+Two worked examples — one per side, both steps shown.
 
 ```
   PETERBILT ATLANTIC — SERVICE WRITER
   Anything on today's book that should be warranty instead of customer-pay?
 
-  ANSWER
-  Three of today's twelve booked VINs have jobs under an active coverage bucket.
+  STEP 1 (automated, OEM)
+  Three of today's twelve booked VINs have jobs under an active OEM bucket.
   VIN 1XPBSYN00…202 is booked for a DEF dosing valve — the CE033 federal
   emissions extension covers this until 2033-09-05 and it has not been claimed.
-  Recovery-at-risk on today's book: $4,180 customer-pay that could be filed as
-  warranty if the write-ups are corrected before close.
+
+  STEP 2 (human, third-party)
+  Ask the customer for VIN …202 whether they hold any extended service
+  contract on the truck. If yes, verify against the administrator and record
+  the coverage row. If no, record the confirmed negative so we don't re-ask
+  next visit.
+
+  RECOVERY-AT-RISK on today's book: $4,180 customer-pay that could be filed
+  as warranty if the write-ups are corrected before close (step 1 only;
+  step 2 may add).
 ```
 
 ```
@@ -169,13 +198,19 @@ Two worked examples — one per side.
   Sea-Doo in the bay for a supercharger rebuild. Anything on the coverage side
   I should know before I write this up customer-pay?
 
-  ANSWER
-  This VIN has an active BRP B.E.S.T. plan that runs through 2027-05-14; the
-  supercharger clutch and drive shaft are in the B.E.S.T. component list. The
-  customer also has an Assurant policy on file — the sovereign replica already
-  holds the contract number. B.E.S.T. is the first-position payer for this
-  component; file B.E.S.T. before Assurant. Recovery-at-risk if written
-  customer-pay: $2,340.
+  STEP 1 (automated, OEM)
+  This VIN has an active BRP B.E.S.T. plan that runs through 2027-05-14 in the
+  DMS record; the supercharger clutch and drive shaft are in the B.E.S.T.
+  component list. Base warranty is expired.
+
+  STEP 2 (human, third-party)
+  The sovereign replica already holds an Assurant contract number for this
+  customer from a prior visit — confirm with the customer it is still
+  active, or capture any new contract they surface. B.E.S.T. is the first-
+  position payer for this component; file B.E.S.T. before Assurant.
+
+  RECOVERY-AT-RISK if written customer-pay: $2,340 (B.E.S.T. + Assurant
+  stack, step-2 confirmation pending).
 ```
 
 Two properties, unchanged from v1 and now more important given the custody model:
@@ -253,17 +288,17 @@ For Torque Motorsports, items 1–3 and 7–8 are ready today. Items 4–6 and 9
 
 ---
 
-## 7 · The delivery surfaces
+## 7 · The delivery surfaces — every one runs the two-step model
 
-Three surfaces, same page, same flow, both rooftops:
+Three surfaces, same page, same flow, both rooftops. Every surface renders step 1 and step 2 as adjacent rows so the write-up decision sees both.
 
-| Surface | Who uses it | Question answered |
-|---------|-------------|-------------------|
-| **Single VIN wizard** | Service writer, warranty administrator, both rooftops | "Is this VIN still under warranty (OEM base, extended, CE033, B.E.S.T., or third-party VSC) for the work I'm about to invoice?" |
-| **Work-order uplift** | Warranty administrator, fixed-ops director | "Which line items on today's ROs could shift from customer-pay to warranty, and which payer is first-position?" |
-| **VIN batch scan** | Fixed-ops director, dealer principal | "Across the next four weeks of bookings, where are we not getting at the big warranty jobs?" |
+| Surface | Who uses it | Step 1 (automated) shows | Step 2 (human) shows |
+|---------|-------------|--------------------------|----------------------|
+| **Single VIN wizard** | Service writer, warranty administrator, both rooftops | OEM buckets still active on this VIN and the covered line items on the current work order | Prompt to ask the customer about third-party coverage; capture form with administrator, contract number, coverage confirmed, channel used |
+| **Work-order uplift** | Warranty administrator, fixed-ops director | Every OEM-covered line across today's ROs, ranked by recovery-at-risk | Every VIN on today's ROs that still needs a step-2 conversation, sorted by time-since-last-asked |
+| **VIN batch scan** | Fixed-ops director, dealer principal | Cohort-level OEM coverage opportunity across the next four weeks of bookings | Cohort-level step-2 backlog: which upcoming VINs have never had a third-party check completed |
 
-Every surface produces the same three exports (PDF, CSV, JSON). Every surface writes its computation trail back to Azure and mirrors the non-PII derived row to GitHub — including which payer was chosen, which was rejected, and why. That last piece is what §9 compounds.
+Every surface produces the same three exports (PDF, CSV, JSON). Every surface writes both step-1 and step-2 computation trails back to Azure and mirrors the non-PII derived row to GitHub — including which payer was chosen, which was rejected, and why. That last piece is what §9 compounds.
 
 ---
 
@@ -278,6 +313,8 @@ The Warranty GENE is a **sidecar** — integral to the Hawkins Twin, and a stand
 | **Twin-integrated (Hawkins tier)** | Above + full integration with the Hawkins Twin: territory relationship, telemetry lane, PM/compliance overlay, historical claim ledger, cross-rooftop customer twin (Peterbilt Atlantic + Torque Motorsports under one customer record when the same customer appears on both). | The tier Hawkins is running. Sidecar becomes an integral organ of the twin. |
 
 **Custody rule is invariant across tiers.** Every subscriber owns their own Azure tenant and their own repository fork. EVE has no cross-tenant data access, ever. The reasoning engine is portable code; the schema is a public standard; the data always sits with the dealer.
+
+**Operating model is invariant across tiers.** Every subscriber, every tier, runs the same two-step model on every VIN. The public-ledger tier runs it against public references and paste-in inputs; the dealer-authorized tier runs it against integrated DMS and portal feeds; the twin-integrated tier runs it against the full Hawkins Twin. The steps are the same; the friction on step 2 is what higher tiers reduce.
 
 ---
 
@@ -312,22 +349,22 @@ Warranty GENE is the first tenant. The record repository is the landlord. The ch
 
 ---
 
-## 10 · Integrations — the value added, articulated
+## 10 · Integrations — what each one does for the two-step model
 
-Tobias will want each integration named against what it adds to Hawkins's dataset (not what it does for EVE — EVE has no dataset).
+Every integration is named against which step it feeds and what it adds to Hawkins's dataset (not what it does for EVE — EVE has no dataset). Nothing here gates the operating model; step 1 and step 2 already run today with the inputs listed in §1. Integrations compress the time cost of step 2 (or add depth to step 1) one counterparty at a time.
 
-| Integration | Adds to Hawkins's dataset | Compounds because |
-|-------------|--------------------------|-------------------|
-| **CDK Drive (Peterbilt)** | Live booking calendar, RO history, current mileage — the substrate every truck-side answer joins against | Same substrate feeds recall recovery, resale valuation, PM planning tomorrow — one integration, many services |
-| **Lightspeed EVO (BRP)** | Live booking calendar, RO history, deal + customer records — the substrate every powersports answer joins against | Same substrate feeds seasonality-aware bookings, cross-line customer profiles, third-party VSC reconciliation tomorrow |
-| **PRWS + PACCAR Solutions + PSSM Decisiv** | Truck-side coverage windows, telemetry, point-of-service coverage — the fields the twin needs that CDK does not carry | Turns every service event on a Peterbilt VIN into a payer-first write-up instead of a customer-pay-by-default one |
-| **Big-5 truck component portals** (Cummins, Eaton, Allison, Cummins-Meritor, Bendix, ZF, Dana) | Component-level coverage — Cummins engine block covered separately from the Peterbilt chassis, etc. | Answers component-level "who pays" questions the OEM portal cannot, and produces the choice records that grade component-level coverage recommendations |
-| **BOSSWeb + BRP B.E.S.T.** | Powersports coverage windows and extended plan status — the analog of PRWS on the BRP side | Turns every service event on a BRP VIN into a payer-first write-up |
-| **Wave-one + wave-two + bank-branded VSC administrators** | Third-party coverage on the powersports side — a denser layer than the truck side | Every third-party claim is a choice record; over a season, the engine learns which administrator pays which class of claim reliably |
-| **Selling-dealer outreach** | Contract resolution for the long tail of unknown administrators | Every resolved case moves that VIN from tier-3 (unknown) to tier-1/2 (known) for every future visit — the sovereign replica grows without new subscriptions |
-| **Interchangeable AI surface** (Perplexity Computer / Peterbilt-Atlantic Claude / BRP Claude) | A wireframe today, an ad hoc reasoning lane every day, a learned recommender tomorrow (§9.2) | The value is portable across surfaces because the schema and the replica are the durable layer; the surface is not |
+| Integration | Feeds which step | Adds to Hawkins's dataset | Compounds because |
+|-------------|------------------|--------------------------|-------------------|
+| **CDK Drive (Peterbilt)** | Step 1 (already in hand) | Live booking calendar, RO history, current mileage — the substrate step 1 joins against | Same substrate feeds recall recovery, resale valuation, PM planning tomorrow — one integration, many services |
+| **Lightspeed EVO (BRP)** | Step 1 (already in hand) | Live booking calendar, RO history, deal + customer records — the substrate step 1 joins against | Same substrate feeds seasonality-aware bookings, cross-line customer profiles, third-party VSC reconciliation tomorrow |
+| **PRWS + PACCAR Solutions + PSSM Decisiv** | Step 1 (adds depth) | Truck-side coverage windows, telemetry, point-of-service coverage — fields step 1 needs that CDK does not carry | Turns every service event on a Peterbilt VIN into a payer-first write-up instead of a customer-pay-by-default one |
+| **Big-5 truck component portals** (Cummins, Eaton, Allison, Cummins-Meritor, Bendix, ZF, Dana) | Step 1 (adds depth) | Component-level coverage — Cummins engine block covered separately from the Peterbilt chassis, etc. | Answers component-level "who pays" questions the OEM portal cannot; produces the choice records that grade component-level coverage recommendations |
+| **BOSSWeb + BRP B.E.S.T.** | Step 1 (adds depth) | Powersports coverage windows and extended plan status — the analog of PRWS on the BRP side | Turns every service event on a BRP VIN into a payer-first write-up |
+| **Wave-one + wave-two + bank-branded VSC administrators** | Step 2 (compresses friction) | Third-party coverage on the powersports side — same coverage that step 2 collects by phone today, collected from a portal tomorrow | Every third-party claim is a choice record; over a season, the engine learns which administrator pays which class of claim reliably. Does **not** remove the customer conversation — verifies faster what the customer already surfaced |
+| **Selling-dealer outreach** | Step 2 (long tail) | Contract resolution for the long tail of unknown administrators | Every resolved case moves that VIN from tier-3 (unknown) to tier-1/2 (known) for every future visit — the sovereign replica grows without new subscriptions |
+| **Interchangeable AI surface** (Perplexity Computer / Peterbilt-Atlantic Claude / BRP Claude) | Both steps (compute lane) | A wireframe today, an ad hoc reasoning lane every day, a learned recommender tomorrow (§9.2) | The value is portable across surfaces because the schema and the replica are the durable layer; the surface is not |
 
-*Table 4: Every integration is a feed into Hawkins's Azure + GitHub. None is a feed into EVE.*
+*Table 4: Every integration is a feed into Hawkins's Azure + GitHub. None is a feed into EVE. Step-1 integrations deepen automation; step-2 integrations reduce human friction; neither replaces the customer conversation.*
 
 ---
 
@@ -347,11 +384,12 @@ Called out so nothing is presumed:
 
 Called out so the review is efficient:
 
-1. Is the three-lane custody model (§2) — Azure of record, GitHub replica, session-only compute — the right long-term architecture, or does Tobias want a variant?
-2. Is the AI-surface interchangeability rule (§2, §5.2) — same schema, same replica, same answers whether Perplexity Computer or Claude runs the session — worth pinning as a design constraint, or is it an implementation detail?
-3. Is the choice record (§9.1) worth writing from day one, or should it wait until the twin records themselves are stable? EgD's recommendation is day-one, because the compounding is what turns the engine into an assistant.
-4. On the powersports side, does Torque Motorsports have a BRP district-manager relationship already? That fills the one gap left in [EgD-WGB-005 row 12](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-contacts/EgD-WGB-005-Luke-Contact-Table.pdf).
-5. Any Tobias-specific integration requirements (identity, SSO, audit-log format) that should be added to §10 before the twin repository schema is frozen?
+1. Is the **two-step operating model** (§1) — automated OEM check plus human-driven third-party check, on every VIN every visit — the right shape for how Hawkins wants warranty determination to run in service? EgD's recommendation is yes: it works with what is on hand today, and integrations layer on top without changing the shape.
+2. Is the three-lane custody model (§2) — Azure of record, GitHub replica, session-only compute — the right long-term architecture, or does Tobias want a variant?
+3. Is the AI-surface interchangeability rule (§2, §5.2) — same schema, same replica, same answers whether Perplexity Computer or Claude runs the session — worth pinning as a design constraint, or is it an implementation detail?
+4. Is the choice record (§9.1) worth writing from day one, or should it wait until the twin records themselves are stable? EgD's recommendation is day-one, because the compounding is what turns the engine into an assistant.
+5. On the powersports side, does Torque Motorsports have a BRP district-manager relationship already? That fills the one gap left in [EgD-WGB-005 row 12](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-contacts/EgD-WGB-005-Luke-Contact-Table.pdf).
+6. Any Tobias-specific integration requirements (identity, SSO, audit-log format) that should be added to §10 before the twin repository schema is frozen?
 
 ---
 
