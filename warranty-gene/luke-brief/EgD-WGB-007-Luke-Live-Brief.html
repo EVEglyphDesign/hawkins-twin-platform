@@ -1,0 +1,127 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Warranty GENE — Luke Live Brief (EgD-WGB-007)</title></head>
+<body><div class="title-block"><div class="kicker">EVEglyphDesign · Hawkins Twin Platform</div><h1>Warranty GENE — Luke Live Brief</h1><div class="subtitle">EgD-WGB-007 · Proving Luke's DMS logins pull real data · One hour to demo</div><p><strong>Purpose.</strong> In the next hour, we prove that Luke's own CDK Drive and Lightspeed EVO logins pull real warranty data for one Peterbilt VIN and one BRP VIN, driven headlessly from Luke's repo admin credentials. No Fortellis subscription. No Client Portal API subscription. No Azure yet. Everything runs on GitHub Actions in the <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform">hawkins-twin-platform</a> repo. Tobias moves it to Azure after we prove it works.</p></div>
+<h2>The three-step demo</h2>
+<ol>
+<li><strong>Luke opens the intake page</strong>, fills in his CDK Drive and Lightspeed EVO logins, clicks <em>Encrypt in browser</em>, copies the encrypted blob. Intake page: <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/dms-pull/intake/">Warranty GENE — Credential intake</a></li>
+<li><strong>Store the blob</strong>: dispatch the <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/actions/workflows/store-credentials.yml">Store credentials workflow</a> with the blob pasted into the <code>payload</code> input. Writes <code>warranty-gene/dms-pull/credentials.age</code> to the repo.</li>
+<li><strong>Pull a VIN</strong>: dispatch the <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/actions/workflows/pull-vin.yml">Pull VIN workflow</a> with <code>side=cdk</code> and a Peterbilt VIN, then again with <code>side=lightspeed</code> and a BRP VIN. Result JSON commits to <code>warranty-gene/dms-pull/pulls/</code>.</li>
+</ol>
+<h2>What Dany needs to do BEFORE Luke arrives (10 min)</h2>
+<p>One-time <code>age</code> key setup — this is what makes the credential file readable by the workflow and by nothing else.</p>
+<ol>
+<li>On any machine with <code>age</code> installed (<code>brew install age</code> on macOS), run:</li>
+</ol>
+<pre><code>   age-keygen -o warranty-gene-age.key</code></pre>
+<p>   This prints the public key (<code>age1...</code>) to stderr and writes the private key into the file (<code>AGE-SECRET-KEY-...</code>).</p>
+<ol>
+<li>Open the repo secrets page: <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/settings/secrets/actions">Actions secrets — hawkins-twin-platform</a>. Add two:</li>
+</ol>
+<ul>
+<li><code>AGE_PUBLIC_KEY</code> — the public key string, one line, starts <code>age1</code>.</li>
+<li><code>AGE_PRIVATE_KEY</code> — the full contents of <code>warranty-gene-age.key</code>, starts <code>AGE-SECRET-KEY-</code>.</li>
+</ul>
+<ol>
+<li>Delete <code>warranty-gene-age.key</code> from the local machine. GitHub Actions has both halves. Nothing else needs it.</li>
+</ol>
+<p>That is the whole setup. If the <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/actions/workflows/store-credentials.yml">Store credentials workflow</a> fails at the <em>Verify AGE_PUBLIC_KEY</em> step, the secrets were not saved — redo step 2.</p>
+<h2>What Luke needs when he arrives</h2>
+<p>Have these ready — the intake form will not submit without them. If Luke does not have them at hand, we ask him for them one at a time as he types.</p>
+<table class="data"><thead><tr>
+<th>Field</th>
+<th>What to bring</th>
+<th>Why it matters</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>CDK login URL</strong></td>
+<td>The exact URL Luke opens to sign into CDK Drive (the dealer-scoped one, not <code>cdk.com</code> marketing)</td>
+<td>The reader navigates to that URL first; wrong URL = login screen never appears</td>
+</tr>
+<tr>
+<td><strong>CDK username + password</strong></td>
+<td>The credentials Luke uses today</td>
+<td>The reader logs in as Luke</td>
+</tr>
+<tr>
+<td><strong>CDK MFA method</strong></td>
+<td>TOTP (authenticator app), SMS, push, or SSO</td>
+<td>Determines whether the reader can complete login unattended</td>
+</tr>
+<tr>
+<td><strong>CDK TOTP seed</strong> — only if MFA=TOTP</td>
+<td>The base32 secret from the authenticator setup screen (find it via "can't scan QR" in the app)</td>
+<td>Without the seed the reader cannot generate the 6-digit code</td>
+</tr>
+<tr>
+<td><strong>Lightspeed login URL</strong></td>
+<td>The exact URL Luke opens for Lightspeed EVO — Torque Motorsports scoped</td>
+<td>Same</td>
+</tr>
+<tr>
+<td><strong>Lightspeed username + password</strong></td>
+<td>Same</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Lightspeed MFA method</strong></td>
+<td>TOTP, SMS, push</td>
+<td>Same</td>
+</tr>
+<tr>
+<td><strong>Lightspeed TOTP seed</strong> — only if MFA=TOTP</td>
+<td>Same</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>One Peterbilt VIN</strong></td>
+<td>A VIN in CDK Drive today, ideally one where Luke already knows the warranty answer</td>
+<td>Lets us eyeball whether the pull is right</td>
+</tr>
+<tr>
+<td><strong>One BRP VIN</strong></td>
+<td>A unit in Lightspeed EVO</td>
+<td>Same</td>
+</tr>
+</tbody></table>
+<h2>MFA reality check</h2>
+<p>The reader handles four MFA shapes. Only one of them works fully unattended.</p>
+<ul>
+<li><strong>None</strong> — works.</li>
+<li><strong>TOTP (authenticator app)</strong> — works if Luke gives us the base32 seed. This is the target. If MFA is currently on but not TOTP, Luke can switch it to TOTP in both DMSes in about 60 seconds each — the account settings page has an authenticator-app option.</li>
+<li><strong>SMS or push</strong> — the reader will fail with a clear error. Luke has to switch to TOTP on that account, or approve each pull as it happens (which defeats the point).</li>
+<li><strong>SSO through Peterbilt / PACCAR</strong> — the reader fails, because it would need the IdP credentials, not the CDK ones. If CDK is SSO-federated at Peterbilt Atlantic, we have to capture the Peterbilt SSO credentials instead — Luke will know from his own experience whether "log into CDK" today means typing a CDK password or clicking a Peterbilt login button.</li>
+</ul>
+<p>The single fastest thing Luke can do on his own before the call: <strong>turn on TOTP</strong> on both CDK Drive and Lightspeed EVO if it isn't already, using any authenticator app (1Password, Google Authenticator, Authy, Microsoft Authenticator all work). Save the setup seed as text somewhere he can copy from, not just scan.</p>
+<h2>What the first pull will look like</h2>
+<p>The reader is deliberately dumb on the first pass. It logs in, finds the VIN search box, types the VIN, hits Enter, then captures the entire text of the result page into a single field in the JSON. That gives us proof of principle — real login, real DMS, real VIN, real data — and a full copy of what the DMS shows so we can write targeted extractors ("base warranty start date", "extended plans", "open ROs") without another authentication.</p>
+<p>The pull output file lands at <code>warranty-gene/dms-pull/pulls/{side}-{vin}-{timestamp}.json</code> with:</p>
+<ul>
+<li><code>success: true</code> and an <code>extracted.raw.main_text</code> field containing the DMS VIN screen as plain text, or</li>
+<li><code>success: false</code> with a Playwright trace attached to the workflow run as an artifact — we open the trace in a browser and see exactly what the reader saw, screenshot by screenshot.</li>
+</ul>
+<p>If the first pull fails, it will be because the selectors in <code>readers/cdk.py</code> or <code>readers/lightspeed.py</code> don't match Luke's specific dealer's screen layout. That is a code change we make in the repo, commit, and re-dispatch — Luke does not re-enter credentials.</p>
+<h2>Expected timeline (from Luke's first click)</h2>
+<ul>
+<li>Minute 0–3: Luke fills the intake form and copies the blob.</li>
+<li>Minute 3–5: dispatch the store-credentials workflow, watch it turn green.</li>
+<li>Minute 5–15: first pull attempt for CDK. Likely one or two selector fixes on our side, each a commit.</li>
+<li>Minute 15–25: first pull attempt for Lightspeed. Same.</li>
+<li>Minute 25–35: both sides pulling clean raw-text output. That is the demo.</li>
+</ul>
+<h2>After the demo</h2>
+<ul>
+<li>Write targeted extractors — turn the raw-text dump into structured <code>warranty.base</code>, <code>warranty.extended</code>, <code>work_orders_open</code> fields. Half a day of work looking at real DMS screens.</li>
+<li>Wire the reader output into the blueprint's step-2 engine (Uplift / Rank / Warranty scan).</li>
+<li>Hand the whole thing to Tobias with the <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/warranty-gene/dms-pull/README.md">DMS pull README</a>, which spells out what changes when it moves to Azure: swap the age file read for an Azure Key Vault call, swap the git commit for an Azure Blob write, keep the reader modules unchanged.</li>
+</ul>
+<h2>Working surfaces</h2>
+<ul>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/dms-pull/intake/">Intake page</a></li>
+<li><a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/actions/workflows/store-credentials.yml">Store credentials workflow</a></li>
+<li><a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/actions/workflows/pull-vin.yml">Pull VIN workflow</a></li>
+<li><a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/warranty-gene/dms-pull/README.md">DMS pull README</a></li>
+<li><a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene/dms-pull/pulls">Pulls directory</a></li>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/blueprint-v2/EgD-WGB-006-Warranty-GENE-Blueprint-v2.pdf">Blueprint v2 (EgD-WGB-006)</a></li>
+</ul>
+<hr>
+<p class="closing">© 2026 EVEglyphDesign. All rights reserved. Controlled copy.<br>Key ID <code>EgD-KEY-2026-07</code>.<br><em>Pour le bien-être du peuple.</em></p></body></html>
