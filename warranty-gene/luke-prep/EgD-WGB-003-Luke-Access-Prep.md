@@ -2,7 +2,9 @@
 
 For the next sit-down with Luke. Five routine dealer data-rights requests, framed as a customer service initiative. Tim cares deeply about the people who buy trucks from Hawkins, and he wants his team to give them clearer answers at the counter about coverage, campaigns, and history on their own vehicle. The data Hawkins needs to do that is data Hawkins already has rights to under existing dealer agreements. Every ask reads as customer service. Nothing else.
 
-**Least questions is the goal.** Until we have results to show, every extra sentence in an outbound message is a question we're inviting. Keep each ask short. Keep each ask standalone. Do not link the asks to each other in writing. What sits behind the initiative on our side is not part of any outbound message — it is understood internally and stays internal until there is a result worth showing.
+**Internally, the picture is different from the outbound frame.** Hawkins is turning on feeds into its own sovereign data replica — the record Hawkins already owns, under agreements Hawkins already signed. Each counterparty is a source that keeps the replica current on its lane; the replica is the destination, and it is authoritative because it is Hawkins'. Feeds provision on their own timelines: some open quickly, some slowly. The replica exists and updates from every feed that is open. Automation adds value on top of what the replica holds, and the value compounds as more feeds come online. No single counterparty holds the initiative; the initiative holds them.
+
+**Least questions is the goal.** Until we have results to show, every extra sentence in an outbound message is a question we're inviting. Keep each ask short. Keep each ask standalone. Do not link the asks to each other in writing. What sits behind the initiative on our side — the replica, the automation, the compounding value — is not part of any outbound message. It is understood internally and stays internal until there is a result worth showing.
 
 ---
 
@@ -137,6 +139,8 @@ Spaced, not stacked. The pattern is: one ask, then wait for confirmation before 
 5. **Chassis and air-system suppliers, one at a time, one per week.** Order does not matter; spacing does.
 
 Total elapsed time to have all eight external service-accounts provisioned: eight to ten weeks. That is a feature, not a bug — none of the counterparties sees a burst of activity from Hawkins in the same window.
+
+Each ask goes out on its own schedule; each feed opens on the counterparty's own timeline. The replica exists from the moment Peter authorizes the service-account mailbox and CDK provisions the first login. Every additional feed that comes online enriches what the replica already holds, and enriches what automation on top of the replica can do at the counter. There is no waiting for a full set.
 
 ---
 
