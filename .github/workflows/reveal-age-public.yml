@@ -1,0 +1,29 @@
+name: Reveal age public key
+
+# Public keys are not sensitive. This workflow reads the AGE_PUBLIC_KEY
+# secret and writes it to the step summary so it can be copied into the
+# intake page. Safe to run any time; safe to leave in place.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  reveal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print public key
+        env:
+          PUB: ${{ secrets.AGE_PUBLIC_KEY }}
+        run: |
+          if [ -z "$PUB" ]; then
+            echo "::error::AGE_PUBLIC_KEY not set."
+            exit 1
+          fi
+          echo "AGE_PUBLIC_KEY=$PUB"
+          {
+            echo "### AGE_PUBLIC_KEY"
+            echo ""
+            echo '```'
+            echo "$PUB"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
