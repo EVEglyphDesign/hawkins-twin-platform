@@ -1,0 +1,102 @@
+name: Pull VIN (CDK Drive / Lightspeed EVO)
+
+on:
+  workflow_dispatch:
+    inputs:
+      side:
+        description: 'Which DMS to pull from'
+        required: true
+        type: choice
+        options:
+          - cdk
+          - lightspeed
+      vin:
+        description: 'VIN to look up'
+        required: true
+        type: string
+      headed:
+        description: 'Run headed (visible browser) for debugging'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install age
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y age
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Playwright + deps
+        run: |
+          pip install playwright==1.47.0 pyotp==2.9.0
+          python -m playwright install --with-deps chromium
+
+      - name: Verify credentials file exists
+        run: |
+          if [ ! -f warranty-gene/dms-pull/credentials.age ]; then
+            echo "::error::warranty-gene/dms-pull/credentials.age not found. Run store-credentials workflow first."
+            exit 1
+          fi
+
+      - name: Decrypt credentials
+        env:
+          AGE_PRIVATE_KEY: ${{ secrets.AGE_PRIVATE_KEY }}
+        run: |
+          if [ -z "$AGE_PRIVATE_KEY" ]; then
+            echo "::error::AGE_PRIVATE_KEY secret not set."
+            exit 1
+          fi
+          echo "$AGE_PRIVATE_KEY" > /tmp/age.key
+          chmod 600 /tmp/age.key
+          age -d -i /tmp/age.key -o /tmp/credentials.json warranty-gene/dms-pull/credentials.age
+          echo "Decrypted OK ($(wc -c < /tmp/credentials.json) bytes)"
+
+      - name: Run reader
+        env:
+          SIDE: ${{ inputs.side }}
+          VIN: ${{ inputs.vin }}
+          HEADED: ${{ inputs.headed }}
+          CREDS_PATH: /tmp/credentials.json
+        run: |
+          mkdir -p warranty-gene/dms-pull/pulls
+          python warranty-gene/dms-pull/readers/run.py \
+            --side "$SIDE" \
+            --vin "$VIN" \
+            --creds "$CREDS_PATH" \
+            --out warranty-gene/dms-pull/pulls/
+
+      - name: Wipe decrypted credentials
+        if: always()
+        run: |
+          shred -u /tmp/credentials.json /tmp/age.key 2>/dev/null || rm -f /tmp/credentials.json /tmp/age.key
+
+      - name: Upload trace on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-trace-${{ inputs.side }}-${{ inputs.vin }}
+          path: warranty-gene/dms-pull/readers/trace/
+          if-no-files-found: ignore
+
+      - name: Commit pull result
+        if: success()
+        run: |
+          git config user.name "EVEglyphDesign (dms-pull)"
+          git config user.email "bot@eveglyphdesign.com"
+          git add warranty-gene/dms-pull/pulls/
+          git diff --cached --quiet && echo "No pull output to commit" && exit 0
+          git commit -m "Warranty GENE: pull ${{ inputs.side }} VIN ${{ inputs.vin }} ($(date -u +%FT%TZ))"
+          git push

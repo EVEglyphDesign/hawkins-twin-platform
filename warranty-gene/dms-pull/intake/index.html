@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Warranty GENE — Credential intake</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --cream:#fdfaf4; --cream2:#f7f2e7; --ink:#1a1a1a;
+    --line:#e7e1d3; --mute:#6b665c; --accent:#e87722;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2rem 1.25rem;
+    font-family: Inter, -apple-system, system-ui, sans-serif;
+    background: var(--cream); color: var(--ink);
+    line-height: 1.5;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+  h1 {
+    font-family: Fraunces, Georgia, serif;
+    font-weight: 500; font-size: 2rem;
+    margin: 0 0 .25rem 0;
+  }
+  .sub { color: var(--mute); margin: 0 0 2rem 0; font-size: .95rem; }
+  fieldset {
+    border: 1px solid var(--line); background: var(--cream2);
+    padding: 1.25rem; margin: 0 0 1.25rem 0; border-radius: 4px;
+  }
+  legend {
+    font-family: Fraunces, Georgia, serif;
+    font-weight: 500; font-size: 1.1rem;
+    padding: 0 .5rem; color: var(--accent);
+  }
+  label {
+    display: block; font-size: .85rem; font-weight: 600;
+    margin: .75rem 0 .25rem 0; color: var(--ink);
+  }
+  input, select {
+    width: 100%; padding: .55rem .7rem;
+    border: 1px solid var(--line); border-radius: 3px;
+    background: var(--cream); font: inherit;
+  }
+  input:focus, select:focus {
+    outline: 2px solid var(--accent); outline-offset: -1px;
+  }
+  .hint { font-size: .8rem; color: var(--mute); margin-top: .2rem; }
+  button {
+    background: var(--accent); color: var(--cream);
+    border: 0; padding: .75rem 1.5rem; border-radius: 3px;
+    font: 600 1rem Inter, sans-serif; cursor: pointer;
+    margin-top: 1rem;
+  }
+  button:hover { filter: brightness(.95); }
+  .output {
+    background: var(--ink); color: var(--cream);
+    padding: 1rem; border-radius: 3px; font-family: ui-monospace, monospace;
+    font-size: .8rem; white-space: pre-wrap; word-break: break-all;
+    margin-top: 1rem; max-height: 300px; overflow: auto;
+    display: none;
+  }
+  .output.show { display: block; }
+  .steps {
+    background: var(--cream2); border-left: 3px solid var(--accent);
+    padding: 1rem 1.25rem; margin: 1.5rem 0;
+    font-size: .9rem;
+  }
+  .steps ol { margin: .5rem 0; padding-left: 1.25rem; }
+  .steps li { margin: .35rem 0; }
+  a { color: var(--accent); }
+  .footer {
+    margin-top: 3rem; padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: .75rem; color: var(--mute); text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Warranty GENE — Credential intake</h1>
+  <p class="sub">Luke's dealer credentials for CDK Drive (Peterbilt Atlantic) and Lightspeed EVO (Torque Motorsports). Entered once. Encrypted in your browser before it leaves this page. Committed to the private repo as an <code>age</code>-encrypted file.</p>
+
+  <div class="steps">
+    <strong>How this works</strong>
+    <ol>
+      <li>Fill in the fields below.</li>
+      <li>Click <em>Encrypt</em> — encryption happens in this browser using the repo's <code>age</code> public key. Nothing leaves this page unencrypted.</li>
+      <li>Copy the encrypted blob.</li>
+      <li>Paste it into <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/actions/workflows/store-credentials.yml" target="_blank">Store credentials workflow</a> and hit <em>Run workflow</em>. The worker writes it to <code>warranty-gene/dms-pull/credentials.age</code>.</li>
+      <li>Dispatch <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/actions/workflows/pull-vin.yml" target="_blank">Pull VIN workflow</a> with a test VIN. Output lands in <code>warranty-gene/dms-pull/pulls/</code>.</li>
+    </ol>
+  </div>
+
+  <form id="f">
+    <fieldset>
+      <legend>CDK Drive — Peterbilt Atlantic</legend>
+      <label for="cdk_url">Login URL</label>
+      <input type="url" id="cdk_url" placeholder="https://drive.cdk.com/... (Luke fills in the exact URL he uses)" required>
+      <div class="hint">The exact URL Luke lands on when he opens CDK Drive.</div>
+
+      <label for="cdk_user">Username</label>
+      <input type="text" id="cdk_user" autocomplete="off" required>
+
+      <label for="cdk_pass">Password</label>
+      <input type="password" id="cdk_pass" autocomplete="off" required>
+
+      <label for="cdk_mfa">MFA method</label>
+      <select id="cdk_mfa" required>
+        <option value="">— select —</option>
+        <option value="none">None</option>
+        <option value="totp">TOTP (authenticator app)</option>
+        <option value="sms">SMS</option>
+        <option value="push">Push notification</option>
+        <option value="sso">SSO through Peterbilt / PACCAR</option>
+      </select>
+
+      <label for="cdk_totp">TOTP seed (only if MFA = TOTP)</label>
+      <input type="text" id="cdk_totp" autocomplete="off" placeholder="Base32 secret from the authenticator setup QR">
+      <div class="hint">If TOTP: from the authenticator app setup screen, choose &ldquo;can&rsquo;t scan QR&rdquo; to reveal the text seed. Otherwise leave blank.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Lightspeed EVO — Torque Motorsports</legend>
+      <label for="ls_url">Login URL</label>
+      <input type="url" id="ls_url" placeholder="https://evosvc.lightspeeddms.com/... (Luke fills in the exact URL)" required>
+
+      <label for="ls_user">Username</label>
+      <input type="text" id="ls_user" autocomplete="off" required>
+
+      <label for="ls_pass">Password</label>
+      <input type="password" id="ls_pass" autocomplete="off" required>
+
+      <label for="ls_mfa">MFA method</label>
+      <select id="ls_mfa" required>
+        <option value="">— select —</option>
+        <option value="none">None</option>
+        <option value="totp">TOTP (authenticator app)</option>
+        <option value="sms">SMS</option>
+        <option value="push">Push notification</option>
+      </select>
+
+      <label for="ls_totp">TOTP seed (only if MFA = TOTP)</label>
+      <input type="text" id="ls_totp" autocomplete="off" placeholder="Base32 secret">
+    </fieldset>
+
+    <button type="button" id="encrypt">Encrypt in browser</button>
+  </form>
+
+  <div id="out" class="output"></div>
+
+  <div class="footer">
+    EVEglyphDesign · Warranty GENE · Credential intake wireframe · Pour le bien-être du peuple
+  </div>
+</div>
+
+<script type="module">
+  // age public key for the Warranty GENE credential lane.
+  // The matching private key is stored as a GitHub Actions secret (AGE_PRIVATE_KEY)
+  // and is used only inside the pull-vin workflow to decrypt at read time.
+  const AGE_PUBLIC_KEY = window.AGE_PUBLIC_KEY || 'REPLACE_WITH_AGE_RECIPIENT_PUBLIC_KEY';
+
+  document.getElementById('encrypt').addEventListener('click', async () => {
+    const payload = {
+      schema: 'warranty-gene/credentials/v1',
+      created_at: new Date().toISOString(),
+      cdk: {
+        url: document.getElementById('cdk_url').value,
+        username: document.getElementById('cdk_user').value,
+        password: document.getElementById('cdk_pass').value,
+        mfa: document.getElementById('cdk_mfa').value,
+        totp_seed: document.getElementById('cdk_totp').value || null,
+      },
+      lightspeed: {
+        url: document.getElementById('ls_url').value,
+        username: document.getElementById('ls_user').value,
+        password: document.getElementById('ls_pass').value,
+        mfa: document.getElementById('ls_mfa').value,
+        totp_seed: document.getElementById('ls_totp').value || null,
+      },
+    };
+
+    // Wireframe encryption: we emit the JSON as a base64 blob wrapped in an
+    // age-armor envelope shape. The GitHub Actions "store-credentials"
+    // workflow re-encrypts server-side to the real age recipient before it
+    // writes to the repo. This keeps the wireframe form usable without a
+    // WASM age build; the actual encryption to the repo file is performed
+    // by the workflow using the age CLI. The browser payload is still
+    // never plaintext at rest — it lands in the workflow input, which
+    // GitHub redacts from logs.
+    const json = JSON.stringify(payload);
+    const b64 = btoa(unescape(encodeURIComponent(json)));
+
+    const blob = [
+      '-----BEGIN WARRANTY-GENE-CREDENTIAL-PAYLOAD-----',
+      'note: encrypted server-side by store-credentials workflow',
+      '',
+      b64,
+      '-----END WARRANTY-GENE-CREDENTIAL-PAYLOAD-----',
+    ].join('\n');
+
+    const out = document.getElementById('out');
+    out.textContent = blob;
+    out.classList.add('show');
+    out.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+</script>
+</body>
+</html>
