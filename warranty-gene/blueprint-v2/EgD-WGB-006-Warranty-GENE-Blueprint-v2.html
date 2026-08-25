@@ -1,0 +1,552 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Warranty GENE — Blueprint v2 (EgD-WGB-006)</title></head>
+<body><div class="title-block"><div class="kicker">EVEglyphDesign · Hawkins Twin Platform</div><h1>Warranty GENE — Blueprint v2</h1><div class="subtitle">EgD-WGB-006 · Two rooftops, Azure custody, POC on the current book · For Tobias review</div><p><strong>Programme:</strong> EVEglyphDesign — Warranty GENE <strong>Document ID:</strong> EgD-WGB-006 · <strong>Key ID:</strong> EgD-KEY-2026-07 <strong>Status:</strong> For Tobias review, v0.2 <strong>Posture:</strong> Modular sidecar to the Hawkins Twin. Business data lives in the client-owned Azure server. Public replica of record lives in the <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform">Hawkins Twin GitHub repository</a>. <strong>EVE holds custody of nothing at rest.</strong> <strong>Supersedes:</strong> <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/blueprint/EgD-WGB-001-Warranty-GENE-Blueprint.pdf">EgD-WGB-001</a> — same architectural spine, retargeted to two rooftops (Peterbilt Atlantic + Torque Motorsports), custody split made explicit, AI surface made interchangeable. <strong>Companions:</strong> <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/wireframe/">Wireframe v0</a> · <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/schema/">Schema v1</a> · <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep/EgD-WGB-003-Luke-Access-Prep.pdf">Luke access prep (Peterbilt)</a> · <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep-brp/EgD-WGB-004-Luke-Access-Prep-BRP.pdf">Luke access prep (BRP)</a> · <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-contacts/EgD-WGB-005-Luke-Contact-Table.pdf">Luke contact table</a></p></div>
+<hr>
+<h2>1 · The POC mandate — automated OEM check first, human second step for the rest</h2>
+<p><strong>The POC has one job: surface, on the current book, the warranty coverage that is still valid on each VIN so the service writer knows it exists before the job closes to customer-pay.</strong> Everything else in this blueprint is downstream of that.</p>
+<p>The POC runs in two steps.</p>
+<p><strong>Step 1 — automated OEM check.</strong> For every VIN with an active work order on the current book at either rooftop, the engine reads what CDK Drive already carries on the Peterbilt Atlantic side and what Lightspeed EVO already carries on the Torque Motorsports side, joins it against the public OEM coverage references, and returns which OEM warranty buckets are still active on that VIN. On the Peterbilt side that is PACCAR base and extended warranty windows and the CE033 federal emissions extension. On the Torque Motorsports side that is BRP base warranty and any B.E.S.T. extended coverage the DMS record already reflects. <strong>This step touches no third party, requires no new credential, and needs no integration built.</strong> It uses the DMS logins Luke has today and the public references already committed to the repository.</p>
+<p><strong>Step 2 — human-driven third-party check.</strong> Third-party and extended coverage the DMS does not know about is surfaced by the humans in the loop. The service writer asks the customer whether they hold any extended warranty, service contract, or VSC on the unit — the customer knows what they bought, they usually have the paperwork with them, and if they do not know we can rely on them to check. Hawkins staff then verify manually against whichever administrator the customer names (phone or portal, whichever exists). The engine records what the customer surfaced, what Hawkins verified, and against which administrator, so the sovereign replica grows one VIN at a time — tier-3 (unknown) moves to tier-1/2 (known) for that VIN's next visit.</p>
+<p><strong>Why this split is right for the POC.</strong> Step 1 is where the automation earns its keep: the engine is faster than the service writer at seeing which OEM bucket is still open on a VIN, and it is doing that already-visible check on every VIN on the book rather than only the ones the writer thought to check. Step 2 is where the humans earn theirs: customers know their own coverage, and Hawkins staff can verify a named administrator in a minute or two. Automating step 2 needs the third-party integrations in <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-contacts/EgD-WGB-005-Luke-Contact-Table.pdf">EgD-WGB-005</a>; the POC does not.</p>
+<p><strong>Inputs the POC uses — all in hand today.</strong></p>
+<ul>
+<li>Luke's existing <strong>CDK Drive</strong> login (Peterbilt Atlantic).</li>
+<li>Luke's existing <strong>Lightspeed EVO</strong> login (Torque Motorsports).</li>
+<li>The <strong>public NHTSA VIN decoder and recalls API</strong>.</li>
+<li>The <strong>public PACCAR coverage references</strong> already committed to the <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene">Hawkins Twin GitHub repository</a> — base warranty windows, MX extended, CE033 federal emissions extension, WPM v2026.7 §7.</li>
+<li>The <strong>public BRP base-warranty and B.E.S.T. component references</strong>.</li>
+<li>The <strong>customer's own knowledge and paperwork</strong> for anything the DMS record does not carry — read by Hawkins staff, verified manually.</li>
+</ul>
+<p><strong>The economic formula being tested.</strong></p>
+<pre><code>  additional_margin =
+    Σ (line items on the current book that the engine flags in step 1 as
+       covered under an active OEM warranty bucket AND that the current
+       write-up path is billing customer-pay)
+    + Σ (line items the customer or Hawkins staff surface in step 2 as
+         covered under a third-party or extended contract AND that the
+         current write-up path is billing customer-pay)
+    × (labour + parts recovered at the coverage payer's rate)
+    − (time cost of the automated step + the human second step)</code></pre>
+<p>The test passes if <code>additional_margin</code> is a number that clearly rewards the effort of running the POC and justifies the integration work behind it. The exact bar is Peter's to set; the POC's job is to make the number legible so Peter can set it.</p>
+<p><strong>Test population.</strong> The current booking calendar at both rooftops for a bounded window — the next few weeks the service writers are already working. Not a synthetic set, not a historical replay, not a subsample chosen to look favourable.</p>
+<p><strong>What proof looks like.</strong> A one-page rollup Tobias and Peter can read in one sitting:</p>
+<ul>
+<li>Ranked list of VINs on the current book with at least one flagged line, split into two columns: what step 1 caught automatically, what step 2 caught with a human in the loop.</li>
+<li>For each flagged VIN, the delta: what the current write-up bills customer-pay versus what the engine and the second-step review believe should file against a coverage bucket, cited to the coverage row.</li>
+<li>A warranty-administrator review column: confirm, override with reason, or reject — recorded in the choice record (§9.1).</li>
+<li>One rolled-up dollar figure: additional margin surfaced on the current book that the current process was not catching, over the tested window.</li>
+<li>A projection to a full year at the current book's cadence.</li>
+</ul>
+<p><strong>Same engine, both rooftops.</strong> The reasoning layer, the scoring math, the provenance stamps, and the export contract are shared. Only the source adapter and the coverage-feed roster change.</p>
+<hr>
+<h2>2 · Custody model — EVE holds nothing at rest</h2>
+<p>This blueprint is written to a strict custody rule Tobias should evaluate first, because every other design choice descends from it.</p>
+<pre><code>     ┌─────────────────────────┐        ┌──────────────────────────┐
+     │   Azure (Hawkins-owned) │        │   GitHub (public replica │
+     │   Business data of      │◄──────►│   of record — sovereign) │
+     │   record. Encrypted at  │  sync  │   Non-PII. Auditable.    │
+     │   rest. Access-controlled│        │   Byte-faithful mirror.  │
+     └────────────┬────────────┘        └────────────┬─────────────┘
+                  │                                  │
+                  │  ephemeral read                  │  ephemeral read
+                  ▼                                  ▼
+     ┌────────────────────────────────────────────────────────────┐
+     │  AI surface — interchangeable                              │
+     │  (Perplexity Computer for wireframing, Claude on the       │
+     │   Peterbilt-Atlantic / BRP surfaces for ad hoc use)        │
+     │  Reads live. Computes in-session. Writes back to           │
+     │  Azure and mirrors to GitHub. Retains nothing.             │
+     └────────────────────────────────────────────────────────────┘</code></pre>
+<p>Three lanes, three custody rules:</p>
+<table class="data"><thead><tr>
+<th>Layer</th>
+<th>Who owns it</th>
+<th>What sits there</th>
+<th>Retention</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Azure server</strong> (client-owned tenant)</td>
+<td>Hawkins</td>
+<td>Business data of record: customer records, retail-sale records, contract paperwork, VIN-linked service history, credentials for OEM and third-party portals, feed pulls from every source in §5. Encrypted at rest, access-controlled per rooftop.</td>
+<td>Permanent, client-controlled</td>
+</tr>
+<tr>
+<td><strong>GitHub — hawkins-twin-platform</strong></td>
+<td>Hawkins (repository owner)</td>
+<td>Public replica of record: schema, coverage ledger, blueprints, wireframes, provenance-stamped derived tables, non-PII analyses. Anything that is not in Azure gets replicated here.</td>
+<td>Permanent, versioned, publicly auditable</td>
+</tr>
+<tr>
+<td><strong>AI surface — Perplexity Computer / Peterbilt-Atlantic Claude / BRP Claude</strong></td>
+<td>Interchangeable, session-only</td>
+<td>Wireframing today; ad hoc queries, drafts, and one-off analyses tomorrow. Reads live from Azure and GitHub, computes in the session, writes results back to Azure and mirrors to GitHub.</td>
+<td><strong>Zero at rest — session only</strong></td>
+</tr>
+</tbody></table>
+<p><strong>The rule this enforces.</strong> In the end state, EVE has custody of nothing. Every artifact EVE produces during a session lands in Hawkins's Azure server (business data) or in the Hawkins Twin GitHub repository (replica of record). Everything not in Azure gets replicated to GitHub. The AI surface — whichever one is being used — is a <strong>compute lane, not a storage lane</strong>.</p>
+<p><strong>Interchangeable AI surface.</strong> The reasoning is designed so that anything currently being set up in Perplexity Computer can be re-run tomorrow from the Peterbilt-Atlantic or Torque Motorsports Claude surfaces without loss. The AI surface is the wireframe; the value is in the schema, the replica of record, and the compounding decision dataset (§9). Whichever surface the operator prefers reads the same Azure lane and writes back to the same GitHub replica.</p>
+<hr>
+<h2>3 · The architecture, stripped to four parts (unchanged from v1)</h2>
+<p><em>VIN · booking calendar · work-order table · public coverage ledger · dealer credentials · third-party VSC feeds</em></p>
+<pre><code>  1. Source adapter       2. Reasoning              3. Delivery
+  VIN + WO in         →   coverage join    →        Browser wizard
+  (CDK Drive /            + scoring +               (three modes)
+   Lightspeed EVO /       uplift scan                   ⋮
+   Excel drop)                ⋮
+                        4. Observability — every join, decision, and
+                        provenance stamp recorded; every answer replayable
+                        against the Azure record and the GitHub replica
+
+           (compute in-session; state in Azure + GitHub)</code></pre>
+<p>Four parts, each replaceable on its own — identical to the v1 spine.</p>
+<ul>
+<li><strong>Source adapter</strong> — crosses the boundary from CDK Drive (Peterbilt side), Lightspeed EVO (BRP side), OEM portals, and third-party administrator portals into a uniform "VIN + coverage + work-order + owner + contract" shape.</li>
+<li><strong>Reasoning</strong> — a bounded set of joins and scored answers. Deterministic pipeline; no open-ended language-model loop. Same on both sides.</li>
+<li><strong>Delivery</strong> — the browser wizard (single VIN / work-order uplift / cohort scan). Same page, same flow, both rooftops.</li>
+<li><strong>Observability</strong> — provenance stamps on every field. Every answer replayable against the Azure record and the GitHub replica.</li>
+</ul>
+<table class="data"><thead><tr>
+<th>Component</th>
+<th>Peterbilt Atlantic</th>
+<th>Torque Motorsports</th>
+<th>What that involves</th>
+</tr></thead><tbody>
+<tr>
+<td>Reasoning engine (coverage math + scoring)</td>
+<td><strong>Live</strong></td>
+<td><strong>Live</strong></td>
+<td>Reused unchanged both sides</td>
+</tr>
+<tr>
+<td>Browser wizard (three modes)</td>
+<td><strong>Live</strong></td>
+<td><strong>Live</strong></td>
+<td>Same page, same flow</td>
+</tr>
+<tr>
+<td>Public coverage ledger</td>
+<td><strong>Live</strong></td>
+<td>Configured</td>
+<td>Truck: NHTSA CE033, MX 2025 Extended, WPM v2026.7. Powersports: BRP B.E.S.T., third-party VSC references</td>
+</tr>
+<tr>
+<td>Provenance / audit ledger</td>
+<td><strong>Live</strong></td>
+<td><strong>Live</strong></td>
+<td>Same stamp taxonomy</td>
+</tr>
+<tr>
+<td>Source adapter</td>
+<td>Configured (CDK Drive)</td>
+<td>Configured (Lightspeed EVO)</td>
+<td>Point at rooftop DMS export path</td>
+</tr>
+<tr>
+<td>Dealer credential set</td>
+<td>Pending Luke</td>
+<td>Pending Luke</td>
+<td>Twenty-one counterparties from <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-contacts/EgD-WGB-005-Luke-Contact-Table.pdf">EgD-WGB-005</a></td>
+</tr>
+<tr>
+<td>Rooftop map</td>
+<td>Peterbilt Atlantic rooftops</td>
+<td>Torque Motorsports rooftops</td>
+<td>Configured per engagement</td>
+</tr>
+</tbody></table>
+<p><em>Table 1: Four parts are reused as-is on both sides; three are configured per rooftop. None is a new build.</em></p>
+<hr>
+<h2>4 · How it reasons, and why every answer is auditable</h2>
+<p>Fixed path, same on both sides:</p>
+<pre><code>  Decode        Anchor        Coverage         Job           Uplift         Rank
+  the VIN   →   coverage  →   window   →       scoring   →   scan  →        and
+  (NHTSA on     to date        math                          (WO mode)      narrate
+   truck;       (DMS or        (public                                      (per VIN
+   BRP VIN      contract)      + private                                    or cohort)
+   decode                      ledger)
+   on power-
+   sports)</code></pre>
+<p>Two worked examples — one per side.</p>
+<pre><code>  PETERBILT ATLANTIC — SERVICE WRITER
+  Anything on today's book that should be warranty instead of customer-pay?
+
+  ANSWER
+  Three of today's twelve booked VINs have jobs under an active coverage bucket.
+  VIN 1XPBSYN00…202 is booked for a DEF dosing valve — the CE033 federal
+  emissions extension covers this until 2033-09-05 and it has not been claimed.
+  Recovery-at-risk on today's book: $4,180 customer-pay that could be filed as
+  warranty if the write-ups are corrected before close.</code></pre>
+<pre><code>  TORQUE MOTORSPORTS — SERVICE WRITER
+  Sea-Doo in the bay for a supercharger rebuild. Anything on the coverage side
+  I should know before I write this up customer-pay?
+
+  ANSWER
+  This VIN has an active BRP B.E.S.T. plan that runs through 2027-05-14; the
+  supercharger clutch and drive shaft are in the B.E.S.T. component list. The
+  customer also has an Assurant policy on file — the sovereign replica already
+  holds the contract number. B.E.S.T. is the first-position payer for this
+  component; file B.E.S.T. before Assurant. Recovery-at-risk if written
+  customer-pay: $2,340.</code></pre>
+<p>Two properties, unchanged from v1 and now more important given the custody model:</p>
+<ul>
+<li><strong>Bounded and auditable.</strong> Every coverage number cited on the card links to the source row in Azure or the mirrored copy in GitHub. Every score decomposes into <code>recovery × urgency × margin</code>.</li>
+<li><strong>Zero data leakage at rest, fully replayable.</strong> The reasoning runs in-session on whichever AI surface the operator chose. Business data is read live from Azure; the public coverage ledger is read from GitHub. When a warranty administrator asks "how do you know this VIN was still under CE033?" or "how do you know B.E.S.T. covers the supercharger clutch?", the honest answer is: replay it against the Azure record and the GitHub ledger row.</li>
+</ul>
+<h3>4.1 Built to pass a warranty audit on both sides</h3>
+<p>The audit question is finite by design. Truck-side: reads the dealer's own PRWS session (invitation-only, credential held in Azure) or the public NHTSA / PACCAR ledger (no credential). Powersports side: reads the dealer's BOSSWeb session and third-party administrator portals (invitation-only, credentials held in Azure) or the BRP public B.E.S.T. references. <strong>Nothing sensitive leaves Azure; nothing at all stays on the AI surface.</strong></p>
+<hr>
+<h2>5 · Where the data lives — Azure of record, GitHub replica, in-session compute</h2>
+<p>The custody model in §2 dictates the data-locality picture. There is no third database. There is Azure (of record), GitHub (replica of record), and the session tab (compute only).</p>
+<h3>5.1 Live sources, both rooftops</h3>
+<p>The adapter reads live. Everything read is written back to Azure and mirrored to GitHub as a non-PII derived row.</p>
+<table class="data"><thead><tr>
+<th>Live source</th>
+<th>Rooftop</th>
+<th>Typical use</th>
+<th>Custody after read</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>NHTSA VIN decoder API</strong> (public)</td>
+<td>Peterbilt</td>
+<td>Identity for any Class 8 VIN</td>
+<td>GitHub (public), Azure (audit copy)</td>
+</tr>
+<tr>
+<td><strong>NHTSA recalls-by-VIN API</strong> (public)</td>
+<td>Peterbilt</td>
+<td>Open recalls per VIN</td>
+<td>GitHub (public), Azure (audit copy)</td>
+</tr>
+<tr>
+<td><strong>PACCAR public coverage ledger</strong></td>
+<td>Peterbilt</td>
+<td>Base warranty, extended, CE033</td>
+<td>GitHub (public), Azure (audit copy)</td>
+</tr>
+<tr>
+<td><strong>PRWS</strong> — retail-sale, coverage codes</td>
+<td>Peterbilt</td>
+<td>Invitation-only</td>
+<td>Azure only; non-PII summary to GitHub</td>
+</tr>
+<tr>
+<td><strong>PACCAR Solutions / SmartLINQ</strong> — telemetry, DTCs</td>
+<td>Peterbilt</td>
+<td>Invitation-only</td>
+<td>Azure only; non-PII summary to GitHub</td>
+</tr>
+<tr>
+<td><strong>PSSM Decisiv</strong> — point-of-service coverage</td>
+<td>Peterbilt</td>
+<td>Invitation-only</td>
+<td>Azure only; non-PII summary to GitHub</td>
+</tr>
+<tr>
+<td><strong>CDK Drive / Fortellis</strong> — DMS</td>
+<td>Peterbilt</td>
+<td>Booking calendar, RO, service history</td>
+<td>Azure only; non-PII summary to GitHub</td>
+</tr>
+<tr>
+<td><strong>Big-5 truck component portals</strong> — Cummins QuickServe, Eaton my.eaton.com, Allison HUB, Cummins-Meritor OnTrac, Bendix, ZF, Dana RTW</td>
+<td>Peterbilt</td>
+<td>Component-level coverage and warranty claim</td>
+<td>Azure only; non-PII summary to GitHub</td>
+</tr>
+<tr>
+<td><strong>BRP VIN decoder / B.E.S.T. lookup</strong></td>
+<td>BRP</td>
+<td>Identity + extended plan status</td>
+<td>GitHub (public), Azure (audit copy)</td>
+</tr>
+<tr>
+<td><strong>Lightspeed EVO</strong> — DMS</td>
+<td>BRP</td>
+<td>Booking calendar, RO, deal, customer</td>
+<td>Azure only; non-PII summary to GitHub</td>
+</tr>
+<tr>
+<td><strong>BOSSWeb</strong> — BRP dealer portal, warranty</td>
+<td>BRP</td>
+<td>Warranty claim entry, B.E.S.T. status</td>
+<td>Azure only; non-PII summary to GitHub</td>
+</tr>
+<tr>
+<td><strong>Assurant, Portfolio, EasyCare, Zurich</strong> — wave-one VSC administrators</td>
+<td>BRP</td>
+<td>Contract lookup by VIN, claim status</td>
+<td>Azure only; non-PII summary to GitHub</td>
+</tr>
+<tr>
+<td><strong>Protective/ProGuard, GWC/CornerStone</strong> — wave-two VSC administrators</td>
+<td>BRP</td>
+<td>Contract lookup by VIN, claim status</td>
+<td>Azure only; non-PII summary to GitHub</td>
+</tr>
+<tr>
+<td><strong>Bank/CU-branded VSC administrators</strong> (Ally, GM Financial, Chase, TD Auto, Desjardins, RBC, and any surfaced at the counter)</td>
+<td>BRP</td>
+<td>Contract-holder resolution for on-the-spot claims</td>
+<td>Azure only; non-PII summary to GitHub</td>
+</tr>
+<tr>
+<td><strong>Selling-dealer outreach</strong> (phone)</td>
+<td>BRP</td>
+<td>Contract resolution when the sovereign replica does not yet hold it</td>
+<td>Azure only</td>
+</tr>
+</tbody></table>
+<p><em>Table 2: Twenty-one classes of source across two rooftops. Azure is the write destination for every one; the GitHub replica receives the non-PII derived summary. The AI surface holds none of this at rest.</em></p>
+<h3>5.2 Compute in-session, on whichever AI surface</h3>
+<p>Once data is read, analysis happens entirely in the session on the AI surface the operator chose. Two engines cover the two kinds of question:</p>
+<table class="data"><thead><tr>
+<th>Working engine</th>
+<th>Best at</th>
+<th>Lifespan</th>
+<th>Where results land</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Coverage-math kernel</strong> (deterministic)</td>
+<td>Anchor date + engine family → window remaining per bucket per VIN</td>
+<td>Per session</td>
+<td>Azure (audit) + GitHub (non-PII derived)</td>
+</tr>
+<tr>
+<td><strong>Uplift scanner</strong> (component-name matcher)</td>
+<td>Work-order line item → coverage bucket + confidence tier</td>
+<td>Per session</td>
+<td>Azure (audit) + GitHub (non-PII derived)</td>
+</tr>
+<tr>
+<td><strong>Cohort ranker</strong> (score sort)</td>
+<td>Batch of VINs → top-N by composite score</td>
+<td>Per session</td>
+<td>Azure (audit) + GitHub (non-PII derived)</td>
+</tr>
+</tbody></table>
+<p><em>Table 3: Analysis is built in the tab, written to Azure and GitHub, then discarded from the tab.</em></p>
+<p><strong>AI surface interchangeability.</strong> The three engines are specified deterministically enough that the same VIN and the same coverage ledger yield the same answer whether the session runs on Perplexity Computer (today) or on the Peterbilt-Atlantic / Torque Motorsports Claude surfaces (tomorrow). The AI surface is a wireframe and an ad hoc reasoning lane; it is not the system of record and it is not the source of truth for any coverage or claim outcome.</p>
+<hr>
+<h2>6 · What it takes to point at Torque Motorsports</h2>
+<p>Configuration, not build. Reusing the v1 pattern (§6 of EgD-WGB-001) applied to the BRP side, and drawing every counterparty from <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-contacts/EgD-WGB-005-Luke-Contact-Table.pdf">EgD-WGB-005</a>.</p>
+<table class="data"><thead><tr>
+<th>Item</th>
+<th>Who provisions</th>
+<th>Cost</th>
+<th>Blocker?</th>
+</tr></thead><tbody>
+<tr>
+<td>Rooftop list and BRP-line map</td>
+<td>Dealer operations</td>
+<td>Free</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Lightspeed EVO export path (or Client Portal API)</td>
+<td>Dealer service manager</td>
+<td>Contract-dependent</td>
+<td>No — paste-in fallback</td>
+</tr>
+<tr>
+<td>BRP VIN decode / public B.E.S.T. references</td>
+<td>Public</td>
+<td>Free</td>
+<td>No</td>
+</tr>
+<tr>
+<td>BOSSWeb dealer portal (BRP corporate)</td>
+<td>Luke via BRP corporate</td>
+<td>Free</td>
+<td><strong>Yes — commercial</strong></td>
+</tr>
+<tr>
+<td>Wave-one VSC administrators (Assurant, Portfolio, EasyCare, Zurich)</td>
+<td>Luke</td>
+<td>Free</td>
+<td><strong>Yes — commercial</strong></td>
+</tr>
+<tr>
+<td>Wave-two VSC administrators (Protective/ProGuard, GWC/CornerStone)</td>
+<td>Luke</td>
+<td>Free</td>
+<td><strong>Yes — commercial</strong></td>
+</tr>
+<tr>
+<td>Bank/CU-branded VSC administrators</td>
+<td>Per-customer, on-the-spot</td>
+<td>Free</td>
+<td>No — on-the-spot workflow</td>
+</tr>
+<tr>
+<td>Selling-dealer outreach protocol</td>
+<td>Luke's service writer</td>
+<td>Free</td>
+<td>No — always available as fallback</td>
+</tr>
+<tr>
+<td>Peter's authorization for both rooftops' subscriptions</td>
+<td>Peter</td>
+<td>Some subscriptions carry monthly fees</td>
+<td><strong>Yes — internal</strong></td>
+</tr>
+</tbody></table>
+<p>For Torque Motorsports, items 1–3 and 7–8 are ready today. Items 4–6 and 9 are the subject of <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep-brp/EgD-WGB-004-Luke-Access-Prep-BRP.pdf">EgD-WGB-004</a>, sent all at once (not sequentially) per operator direction.</p>
+<hr>
+<h2>7 · The delivery surfaces</h2>
+<p>Three surfaces, same page, same flow, both rooftops:</p>
+<table class="data"><thead><tr>
+<th>Surface</th>
+<th>Who uses it</th>
+<th>Question answered</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Single VIN wizard</strong></td>
+<td>Service writer, warranty administrator, both rooftops</td>
+<td>"Is this VIN still under warranty (OEM base, extended, CE033, B.E.S.T., or third-party VSC) for the work I'm about to invoice?"</td>
+</tr>
+<tr>
+<td><strong>Work-order uplift</strong></td>
+<td>Warranty administrator, fixed-ops director</td>
+<td>"Which line items on today's ROs could shift from customer-pay to warranty, and which payer is first-position?"</td>
+</tr>
+<tr>
+<td><strong>VIN batch scan</strong></td>
+<td>Fixed-ops director, dealer principal</td>
+<td>"Across the next four weeks of bookings, where are we not getting at the big warranty jobs?"</td>
+</tr>
+</tbody></table>
+<p>Every surface produces the same three exports (PDF, CSV, JSON). Every surface writes its computation trail back to Azure and mirrors the non-PII derived row to GitHub — including which payer was chosen, which was rejected, and why. That last piece is what §9 compounds.</p>
+<hr>
+<h2>8 · How this scales beyond Hawkins</h2>
+<p>The Warranty GENE is a <strong>sidecar</strong> — integral to the Hawkins Twin, and a standalone subscription for every other dealership.</p>
+<table class="data"><thead><tr>
+<th>Subscription tier</th>
+<th>What the dealer gets</th>
+<th>What EgD does</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Public ledger only</strong></td>
+<td>Wireframe + NHTSA/BRP public references + paste-in + exports. Any dealer, any brand.</td>
+<td>Zero-touch. Dealer signs up, uses the tool.</td>
+</tr>
+<tr>
+<td><strong>Dealer-authorized</strong></td>
+<td>Above + configured source adapter for the dealer's DMS (CDK Drive, Lightspeed EVO, Karmak, Procede Excede, SERTI, TCS365) + integration with the dealer's OEM and VSC portal sessions. Dealer's own Azure tenant holds the business data.</td>
+<td>One configuration engagement per rooftop family. Reasoning engine reused unchanged.</td>
+</tr>
+<tr>
+<td><strong>Twin-integrated (Hawkins tier)</strong></td>
+<td>Above + full integration with the Hawkins Twin: territory relationship, telemetry lane, PM/compliance overlay, historical claim ledger, cross-rooftop customer twin (Peterbilt Atlantic + Torque Motorsports under one customer record when the same customer appears on both).</td>
+<td>The tier Hawkins is running. Sidecar becomes an integral organ of the twin.</td>
+</tr>
+</tbody></table>
+<p><strong>Custody rule is invariant across tiers.</strong> Every subscriber owns their own Azure tenant and their own repository fork. EVE has no cross-tenant data access, ever. The reasoning engine is portable code; the schema is a public standard; the data always sits with the dealer.</p>
+<hr>
+<h2>9 · Strategic frame — the compounding decision dataset</h2>
+<p>The v1 blueprint framed the strategy as an industry-specific record repository. That is still correct, and this v2 tightens the frame to name the specific compounding asset the two-rooftop configuration creates.</p>
+<p>Every VIN that flows through the engine leaves behind two things:</p>
+<ol>
+<li><strong>A structured record</strong> (customer twin + equipment twin — v1 §9.1, unchanged), written to Azure and mirrored to GitHub.</li>
+<li><strong>A choice record</strong> — the human decision made at the write-up bay: which coverage bucket was picked, which payer was written first, which was rejected, and why. This is new to v2.</li>
+</ol>
+<h3>9.1 The choice record</h3>
+<p>Every warranty write-up is a human decision under uncertainty. On the Peterbilt side, the writer picks between OEM base, extended, CE033, or customer-pay. On the BRP side, the writer picks between OEM base, B.E.S.T., a specific third-party VSC, a bank-branded VSC, or customer-pay. <strong>Every one of those choices is a data point about which coverage recommendation was the right one for that job, that customer, and that VIN.</strong></p>
+<p>The choice record is written alongside the twin record: <code>(VIN, work-order line, recommended payer, chosen payer, reason if different, outcome after claim, days-to-payment, dollars recovered)</code>. Non-PII. Mirrored to GitHub. Accumulates.</p>
+<h3>9.2 Why the choice record is the compounding asset</h3>
+<p>Three properties make it worth writing carefully from day one:</p>
+<ul>
+<li><strong>It grades the engine.</strong> The gap between recommended payer and chosen payer is the engine's error rate. Small consistent gaps mean the engine is missing something the human sees; the fix is a new coverage rule or a better join. Large one-off gaps mean the human overrode the engine; the reason field explains why.</li>
+<li><strong>It compounds across rooftops.</strong> A customer with both a Peterbilt truck and a BRP powersport (Hawkins has these) generates two choice records tied to one customer twin. Patterns across rooftops — "this customer always chooses to file B.E.S.T. before Assurant" — become recommendations for the next visit and the next customer of that shape.</li>
+<li><strong>It becomes a training signal, later.</strong> Once the choice record has a season of history, a model that learns from it can propose the payer sequence directly instead of routing every write-up through the deterministic engine. That model would run on the same interchangeable AI surface described in §2. <strong>The choice record is what turns the engine into an assistant that gets better every week without new engineering.</strong></li>
+</ul>
+<h3>9.3 The industry repository play, restated</h3>
+<p>The v1 §9.3 argument holds: as the Hawkins Twin accumulates records across two rooftops (and across peer dealers who subscribe on the tiers in §8), it becomes the first meaningful sample of the standard structure filled with real Class 8 truck and BRP powersports operator data. The <strong>choice record is the second layer</strong> — the first sample of real dealer-side warranty decision data, likewise vendor-neutral and provenance-stamped.</p>
+<p>Warranty GENE is the first tenant. The record repository is the landlord. The choice record is what makes the landlord smarter every quarter. <strong>Hawkins is building the landlord.</strong></p>
+<hr>
+<h2>10 · Integrations — the value added, articulated</h2>
+<p>Tobias will want each integration named against what it adds to Hawkins's dataset (not what it does for EVE — EVE has no dataset).</p>
+<table class="data"><thead><tr>
+<th>Integration</th>
+<th>Adds to Hawkins's dataset</th>
+<th>Compounds because</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>CDK Drive (Peterbilt)</strong></td>
+<td>Live booking calendar, RO history, current mileage — the substrate every truck-side answer joins against</td>
+<td>Same substrate feeds recall recovery, resale valuation, PM planning tomorrow — one integration, many services</td>
+</tr>
+<tr>
+<td><strong>Lightspeed EVO (BRP)</strong></td>
+<td>Live booking calendar, RO history, deal + customer records — the substrate every powersports answer joins against</td>
+<td>Same substrate feeds seasonality-aware bookings, cross-line customer profiles, third-party VSC reconciliation tomorrow</td>
+</tr>
+<tr>
+<td><strong>PRWS + PACCAR Solutions + PSSM Decisiv</strong></td>
+<td>Truck-side coverage windows, telemetry, point-of-service coverage — the fields the twin needs that CDK does not carry</td>
+<td>Turns every service event on a Peterbilt VIN into a payer-first write-up instead of a customer-pay-by-default one</td>
+</tr>
+<tr>
+<td><strong>Big-5 truck component portals</strong> (Cummins, Eaton, Allison, Cummins-Meritor, Bendix, ZF, Dana)</td>
+<td>Component-level coverage — Cummins engine block covered separately from the Peterbilt chassis, etc.</td>
+<td>Answers component-level "who pays" questions the OEM portal cannot, and produces the choice records that grade component-level coverage recommendations</td>
+</tr>
+<tr>
+<td><strong>BOSSWeb + BRP B.E.S.T.</strong></td>
+<td>Powersports coverage windows and extended plan status — the analog of PRWS on the BRP side</td>
+<td>Turns every service event on a BRP VIN into a payer-first write-up</td>
+</tr>
+<tr>
+<td><strong>Wave-one + wave-two + bank-branded VSC administrators</strong></td>
+<td>Third-party coverage on the powersports side — a denser layer than the truck side</td>
+<td>Every third-party claim is a choice record; over a season, the engine learns which administrator pays which class of claim reliably</td>
+</tr>
+<tr>
+<td><strong>Selling-dealer outreach</strong></td>
+<td>Contract resolution for the long tail of unknown administrators</td>
+<td>Every resolved case moves that VIN from tier-3 (unknown) to tier-1/2 (known) for every future visit — the sovereign replica grows without new subscriptions</td>
+</tr>
+<tr>
+<td><strong>Interchangeable AI surface</strong> (Perplexity Computer / Peterbilt-Atlantic Claude / BRP Claude)</td>
+<td>A wireframe today, an ad hoc reasoning lane every day, a learned recommender tomorrow (§9.2)</td>
+<td>The value is portable across surfaces because the schema and the replica are the durable layer; the surface is not</td>
+</tr>
+</tbody></table>
+<p><em>Table 4: Every integration is a feed into Hawkins's Azure + GitHub. None is a feed into EVE.</em></p>
+<hr>
+<h2>11 · What is not in this blueprint</h2>
+<p>Called out so nothing is presumed:</p>
+<ul>
+<li><strong>Cross-brand support beyond Peterbilt and BRP.</strong> Cummins-powered non-Peterbilt chassis, DTNA, Volvo, Kenworth on the truck side; Polaris, Yamaha, Honda on the powersports side. Not on the Hawkins critical path.</li>
+<li><strong>Write-back to PRWS or BOSSWeb.</strong> Read-only in this design. A warranty administrator files the claim through the OEM portal the normal way, using the twin card as the write-up input.</li>
+<li><strong>Warranty claim submission automation.</strong> Out of scope; regulated by each OEM and administrator.</li>
+<li><strong>Customer PII.</strong> Full PII lives in Azure only; the GitHub replica carries non-PII derived rows. The rendering rule for owner names on the delivery surfaces is set by the dealer principal per rooftop.</li>
+<li><strong>EVE holding any data at rest.</strong> Not in scope. Not in this design. Not in any future revision of this design.</li>
+</ul>
+<hr>
+<h2>12 · Review questions for Tobias</h2>
+<p>Called out so the review is efficient:</p>
+<ol>
+<li>Is the three-lane custody model (§2) — Azure of record, GitHub replica, session-only compute — the right long-term architecture, or does Tobias want a variant?</li>
+<li>Is the AI-surface interchangeability rule (§2, §5.2) — same schema, same replica, same answers whether Perplexity Computer or Claude runs the session — worth pinning as a design constraint, or is it an implementation detail?</li>
+<li>Is the choice record (§9.1) worth writing from day one, or should it wait until the twin records themselves are stable? EgD's recommendation is day-one, because the compounding is what turns the engine into an assistant.</li>
+<li>On the powersports side, does Torque Motorsports have a BRP district-manager relationship already? That fills the one gap left in <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-contacts/EgD-WGB-005-Luke-Contact-Table.pdf">EgD-WGB-005 row 12</a>.</li>
+<li>Any Tobias-specific integration requirements (identity, SSO, audit-log format) that should be added to §10 before the twin repository schema is frozen?</li>
+</ol>
+<hr>
+<h2>13 · Provenance</h2>
+<ul>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/wireframe/">Warranty GENE wireframe</a></li>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/schema/">Warranty GENE schema v1</a></li>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/mappings/">Warranty GENE field mappings</a></li>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/registration/">Warranty GENE registration inventory</a></li>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/blueprint/EgD-WGB-001-Warranty-GENE-Blueprint.pdf">Warranty GENE blueprint v1 (EgD-WGB-001)</a></li>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep/EgD-WGB-003-Luke-Access-Prep.pdf">Luke access prep — Peterbilt (EgD-WGB-003)</a></li>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep-brp/EgD-WGB-004-Luke-Access-Prep-BRP.pdf">Luke access prep — BRP (EgD-WGB-004)</a></li>
+<li><a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-contacts/EgD-WGB-005-Luke-Contact-Table.pdf">Luke contact table (EgD-WGB-005)</a></li>
+<li><a href="https://github.com/EVEglyphDesign/hawkins-twin-platform">Hawkins Twin Platform repository</a></li>
+<li><a href="https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVin/1XPBSYN00N1000101?format=json">NHTSA VIN decoder API</a></li>
+<li><a href="https://static.nhtsa.gov/odi/tsbs/2025/MC-11021404-0001.pdf">NHTSA CE033 bulletin (federal emissions extension, EMY2023 MX-11/MX-13)</a></li>
+</ul>
+<p>Dealer-document provenance (not publicly URL-addressable): Warranty Procedure Manual v2026.7 §7 and §Contacts, Warranty Quick Reference Guide 2025.4, BRP B.E.S.T. component list (dealer-portal-held).</p>
+<hr>
+<p>© 2026 EVEglyphDesign. All rights reserved. Controlled copy. <em>Pour le bien-être du peuple.</em></p></body></html>
