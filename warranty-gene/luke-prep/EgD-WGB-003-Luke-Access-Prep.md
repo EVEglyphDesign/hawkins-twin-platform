@@ -1,143 +1,213 @@
 # Warranty GENE — Luke access prep
 
-For the next sit-down with Luke Weatherbie. Five external surfaces, five contacts on the other side, the exact ask for each one, and the language to avoid so we don't set off a response we didn't want. Dany asks; Luke owns the dealer relationships that unlock each surface.
+For the next sit-down with Luke Weatherbie. Four counterparties, one sweep. The goal is that from each counterparty we ask for **everything Hawkins is legitimately entitled to** as a dealer of its tenure that touches a VIN's service history — repair orders, work orders, historical service records, warranty claims, telematics feeds, campaign lookups, supplier bulletins, engine-manufacturer records. All of it, in one message per counterparty, so we don't have to go back multiple times.
 
-## Who Luke is asking, at a glance
+**Why one sweep.** Owner-operators are our customers. The more of a VIN's service history we can pull together in one place, the better job we can do for them. Every time we go back to the same counterparty a second time with a new ask, we raise the question "why now, why again, what changed" — which triggers governance review before it triggers credentials. Ask for everything in scope on the first pass, framed as due diligence, and the second pass is only for what wasn't granted.
 
-| # | Surface | Who Luke asks | What we're asking for | What we're not asking for (yet) |
-| --- | --- | --- | --- | --- |
-| 1 | **PRWS on Fortellis** | Luke's CDK Global account manager (CDK Drive Inside Sales) — cc PACCAR Dealer Systems | A Fortellis Organization tied to Hawkins, one Subscription-Id for our read-only App, OAuth2 service-account credentials scoped to PRWS read | A new App listed in the public Fortellis Marketplace, a US$129 listing fee, or a claim-submission credential |
-| 2 | **PACCAR Solutions Service Management (Decisiv)** | The same CDK account manager, because the DMS provider is the required entry point per Decisiv | Confirmation that the existing CDK Drive ↔ Decisiv integration is live at all eight rooftops, and one read-only account on our side to inspect the same case data | Any change to how service advisors log in, or an OWL Case Estimator re-provisioning |
-| 3 | **PACCAR Solutions Portal + SmartLINQ** | Peter (Hawkins CFO), because the account is dealer-billed, not Luke's to sign for | Read access under Hawkins' existing subscription — one service account, not a personal login — for the Peterbilt Atlantic BAC codes | A new subscription, a fleet-owner Data Sharing Request, or anything that touches PACCAR Connect (see #4) |
-| 4 | **PACCAR Connect Data Integration Services** | PACCAR North America commercial contact (route through the Peterbilt District Manager, not Eindhoven) | One question only, in writing: does PACCAR Connect Data Integration Services cover Peterbilt VINs in North America today, or does Peterbilt telemetry still route through PACCAR Solutions/SmartLINQ? | Partner-network onboarding, a customer Data Sharing Request, or a purchased data package. All three come after we know the answer |
-| 5 | **PACCAR.net supplier bulletins** | Peter, or Luke's Peterbilt District Manager if Peter can't provision it | One dealer-scoped service account with read access to the supplier-bulletin PDF library | A personal PACCAR.net login shared with a service account name pinned to Luke |
-
-Cummins RAPIDSERVE Web is deliberately off this list. It only matters if Hawkins services Cummins-engine chassis outside PACCAR MX. Confirm scope with Tim before adding a sixth surface.
+**Adaptive frame.** This document is a revision of an earlier five-surface sweep. Warranty GENE is designed to be redirected as we learn. When the counterparty conversations run and something new surfaces, this document is reissued at the same canon URL with a new revision line in the provenance block. Do not treat any single revision as the final word.
 
 ---
 
-## 1. PRWS on Fortellis — the registration record of truth
+## Who Luke is asking, at a glance
 
-**Publisher.** CDK Global operates the Fortellis marketplace and gateway. PACCAR publishes PRWS on it. This is the machine-readable field-of-record for VIN-level registration and warranty claim data — the Warranty Procedure Manual v2026.7 names PRWS as authoritative for Retail Sale and warranty transactions.
+| # | Counterparty | Who Luke asks | One-message ask covers |
+| --- | --- | --- | --- |
+| 1 | **CDK Global** | Luke's CDK Global account manager (CDK Drive Inside Sales) | CDK Drive read-only service account (ROs, work orders, labor ops, parts on ticket, 3C narratives, customer records, historical invoices); PRWS on Fortellis (Organization, Subscription-Id, OAuth2 read credentials); PACCAR Solutions Service Management (PSSM/Decisiv) integration confirmation and PSSM read account |
+| 2 | **PACCAR — Peterbilt District Manager** | Luke's Peterbilt District Manager (PACCAR North America, not Eindhoven) | PACCAR.net service account (TSBs, campaigns, supplier bulletins, warranty policy circulars); PACCAR Solutions Portal + SmartLINQ scoping; PACCAR Connect Data Integration Services scoping question; MX engine warranty lane confirmation; PartsPRO warranty transaction read; CARB/EPA emissions-warranty scope inside PRWS |
+| 3 | **Peter (Hawkins CFO)** | Peter, internally | Authorization for a Hawkins service-account mailbox to be attached to every dealer-billed subscription (PACCAR Solutions, PACCAR.net, PartsPRO); business-side sign-off to expose historical DMS customer/invoice records to a service-account read; PacLease/PACCAR Financial lease-return files if Hawkins runs them |
+| 4 | **Powertrain manufacturers** | One rep per manufacturer, framed as dealer-side due diligence | Cummins (RAPIDSERVE Web API, QuickServe warranty history, INSITE session logs, campaign lookups); Eaton (ServiceRanger data, Roadranger warranty history); Allison (Allison DOC session logs, Allison warranty portal read). Meritor / Bendix / Wabco deferred to a second sweep |
 
-**Who Luke asks.** His current CDK Global account manager (CDK Drive Inside Sales). If Luke does not have a named CDK rep, ask through the [Fortellis contact form](https://fortellis.io/contact) and mark the request as originating from an existing CDK Drive dealer.
+---
 
-**Exact ask.**
+## 1. CDK Global — one message, three lanes
 
-> "We're standing up a read-only integration that consumes the PRWS API through Fortellis. We already run CDK Drive across eight rooftops. We need three things provisioned: a Fortellis Organization tied to Hawkins, a Subscription-Id for our internal App (not marketplace-listed), and OAuth2 service-account credentials scoped to PRWS read endpoints only. The App is dealer-internal — no marketplace listing, no listing fee. Warranty claim submission stays where it is today, in our existing CDK-PRWS workflow."
+**Who Luke asks.** His current CDK Global account manager (CDK Drive Inside Sales). If Luke does not have a named CDK rep, the request originates through the [Fortellis contact form](https://fortellis.io/contact) tagged as an existing CDK Drive dealer.
+
+**Why one message.** CDK owns the DMS Hawkins already runs, publishes PRWS on Fortellis, and is Decisiv's documented entry point for PSSM integration per the [Decisiv PACCAR support article](https://support.paccar.decisiv.net/hc/en-us/articles/360034411774). Splitting the ask across three tickets fragments the account manager's context and produces three governance reviews. One message, three lanes, one governance review.
+
+**Exact ask, one message to the CDK account manager.**
+
+> Hawkins runs CDK Drive across eight Peterbilt Atlantic rooftops. We're standing up an internal warranty due-diligence workflow — read-only — that reconciles our warranty claim submissions against the engine-manufacturer record before submission, so we're not filing claims that get denied and cost our owner-operator customers downtime while we appeal. To do that, we need three things provisioned under our existing CDK relationship.
+
+**Lane 1 — CDK Drive read-only service-account access.** Repair orders, work orders, labor operations, parts-on-ticket detail, 3C narratives, customer master records, and historical service invoices, scoped to our eight BAC codes. Service-account mailbox, not a personal login.
+
+**Lane 2 — PRWS on Fortellis.** A Fortellis Organization tied to Hawkins, a Subscription-Id for our internal App (not marketplace-listed), and OAuth2 service-account credentials scoped to PRWS read endpoints only. The App is dealer-internal — no marketplace listing, no listing fee. Warranty claim submission stays in our existing CDK-PRWS workflow.
+
+**Lane 3 — PACCAR Solutions Service Management.** Please confirm the CDK Drive ↔ Decisiv integration is enabled for all eight BAC codes, and provision one read-only service-account for PSSM case data on our side.
 
 **What Luke does not say.**
 
-- Do not describe the App as a "product" or a "solution we're selling." That language routes the request into Fortellis Marketplace publishing, which carries a listing fee per App and a review process we don't need.
-- Do not ask for write access to PRWS. If we ask for write, CDK will route this to the PACCAR PRWS integration team and the conversation becomes about certification, not credentials.
-- Do not name the twin. Call it an "internal read-only integration." Once "twin" is on paper, we get a data-governance escalation before we get an API key.
+- Do not describe the workflow as a "product," a "solution we're selling," or a "twin." Product framing routes Fortellis into marketplace publishing (US$129 listing fee and a review process we don't need). Twin framing routes the entire ask into data-governance review before it reaches provisioning.
+- Do not ask for write access anywhere. Write access to PRWS routes to the PACCAR PRWS integration team and the conversation becomes about certification, not credentials. Write access to CDK Drive is not a service-account grant, it's a user seat, and it triggers a different conversation about license count.
+- Do not ask about bulk data extraction from PSSM. PSSM is case-scoped by design per the [Decisiv SRM Case Estimator fact sheet](https://info.decisiv.com/). Bulk registration data belongs to PRWS. Naming bulk out of PSSM triggers a "wrong tool" reply and delays PRWS.
+- Do not name Decisiv in the initial ask. CDK is the provisioning path. Decisiv only surfaces if CDK asks who the endpoint is.
 
 **Evidence Luke can point to if pushed.**
 
 - [Fortellis API request/response components](https://docs.fortellis.io/) — Subscription-Id is a documented header, not a bespoke request.
-- [CDK Global Heavy Truck PRWS description](https://www.cdkglobal.com/) — PRWS creates warranty claim drafts from ROs, so read-only inspection is a lower-privilege ask than what CDK already grants.
+- [CDK Global Heavy Truck PRWS description](https://www.cdkglobal.com/) — PRWS creates warranty claim drafts from ROs, so read-only inspection is a lower-privilege ask than what CDK already grants Hawkins today.
 
-**What "good" looks like leaving the room.** Fortellis Organization created, one Subscription-Id issued, and a named CDK contact who owns the OAuth2 provisioning ticket.
+**What "good" looks like leaving the room.** Three ticket IDs (or one ticket with three sub-items) opened under Luke's CDK account manager, with named CDK owners for each: DMS read service-account, Fortellis provisioning, PSSM integration confirmation.
 
 ---
 
-## 2. PACCAR Solutions Service Management (built on Decisiv)
+## 2. PACCAR — one message to the Peterbilt District Manager
 
-**Publisher.** PACCAR (product). Decisiv (platform). Reached at [paccar.decisiv.net](https://paccar.decisiv.net).
+**Who Luke asks.** Luke's Peterbilt District Manager (PACCAR North America commercial contact). Not Eindhoven. Not the partner-onboarding form on the DAF site.
 
-**Who Luke asks.** The same CDK Global account manager, because Decisiv's own documented policy is that DMS integration starts with the DMS provider: [Decisiv PACCAR support — Integration with Decisiv, start with your DMS provider](https://support.paccar.decisiv.net/hc/en-us/articles/360034411774).
+**Why one message.** The PDM owns Hawkins' dealer relationship across every PACCAR-brand surface: PACCAR.net, PACCAR Solutions, PACCAR Connect scoping, MX engine warranty policy, PartsPRO parts warranty, and the emissions-warranty policy overlay. Splitting these across separate emails invites the PDM to route each to a different internal group, which delays every one of them. One message, framed as a dealer due-diligence review, produces one PDM-owned response.
 
-**Exact ask.**
+**Exact ask, one message to the PDM.**
 
-> "Our CDK Drive ↔ Decisiv integration is already live for warranty coverage read-back at the point of service. Please confirm the integration is enabled for all eight Peterbilt Atlantic BAC codes, not just the primary rooftop. Second, we need one read-only account on our end that can view the same case-level coverage data through PSSM, tied to a service-account mailbox, not a personal login."
+> Peterbilt Atlantic is standing up an internal warranty due-diligence workflow across our eight rooftops. Read-only. Purpose is to reconcile our warranty claims and campaign eligibility against the manufacturer record before submission, so we deny fewer claims to the owner-operator and appeal fewer to PACCAR. As dealer principals we'd like to sweep, in one review, everything Hawkins is already entitled to under our current PACCAR agreements that would feed this workflow.
+
+**Item 1 — PACCAR.net service account.** Read access to the full document library: technical service bulletins, warranty policy circulars, campaign notices, and supplier warranty bulletins (§7.52 and §7.53 exemplars in Warranty Procedure Manual v2026.7). Service-account mailbox tied to Hawkins, not a personal login. All eight BAC codes.
+
+**Item 2 — PACCAR Solutions Portal and SmartLINQ Service Management.** Confirmation of Hawkins' current subscription scope, and one read-only service account under the existing subscription for the same BAC codes. Not a new subscription, not a fleet-owner Data Sharing Request.
+
+**Item 3 — PACCAR Connect Data Integration Services.** One scoping question, in writing: does PACCAR Connect Data Integration Services cover Peterbilt VINs in North America today for a dealer-side read integration, or does Peterbilt telemetry still route through PACCAR Solutions and SmartLINQ Service Management? If it does cover Peterbilt NA, we'd like to know the entitlement path for a dealer of our tenure. If it doesn't, no further ask.
+
+**Item 4 — PACCAR MX engine warranty lane.** Confirmation that the PRWS credentials CDK is provisioning cover MX engine warranty transactions (MX-11 and MX-13) alongside chassis warranty. If MX warranty is a separate credential lane, the path to that credential.
+
+**Item 5 — PartsPRO warranty transactions.** Read-only service-account access to parts warranty transaction history, warranty parts return authorizations, and parts campaign lookups, tied to our BAC codes.
+
+**Item 6 — CARB/EPA emissions warranty scope.** Confirmation that the emissions-warranty claim types described in the CARB/EPA Emission Component Coverage matrix are in scope of the PRWS read credential CDK is provisioning. If separate, the path to that credential.
 
 **What Luke does not say.**
 
-- Do not ask about "bulk data extraction" from PSSM. PSSM is case-scoped by design — that's what the [Decisiv SRM Case Estimator fact sheet](https://info.decisiv.com/) describes. Bulk registration belongs to PRWS (#1). Asking for bulk out of PSSM triggers a "wrong tool" reply and delays #1.
-- Do not name Decisiv in the initial ask — CDK is the provisioning path. Decisiv only surfaces if CDK asks who the endpoint is.
+- Do not describe this as "an integration" or "a partnership." Describe it as "a due-diligence review" and "an internal read-only workflow." Integration framing routes PACCAR Connect into the partner-onboarding flow (partner agreement, data-package purchase, customer Data Sharing Request routed to Hawkins as if it were a third party). Due-diligence framing routes it to the PDM's dealer-services desk.
+- Do not fill in the [PACCAR Connect Data Integration Partner form](https://www.daf.global/en-us/daf-services/connected-services/paccar-connect-data-integration-services). The form is the partner flow. The email to the PDM is the dealer flow.
+- Do not name Navixy or any third-party integrator. If PACCAR North America is unaware of a public third-party claim about their scope, naming it accelerates a marketing correction, not our answer.
+- Do not name the twin. "Internal warranty due-diligence workflow" is the phrase.
+- Do not bundle the CDK ask (Counterparty 1) into this message. PACCAR does not provision Fortellis; CDK does. Naming CDK's provisioning inside PACCAR's ask makes the PDM think we're asking PACCAR to intervene on our behalf with CDK, which slows everything.
 
-**What "good" looks like leaving the room.** A confirmation that all eight BAC codes are enabled and a service-account mailbox provisioned for PSSM read access.
+**What "good" looks like leaving the room.** One PDM-owned response covering all six items — some as confirmations of existing scope, some as new service-account provisions, one as a scoping answer.
 
 ---
 
-## 3. PACCAR Solutions Portal + SmartLINQ Service Management
+## 3. Peter — one internal conversation
 
-**Publisher.** PACCAR. This is the human-facing portal and the SmartLINQ remote-diagnostics feed for over 800 engine and emissions systems, per [Peterbilt Connected Services](https://www.peterbilt.com/services/connected-services).
+**Who Luke asks.** Peter, Hawkins CFO. Not by email. In person, or a scheduled call. This is internal authorization for the two external counterparties above to succeed.
 
-**Who Luke asks.** Peter (Hawkins CFO). This account is dealer-billed and enrolled through [PACCARSolutions.com](https://www.paccarsolutions.com/), per the PACCAR Truck Connectivity Services Agreement. It is not Luke's to sign for; it is Peter's.
+**Why one conversation.** Everything CDK and PACCAR would provision under Counterparties 1 and 2 is dealer-billed or requires a Hawkins business-side signatory. Without Peter's authorization staged before Luke sends the two external asks, the external asks will bounce back to Hawkins for a signature and stall.
 
 **Exact ask, from Luke to Peter.**
 
-> "We need one read-only service account under Hawkins' existing PACCAR Solutions subscription — same billing entity, no new subscription. The account name should be a service-account mailbox, not a personal login. Scope is Peterbilt Atlantic BAC codes only. This is for the same warranty program we discussed with Tim."
+> Peter, on the warranty workflow Dany and I are standing up: I'm going to send our CDK account manager and our PACCAR PDM two messages this week. They'll both come back to you for authorization on a few items, and I want you to know what's coming so you're not surprised.
+
+**Item 1 — Hawkins service-account mailbox.** One address like `warranty-integration@hawkinstruck.com` or similar, attached to every dealer-billed subscription for read-only access: PACCAR Solutions, PACCAR.net, PartsPRO, CDK Drive read, PSSM read, Fortellis. This replaces pinning service accounts to individual employee logins, which is a credential-audit finding waiting to happen.
+
+**Item 2 — business-side sign-off** on exposing our historical DMS customer master and service-invoice records to that service account, on a read-only basis. Same data our service advisors see today; the read scope changes, not the data.
+
+**Item 3 — PacLease.** If Hawkins runs any PacLease returns, we'll want the lease-return warranty files in the same workflow. If we don't, no action needed.
+
+> Nothing in this changes what Hawkins pays. Every subscription named already exists under our BAC codes. We're asking for read seats under existing entitlements, not new purchases.
 
 **What Luke does not say.**
 
-- Do not ask Peter to open a new subscription. That's a purchasing decision that needs Tim, not just Peter, and it changes what we're doing from "read what Hawkins already pays for" to "buy something new" — a different conversation.
-- Do not mention PACCAR Connect (#4) in the same ask. PACCAR Solutions and PACCAR Connect are separate surfaces with separate account trees. Mixing them makes Peter route the ask to the wrong internal owner.
+- Do not present this as "Dany's project." Present it as "our warranty workflow." Peter authorizes Hawkins-owned work, not vendor-owned work.
+- Do not ask for a new subscription. If any of the external counterparties comes back with "we can grant this, but it requires an upgraded subscription," that's a separate conversation with Peter *and* Tim, not the first conversation.
+- Do not name the twin. "Warranty workflow" is the phrase.
 
-**What "good" looks like leaving the room.** One service account provisioned under Hawkins' PACCAR Solutions subscription, all eight BAC codes visible.
-
----
-
-## 4. PACCAR Connect Data Integration Services
-
-**Publisher.** PACCAR Global Connected Services in Eindhoven, DAF-branded. Named on the [DAF PACCAR Connect Data Integration Services page](https://www.daf.global/en-us/daf-services/connected-services/paccar-connect-data-integration-services).
-
-**Why this one is delicate.** Third-party integrator [Navixy publicly claims](https://www.navixy.com/oem-telematics-brands/) PACCAR Connect covers DAF, Kenworth, and Peterbilt. PACCAR itself has not confirmed North American Peterbilt scope in a citable document. Until we know the answer, we do not want to trigger the partner-onboarding flow.
-
-**Who Luke asks.** His Peterbilt District Manager (PACCAR North America commercial contact). Not Eindhoven. Not the partner-onboarding form.
-
-**Exact ask, in writing.**
-
-> "One question. Does PACCAR Connect Data Integration Services cover Peterbilt VINs in North America today for a dealer integration, or does Peterbilt telemetry still route through PACCAR Solutions and SmartLINQ Service Management? We're planning a read-only warranty integration and need to know which surface owns the telemetry lane before we scope credentials."
-
-**What Luke does not say.**
-
-- Do not fill in the [PACCAR Connect Data Integration Partner form](https://www.daf.global/en-us/daf-services/connected-services/paccar-connect-data-integration-services). Once submitted, we're in the partner-network flow, which means a partner agreement, a data-package purchase decision, and a customer Data Sharing Request routed to Hawkins as if we were a third party — none of which we want before we know the answer to the one question.
-- Do not describe the ask as "we want to integrate." Describe it as "we want to scope." The first framing gets us a partnership pitch; the second gets us the answer.
-- Do not mention Navixy or any third-party integrator by name. If PACCAR North America is unaware of a claim about their scope, naming it accelerates a marketing correction, not our answer.
-
-**What "good" looks like leaving the room.** A one-line answer, in writing if possible, from a named PACCAR North America contact. That's it.
+**What "good" looks like leaving the room.** Peter's verbal go-ahead on the service-account mailbox, the read-only DMS record exposure, and clarity on whether PacLease is in scope.
 
 ---
 
-## 5. PACCAR.net supplier bulletins
+## 4. Powertrain manufacturers — three parallel due-diligence asks
 
-**Publisher.** PACCAR. Referenced 17 times in the Warranty Procedure Manual v2026.7 as the retrieval location for supplier warranty bulletins (Sensata, SmartLINQ/PMG, and others — §7.52 page 175 and §7.53 pages 175–176 are the exemplars).
+**Who Luke asks.** One rep per manufacturer. Cummins district service manager (or Hawkins' authorized-dealer service rep). Eaton warranty rep (Roadranger territory manager). Allison warranty rep (Allison Authorized Distributor territory manager). Each is a separate message. Do not bundle across manufacturers — each has its own warranty group, its own governance review, and no cross-visibility to what we asked another.
 
-**Who Luke asks.** Peter first, because this is again a dealer-billed credential. If Peter cannot provision a service account, Luke's Peterbilt District Manager is the fallback.
+**Why in this sweep.** Powertrain is where warranty dollars concentrate. Engine, transmission, and torque-converter/automatic-transmission claims produce the biggest single-line warranty amounts and the longest owner-operator downtime. Reconciling our claim against the manufacturer's warranty record *before* submission is the single largest per-claim reduction in denial-and-appeal cycle time we can deliver to an owner-operator. Meritor, Bendix, and Wabco (axles, air brakes, air-system) matter and are deferred to a second sweep so this one stays focused.
 
-**Exact ask.**
+**Framing across all three manufacturers.** Same opening, adjusted per manufacturer's own terminology.
 
-> "One dealer-scoped service account with read access to the PACCAR.net supplier bulletin PDF library. Service-account mailbox, not a personal login. Scope is Peterbilt Atlantic BAC codes."
+> Hawkins is an authorized service dealer for [manufacturer] equipment on our Peterbilt platform. We're standing up an internal warranty due-diligence workflow that reconciles our warranty claim submissions against the [manufacturer] warranty record before submission. Goal is to reduce the denial rate of our claims and the appeal workload on your warranty group. Read-only. As an authorized service dealer of our tenure, we'd like to sweep — in one review — everything we're entitled to that would feed this reconciliation.
 
-**What Luke does not say.**
+**Per-manufacturer specifics below.**
 
-- Do not offer to reuse Luke's personal PACCAR.net login "just to get started." A personal login pinned to a service becomes a credential-audit finding six months from now, and it also creates a dependency on Luke being at Hawkins.
-- Do not ask for admin. Read is enough.
+### 4a. Cummins
 
-**What "good" looks like leaving the room.** One service account, read-only, all eight BAC codes in scope.
+**Who.** Cummins district service manager assigned to Hawkins' authorized-dealer coverage. If Luke doesn't have a named DSM, the entry is through [QuickServe Online](https://quickserve.cummins.com/) dealer support, tagged as an authorized-dealer request.
+
+**Exact ask to Cummins.**
+
+> As an authorized Cummins service dealer, we'd like read-only access under our existing dealer authorization.
+
+**Cummins Item 1 — RAPIDSERVE Web API.** Read credentials for warranty coverage lookup by ESN, campaign eligibility lookup, and warranty history by ESN.
+
+**Cummins Item 2 — QuickServe Online warranty history.** Service-account access to warranty transaction history for Cummins engines we service, tied to Hawkins' authorized-dealer ID.
+
+**Cummins Item 3 — INSITE session log archive.** The ability to submit and retrieve INSITE session logs against warranty claims we're preparing, so we can attach the same session data your warranty group would ask us to attach on appeal, before submission rather than after.
+
+**Cummins Item 4 — authorized-dealer campaign document library**, if Cummins publishes campaign notices to authorized dealers separately from QuickServe. Service-account read access.
+
+**Language to avoid.**
+
+- Do not describe Hawkins as "building an integration with Cummins." Cummins integration goes through Cummins Digital, which is a partner track, not a dealer track.
+- Do not ask for CustomerLink or CumminsLink write access. Read is enough.
+
+### 4b. Eaton (Roadranger)
+
+**Who.** Eaton Roadranger warranty rep for the Atlantic Canada territory, or Luke's Roadranger contact if Hawkins has a named one.
+
+**Exact ask to Eaton.**
+
+> As an authorized Eaton service dealer under our Peterbilt platform, we'd like read-only access under our existing dealer authorization.
+
+**Eaton Item 1 — ServiceRanger data.** Read credentials for transmission diagnostic data, warranty coverage lookup by serial number, and campaign eligibility.
+
+**Eaton Item 2 — Roadranger warranty history.** Service-account access to warranty transaction history for Eaton transmissions and clutches we service, tied to Hawkins' authorized-dealer ID.
+
+**Eaton Item 3 — Roadranger dealer bulletin library.** Service-account read to warranty policy and campaign notices.
+
+**Language to avoid.**
+
+- Do not ask about Cummins-Eaton Endurant partnership scope until Cummins confirms 4a. If Endurant is in play, it will surface in the Cummins conversation first and simplify the Eaton ask.
+
+### 4c. Allison
+
+**Who.** Allison Authorized Distributor territory manager, or Allison warranty rep if Hawkins deals direct.
+
+**Exact ask to Allison.**
+
+> As an authorized Allison service dealer on our Peterbilt platform, we'd like read-only access under our existing dealer authorization.
+
+**Allison Item 1 — Allison DOC session logs.** The ability to submit and retrieve DOC session data against warranty claims we're preparing.
+
+**Allison Item 2 — Allison warranty portal.** Service-account read access to warranty transaction history for Allison transmissions we service, tied to Hawkins' authorized-dealer ID, plus campaign eligibility lookup.
+
+**Allison Item 3 — Allison dealer bulletin library.** Service-account read to warranty policy and campaign notices.
+
+**Language to avoid.**
+
+- Do not ask for Allison DOC Premium features. Read against the warranty portal and standard DOC session logs is the scope.
+
+**What "good" looks like leaving the room, across all three.** Three separate warranty-rep-owned responses, each covering the read credentials and the warranty history/portal access for that manufacturer.
 
 ---
 
-## The three things Luke should keep off every conversation
+## The three things Luke keeps off every conversation
 
-1. **The word "twin."** Everywhere it appears in our internal canon, replace it with "internal read-only integration" in external asks. The twin framing is correct on our side and unhelpful on theirs — it invites governance review before it invites credentials.
-2. **Warranty claim submission.** Every surface we're asking for is read-only. Submission stays where it lives today. Naming submission triggers a certification conversation that we do not need to have to build the read lane.
-3. **Cross-surface bundling.** Ask one surface owner for one surface at a time. Bundling PRWS + PSSM + PACCAR Solutions + PACCAR Connect + PACCAR.net into one "we need access to everything" ask routes the entire request to a data-governance escalation queue at CDK or PACCAR, and slows every individual ask.
+1. **The word "twin."** Everywhere it appears in our internal canon, replace with "internal read-only warranty due-diligence workflow" in external asks. The twin framing is correct on our side and unhelpful on theirs — it invites governance review before it invites credentials.
+2. **Warranty claim submission.** Every credential we're asking for is read-only. Submission stays where it lives today. Naming submission triggers a certification conversation that we do not need to have to build the read lane.
+3. **Cross-counterparty bundling.** Ask one counterparty for their full scope at a time. Naming CDK's provisioning inside PACCAR's message, or naming Cummins inside Eaton's, routes the conversation to a governance escalation because it looks like we're building something that spans everyone's data.
 
-## Order of operations for the sit-down with Luke
+---
 
-1. **PACCAR Connect (#4) first, in writing, before the meeting if possible.** It's a single-question read that unblocks the shape of the telemetry lane. Answer determines nothing else, but it removes an unknown.
-2. **PRWS (#1) at the meeting.** This is the biggest unlock and the most sensitive framing. Get Luke to send the ask to his CDK account manager while Dany is with him, so the language is right on the first send.
-3. **PSSM (#2) in the same message as #1.** Same contact, same CDK account manager, adjacent surface. Bundling PRWS and PSSM to one contact is fine; that's not the bundling failure — the bundling failure is bundling across contacts.
-4. **PACCAR Solutions (#3) and PACCAR.net (#5) via Peter after the meeting.** These are dealer-billed; Peter owns them. Route these once the meeting produces the exact account names to request.
+## Order of operations
+
+1. **Peter first (Counterparty 3), in person.** Before either external message goes out, Luke and Peter agree on the service-account mailbox name and the DMS-record read-exposure authorization. This is the internal prerequisite for the external asks to succeed.
+2. **CDK message (Counterparty 1) same day as the Luke-and-Dany sit-down.** Get Luke to send it to his CDK account manager while Dany is with him, so the language is right on the first send. Three ticket IDs come back over the next several days.
+3. **PACCAR PDM message (Counterparty 2), 24 hours after CDK.** Not the same day. CDK and PACCAR should each see a message that is clearly theirs alone, not one that arrives in tandem with the other's — which would make both counterparties assume this is a coordinated procurement event rather than a dealer due-diligence review.
+4. **Powertrain manufacturers (Counterparty 4a, 4b, 4c) in parallel, one week after Counterparties 1 and 2.** By that point, CDK has confirmed PRWS provisioning and PACCAR has confirmed MX engine warranty scope, which gives Luke the "as an authorized service dealer of our tenure" credibility line on the manufacturer asks.
 
 ---
 
 ## Provenance
 
+- **Revision.** This is EgD-WGB-003 revision 2. Revision 1 (five surfaces) is superseded but referenced in the boot-contract defect register for the pattern it exposed — asking by surface name rather than by counterparty produced a five-message plan where a four-counterparty plan does the same work with less suspicion.
 - Canonical surface map: [`warranty-gene/registration/registration-and-terms.json`](https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/warranty-gene/registration/registration-and-terms.json)
 - Registration & Terms narrative: [Warranty GENE Registration & Terms](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/registration/)
 - Warranty Procedure Manual v2026.7 (§1.18, §7.52, §7.53) — uploaded to the project workspace
+- CARB/EPA Emission Component Coverage matrix — uploaded to the project workspace
 - Shrish's execution lane, activated once these credentials arrive: [Warranty GENE Shrish Setup (EgD-WGB-002)](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/shrish-setup/)

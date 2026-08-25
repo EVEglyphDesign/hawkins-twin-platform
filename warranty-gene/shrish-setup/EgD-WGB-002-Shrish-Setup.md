@@ -1,13 +1,15 @@
 # Warranty GENE — Shrish task list
 
-**Scope of this document.** Shrish provisions the Azure database that will hold the Warranty GENE dealer records, loads the JSON records we hand him, runs the tests we wrote, and reports pass or fail. That is the entire scope. Shrish does not design the schema, does not write scripts, does not rename fields, does not enrich records, does not decide indexing strategy, and does not modify anything under `warranty-gene/` in the source repository. Everything creative stays in the [EVEglyphDesign/hawkins-twin-platform](https://github.com/EVEglyphDesign/hawkins-twin-platform) repository so Dany can read every change on the surface it was made.
+**Scope of this document.** Shrish provisions the Azure database that will hold the Warranty GENE dealer records, loads the JSON records we hand him, runs the tests we wrote, and reports pass or fail. That is the paid scope.
 
-If a task in this document produces a question that is not answered by the document itself, Shrish stops and messages Dany. Improvising is out of scope, even when it looks helpful.
+**Common sense allowed — fork first.** These instructions were written quickly. If Shrish spots something worth improving — a smarter index, a cleaner column, a better ingestion pattern — he is free to do it. The only rule: **fork the source repository first, and make the change on the fork.** Do not push directly to `EVEglyphDesign/hawkins-twin-platform`. That way Dany can see the change on a surface, catch up with Shrish, and decide what to merge upstream. Nothing gets slowed down waiting for approval; nothing gets lost inside a working session either.
+
+**This document is adaptive, not fixed.** Warranty GENE is designed to be redirected as we learn. Dany may loosen a rule, tighten another, or replace whole tasks between one working session and the next. When a redirect happens, the document is reissued at the same canon URL with a new revision line in the provenance block, and the fork initiatives from the previous revision are folded into the discussion. Do not treat any single revision as the final word. Do treat the current revision as the operating contract until a new one is published.
 
 ## Canon rule (given, not to be re-decided)
 
-- The **VIN is the base code** for every equipment record. Every table's primary anchor column is `vin`. Every filename in the source is `{VIN}.json`. Every index is keyed by VIN. This is fixed. Do not propose a surrogate key, do not add an internal id column as the primary key, do not "normalise" the VIN into a lookup table.
-- The record shape is fixed and lives at [`warranty-gene/schema/rich-target.schema.json`](https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/warranty-gene/schema/rich-target.schema.json). The sample records at [`warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins/`](https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins) are canonical shape. Shrish loads them as they are.
+- The **VIN is the base code** for every equipment record. Every table's primary anchor column is `vin`, every filename in the source is `{VIN}.json`, every index is keyed by VIN. This one is load-bearing across every downstream ring, so keep it as the primary key. If you have a strong reason to add a surrogate id alongside it on your fork, that's a fork discussion.
+- The record shape is at [`warranty-gene/schema/rich-target.schema.json`](https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/warranty-gene/schema/rich-target.schema.json), and the sample records at [`warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins/`](https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins) are the canonical shape. Load them as-is for the first pass; anything you want to change goes on the fork.
 
 ## What Shrish does
 
@@ -17,14 +19,12 @@ If a task in this document produces a question that is not answered by the docum
 4. Repeat Task 3 and Task 4 exactly when the first real dealer extract lands from PACCAR (arriving after the credentials in [EgD-WGB-003](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep/)).
 5. Report back with the four rows Task 5 asks for. Nothing else.
 
-## What Shrish does not do
+## Where the line is
 
-- Does not fork or modify the source repository. All source code and all schema authority is in `EVEglyphDesign/hawkins-twin-platform` and stays there.
-- Does not write Python, does not write validators, does not write index builders. Those exist and are canonical: [`warranty-gene/dealer-records/scripts/`](https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene/dealer-records/scripts).
-- Does not add columns, rename fields, or reshape records to match a preferred normal form. The JSON shape is the shape. Store JSONB in Postgres or the native JSON column type in SQL Server; do not decompose.
-- Does not choose which fields to index beyond the four Task 2 names. If a query looks slow, message Dany, do not add indexes.
-- Does not build a UI, an API surface, or a dashboard. That belongs to a later ring and to a different lane.
-- Does not run any generative or interpretive step: no LLM enrichment, no synthetic record fill-in, no coverage-logic derivations, no VIN decoding. Records are stored as delivered.
+Two rules, everything else is fair game with common sense:
+
+1. **Do not push to `EVEglyphDesign/hawkins-twin-platform` directly.** If you want to change anything in the source repository — schema, scripts, DDL, samples, this document — fork it, change it on the fork, and mention the fork URL in the Task 5 report. Dany will pull what makes sense.
+2. **Do not lose the VIN as the primary key** and do not reshape a record such that the source JSON file cannot round-trip back out of the database. Everything else — extra columns, extra indexes, materialized views, a helper script, a better ingestion pattern — is fine, as long as it lives on the fork.
 
 ---
 
@@ -96,7 +96,7 @@ CREATE INDEX ix_vin_record_score_total ON dealer_records.vin_record
 
 **Method.** For each file, read the JSON, and insert one row: `vin` from the JSON's `vin` field, `as_of` from `as_of`, `rooftop_code` set to `R00-sample` (Shrish does not derive this from the record; it comes from the source directory name, which is why the loader is a single line, not a rule engine), `payload` set to the entire JSON document unchanged.
 
-**Rule.** The record on disk is the record in the database. Byte for byte, key order preserved to the extent the target's JSON type preserves it. Do not `SELECT` a nested field to "validate" it and then rewrite the record. Do not lowercase the VIN. Do not add a field.
+**Rule.** For the first pass, the record on disk is the record in the database — whole JSON, VIN preserved as-is, no field rewrites. This makes the round-trip test in Task 4 a real test. If you want to store additional derived columns alongside the payload on your fork, that's fine; keep the untouched `payload` too.
 
 **Gate.**
 
@@ -203,16 +203,20 @@ ORDER BY 2 DESC;
 
 ---
 
-## Task 5 · Report back, four rows
+## Task 5 · Report back
 
-Message Dany with these four rows, in this order, and nothing else:
+Message Dany with these four rows, in this order:
 
 1. **Engine.** `Postgres flexible server` or `Azure SQL`, plus the region.
 2. **Row count.** The single number from Task 3's gate.
 3. **Model breakdown match.** `pass` or `fail` for Task 4.2 against the expected table. If `fail`, include the actual table.
 4. **Top-score row.** VIN and total from Task 4.4.
 
-Do not include narrative. Do not include screenshots. Do not include the DDL you ran. Do not include how long it took. Four rows, that's it.
+Optional fifth row — include it if it applies:
+
+5. **Fork initiatives.** URL of your fork and a one-line summary of anything you changed or added — extra columns, an extra index, a helper script, a suggested edit to this document. One line per initiative. Dany will walk through them with you on the next catch-up.
+
+No screenshots, no narrative, no timing. Just the rows.
 
 ---
 
@@ -224,15 +228,15 @@ At that point Task 4.2's expected values will change — Dany will send the new 
 
 ---
 
-## Questions register
+## When to stop and message Dany
 
-Only three questions are in scope for Shrish. If any of them fires, stop and message Dany:
+Anything that would block progress or that needs a decision only Dany can make:
 
 1. **Task 1 access blocker.** The Azure subscription, resource group, or Key Vault is not accessible under Shrish's tenant.
 2. **Task 3 schema mismatch.** A source record's JSON has a field type that the target's JSON column rejects (rare; both Postgres JSONB and SQL Server NVARCHAR(MAX) with ISJSON accept every shape in the sample).
-3. **Task 6 record collision.** A real-extract record arrives with a VIN already loaded from the sample. This is a Dany-side call, not a Shrish-side merge.
+3. **Task 6 record collision.** A real-extract record arrives with a VIN already loaded from the sample — which one wins is a Dany-side call.
 
-Everything else is either answered by this document or it is a design decision — which means it is Dany's, not Shrish's.
+Other questions can wait for the catch-up. If you took an initiative on the fork, note it in the Task 5 report with a link to the fork commit, and we'll walk through it together.
 
 ---
 
