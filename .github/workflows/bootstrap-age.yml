@@ -1,0 +1,134 @@
+name: Bootstrap age key pair
+
+# One-shot: generate an age key pair inside GitHub Actions, store both
+# halves as repo secrets, print only the public key to the log. Removes
+# the need for a local `age` install before Luke arrives.
+#
+# Idempotency: refuses to overwrite an existing AGE_PRIVATE_KEY secret
+# unless dispatched with force=true.
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Overwrite existing AGE_PUBLIC_KEY / AGE_PRIVATE_KEY secrets if set'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Install age + libsodium tooling
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y age libsodium-dev python3-nacl
+          age-keygen --version || true
+          age --version
+
+      - name: Guard against overwrite
+        env:
+          GH_TOKEN: ${{ secrets.SECRETS_ADMIN_TOKEN }}
+          FORCE: ${{ inputs.force }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::error::SECRETS_ADMIN_TOKEN not set. Create a fine-scoped PAT with 'Actions: read/write' + 'Secrets: read/write' on this repo and add it as a repo secret named SECRETS_ADMIN_TOKEN, then re-run."
+            exit 1
+          fi
+
+          existing=$(curl -sS -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/actions/secrets \
+            | python3 -c 'import sys,json; d=json.load(sys.stdin); print(" ".join(s["name"] for s in d.get("secrets",[])))')
+
+          echo "Existing secrets: $existing"
+
+          if echo "$existing" | grep -qw AGE_PRIVATE_KEY; then
+            if [ "$FORCE" != "true" ]; then
+              echo "::error::AGE_PRIVATE_KEY already exists. Re-run with force=true to overwrite."
+              exit 1
+            fi
+            echo "force=true — will overwrite existing AGE_* secrets."
+          fi
+
+      - name: Generate key pair
+        id: keygen
+        run: |
+          age-keygen -o /tmp/age.key 2>/tmp/age.pub
+          PUBLIC=$(grep -oE 'age1[a-z0-9]+' /tmp/age.pub | head -1)
+          if [ -z "$PUBLIC" ]; then
+            echo "::error::age-keygen did not emit a public key we can parse"
+            cat /tmp/age.pub
+            exit 1
+          fi
+          echo "Public key: $PUBLIC"
+          echo "public=$PUBLIC" >> "$GITHUB_OUTPUT"
+
+      - name: Store both halves as repo secrets
+        env:
+          GH_TOKEN: ${{ secrets.SECRETS_ADMIN_TOKEN }}
+          PUBLIC: ${{ steps.keygen.outputs.public }}
+        run: |
+          set -e
+
+          # Fetch the repo's libsodium public key for encrypting secrets.
+          META=$(curl -sS -H "Authorization: Bearer $GH_TOKEN" \
+                   -H "Accept: application/vnd.github+json" \
+                   https://api.github.com/repos/${{ github.repository }}/actions/secrets/public-key)
+          KEY_ID=$(echo "$META" | python3 -c 'import sys,json; print(json.load(sys.stdin)["key_id"])')
+          REPO_PUB=$(echo "$META" | python3 -c 'import sys,json; print(json.load(sys.stdin)["key"])')
+
+          encrypt() {
+            local plaintext_file="$1"
+            python3 - "$REPO_PUB" "$plaintext_file" <<'PY'
+          import sys, base64
+          from nacl.public import PublicKey, SealedBox
+          pub_b64, path = sys.argv[1], sys.argv[2]
+          pub = PublicKey(base64.b64decode(pub_b64))
+          sealed = SealedBox(pub).encrypt(open(path,'rb').read())
+          print(base64.b64encode(sealed).decode())
+          PY
+          }
+
+          put_secret() {
+            local name="$1"; local value_file="$2"
+            local encrypted; encrypted=$(encrypt "$value_file")
+            local status
+            status=$(curl -sS -o /tmp/resp.json -w '%{http_code}' \
+              -X PUT \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              https://api.github.com/repos/${{ github.repository }}/actions/secrets/$name \
+              -d "{\"encrypted_value\":\"$encrypted\",\"key_id\":\"$KEY_ID\"}")
+            case "$status" in
+              201|204) echo "PUT $name → $status OK" ;;
+              *) echo "::error::PUT $name → $status"; cat /tmp/resp.json; exit 1 ;;
+            esac
+          }
+
+          echo -n "$PUBLIC" > /tmp/pub.txt
+          put_secret AGE_PUBLIC_KEY  /tmp/pub.txt
+          put_secret AGE_PRIVATE_KEY /tmp/age.key
+
+      - name: Wipe local key material
+        if: always()
+        run: |
+          shred -u /tmp/age.key /tmp/pub.txt 2>/dev/null || rm -f /tmp/age.key /tmp/pub.txt
+
+      - name: Summary
+        env:
+          PUBLIC: ${{ steps.keygen.outputs.public }}
+        run: |
+          {
+            echo "### Bootstrap complete"
+            echo ""
+            echo "- Public key: \`$PUBLIC\`"
+            echo "- \`AGE_PUBLIC_KEY\` secret set."
+            echo "- \`AGE_PRIVATE_KEY\` secret set."
+            echo ""
+            echo "The private key was generated inside this runner and never written outside repo secrets."
+            echo "Ready for the credential intake page."
+          } >> "$GITHUB_STEP_SUMMARY"
