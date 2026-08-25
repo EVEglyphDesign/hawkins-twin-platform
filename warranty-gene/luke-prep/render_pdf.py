@@ -310,7 +310,7 @@ html_body = re.sub(
         '<div class="title-block">'
         '<div class="kicker">EVEglyphDesign · Hawkins Twin Platform</div>'
         '<h1>Warranty GENE — Luke access prep</h1>'
-        '<div class="subtitle">EgD-WGB-003 · Four counterparties, one sweep · Ask for everything Hawkins is entitled to, in one message per counterparty</div>'
+        '<div class="subtitle">EgD-WGB-003 · Five counterparties, one sweep · Credentials scoped to every VIN Hawkins services, not just the sample</div>'
         f'<p>{m.group(1)}</p>'
         '</div>'
     ),

@@ -1,7 +1,8 @@
 <!doctype html>
 <html><head><meta charset="utf-8"><title>Warranty GENE — Luke Access Prep (EgD-WGB-003)</title></head>
-<body><div class="title-block"><div class="kicker">EVEglyphDesign · Hawkins Twin Platform</div><h1>Warranty GENE — Luke access prep</h1><div class="subtitle">EgD-WGB-003 · Four counterparties, one sweep · Ask for everything Hawkins is entitled to, in one message per counterparty</div><p>For the next sit-down with Luke Weatherbie. Four counterparties, one sweep. The goal is that from each counterparty we ask for <strong>everything Hawkins is legitimately entitled to</strong> as a dealer of its tenure that touches a VIN's service history — repair orders, work orders, historical service records, warranty claims, telematics feeds, campaign lookups, supplier bulletins, engine-manufacturer records. All of it, in one message per counterparty, so we don't have to go back multiple times.</p></div>
+<body><div class="title-block"><div class="kicker">EVEglyphDesign · Hawkins Twin Platform</div><h1>Warranty GENE — Luke access prep</h1><div class="subtitle">EgD-WGB-003 · Five counterparties, one sweep · Credentials scoped to every VIN Hawkins services, not just the sample</div><p>For the next sit-down with Luke Weatherbie. Five counterparties, one sweep. The goal is that from each counterparty we ask for <strong>everything Hawkins is legitimately entitled to</strong> as a dealer of its tenure that touches a VIN's service history — repair orders, work orders, historical service records, warranty claims, telematics feeds, campaign lookups, supplier bulletins, engine-manufacturer records, chassis-supplier records. All of it, in one message per counterparty, so we don't have to go back multiple times.</p></div>
 <p><strong>Why one sweep.</strong> Owner-operators are our customers. The more of a VIN's service history we can pull together in one place, the better job we can do for them. Every time we go back to the same counterparty a second time with a new ask, we raise the question "why now, why again, what changed" — which triggers governance review before it triggers credentials. Ask for everything in scope on the first pass, framed as due diligence, and the second pass is only for what wasn't granted.</p>
+<p><strong>Where this is going.</strong> The proof-of-concept is a representative sample. The target is complete warranty coverage for every VIN in Hawkins' book of service — every active vehicle, every historical vehicle we've touched, every claim eligible on any warranty lane through any counterparty. This sweep is designed so that once the credentials arrive, the same read pattern scales from the sample VINs to the full VIN population without renegotiating access. That's the point of asking each counterparty for everything Hawkins is entitled to as a dealer of its tenure, in one message: the credential granted here is the credential that covers every VIN we service, not just the ones in the first sample.</p>
 <p><strong>Adaptive frame.</strong> This document is a revision of an earlier five-surface sweep. Warranty GENE is designed to be redirected as we learn. When the counterparty conversations run and something new surfaces, this document is reissued at the same canon URL with a new revision line in the provenance block. Do not treat any single revision as the final word.</p>
 <hr>
 <h2>Who Luke is asking, at a glance</h2>
@@ -33,7 +34,13 @@
 <td>4</td>
 <td><strong>Powertrain manufacturers</strong></td>
 <td>One rep per manufacturer, framed as dealer-side due diligence</td>
-<td>Cummins (RAPIDSERVE Web API, QuickServe warranty history, INSITE session logs, campaign lookups); Eaton (ServiceRanger data, Roadranger warranty history); Allison (Allison DOC session logs, Allison warranty portal read). Meritor / Bendix / Wabco deferred to a second sweep</td>
+<td>Cummins (RAPIDSERVE Web API, QuickServe warranty history, INSITE session logs, campaign lookups); Eaton (ServiceRanger data, Roadranger warranty history); Allison (Allison DOC session logs, Allison warranty portal read)</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Chassis & air-system suppliers</strong></td>
+<td>One rep per manufacturer, same due-diligence framing</td>
+<td>Meritor (MTIS / OnTrac warranty portal, axle warranty history); Bendix (ACom Pro session logs, Bendix warranty portal); Wabco / ZF (Toolbox session logs, Wabco warranty portal); Dana (Dana Expert System, Spicer warranty portal)</td>
 </tr>
 </tbody></table>
 <hr>
@@ -99,7 +106,7 @@
 <hr>
 <h2>4. Powertrain manufacturers — three parallel due-diligence asks</h2>
 <p><strong>Who Luke asks.</strong> One rep per manufacturer. Cummins district service manager (or Hawkins' authorized-dealer service rep). Eaton warranty rep (Roadranger territory manager). Allison warranty rep (Allison Authorized Distributor territory manager). Each is a separate message. Do not bundle across manufacturers — each has its own warranty group, its own governance review, and no cross-visibility to what we asked another.</p>
-<p><strong>Why in this sweep.</strong> Powertrain is where warranty dollars concentrate. Engine, transmission, and torque-converter/automatic-transmission claims produce the biggest single-line warranty amounts and the longest owner-operator downtime. Reconciling our claim against the manufacturer's warranty record <em>before</em> submission is the single largest per-claim reduction in denial-and-appeal cycle time we can deliver to an owner-operator. Meritor, Bendix, and Wabco (axles, air brakes, air-system) matter and are deferred to a second sweep so this one stays focused.</p>
+<p><strong>Why in this sweep.</strong> Powertrain is where warranty dollars concentrate. Engine, transmission, and torque-converter/automatic-transmission claims produce the biggest single-line warranty amounts and the longest owner-operator downtime. Reconciling our claim against the manufacturer's warranty record <em>before</em> submission is the single largest per-claim reduction in denial-and-appeal cycle time we can deliver to an owner-operator. The chassis and air-system suppliers in Counterparty 5 are the second-largest bucket by claim frequency — axles, brakes, air-system — and both counterparties are needed together for a representative sample.</p>
 <p><strong>Framing across all three manufacturers.</strong> Same opening, adjusted per manufacturer's own terminology.</p>
 <blockquote>Hawkins is an authorized service dealer for [manufacturer] equipment on our Peterbilt platform. We're standing up an internal warranty due-diligence workflow that reconciles our warranty claim submissions against the [manufacturer] warranty record before submission. Goal is to reduce the denial rate of our claims and the appeal workload on your warranty group. Read-only. As an authorized service dealer of our tenure, we'd like to sweep — in one review — everything we're entitled to that would feed this reconciliation.</blockquote>
 <p><strong>Per-manufacturer specifics below.</strong></p>
@@ -138,7 +145,47 @@
 <ul>
 <li>Do not ask for Allison DOC Premium features. Read against the warranty portal and standard DOC session logs is the scope.</li>
 </ul>
-<p><strong>What "good" looks like leaving the room, across all three.</strong> Three separate warranty-rep-owned responses, each covering the read credentials and the warranty history/portal access for that manufacturer.</p>
+<p><strong>What "good" looks like leaving the room, across all three powertrain manufacturers.</strong> Three separate warranty-rep-owned responses, each covering the read credentials and the warranty history/portal access for that manufacturer.</p>
+<hr>
+<h2>5. Chassis and air-system suppliers — four parallel due-diligence asks</h2>
+<p><strong>Who Luke asks.</strong> One rep per manufacturer. Meritor (now Cummins Meritor) warranty rep or Hawkins' authorized-dealer contact. Bendix warranty rep for the Atlantic Canada territory. Wabco / ZF Commercial Vehicle Solutions warranty rep. Dana (Spicer) warranty rep. Each is a separate message. Same no-bundling rule as Counterparty 4 — each has its own warranty group and no cross-visibility.</p>
+<p><strong>Why in this sweep.</strong> These four suppliers own the axle, brake, air-system, and driveline component warranty lanes on every Peterbilt Atlantic chassis. A representative warranty sample cannot be proved out without at least one recovered claim per major component family, and these are where the second tier of warranty dollars lives after powertrain. Adding them now, in the same sweep as Counterparty 4, gets a full component-level picture on one pass and lets us prove the concept end-to-end.</p>
+<p><strong>Framing across all four.</strong> Same opening as Counterparty 4, adjusted per manufacturer's own terminology.</p>
+<blockquote>Hawkins is an authorized service dealer for [manufacturer] equipment on our Peterbilt platform. We're standing up an internal warranty due-diligence workflow that reconciles our warranty claim submissions against the [manufacturer] warranty record before submission. Goal is to reduce the denial rate of our claims and the appeal workload on your warranty group. Read-only. As an authorized service dealer of our tenure, we'd like to sweep — in one review — everything we're entitled to that would feed this reconciliation.</blockquote>
+<h3>5a. Meritor (Cummins Meritor)</h3>
+<p><strong>Who.</strong> Meritor warranty rep, or Hawkins' authorized-dealer service contact through the Meritor dealer channel.</p>
+<p><strong>Exact ask to Meritor.</strong></p>
+<blockquote>As an authorized Meritor service dealer under our Peterbilt platform, we'd like read-only access under our existing dealer authorization.</blockquote>
+<p><strong>Meritor Item 1 — MTIS / OnTrac warranty portal.</strong> Service-account read access to warranty transaction history for Meritor axles, driveline components, and tire-inflation systems (MTIS) we service, tied to Hawkins' authorized-dealer ID, plus campaign eligibility lookup.</p>
+<p><strong>Meritor Item 2 — Meritor dealer bulletin library.</strong> Service-account read to warranty policy circulars, campaign notices, and TSBs.</p>
+<p><strong>Meritor Item 3 — axle serial-number warranty coverage lookup.</strong> Read credentials for coverage lookup by axle serial, so we can confirm coverage before submission.</p>
+<h3>5b. Bendix</h3>
+<p><strong>Who.</strong> Bendix warranty rep for the Atlantic Canada territory (Bendix is now part of Knorr-Bremse North America), or Hawkins' authorized-dealer contact.</p>
+<p><strong>Exact ask to Bendix.</strong></p>
+<blockquote>As an authorized Bendix service dealer under our Peterbilt platform, we'd like read-only access under our existing dealer authorization.</blockquote>
+<p><strong>Bendix Item 1 — ACom Pro session log archive.</strong> The ability to submit and retrieve ACom Pro session data against warranty claims we're preparing, so the same session data your warranty group would ask us to attach on appeal is attached before submission.</p>
+<p><strong>Bendix Item 2 — Bendix warranty portal.</strong> Service-account read access to warranty transaction history for Bendix air-brake components (compressors, valves, ABS/ESP modules) we service, tied to Hawkins' authorized-dealer ID, plus campaign eligibility.</p>
+<p><strong>Bendix Item 3 — Bendix dealer bulletin library.</strong> Service-account read to warranty policy circulars, campaign notices, and TSBs.</p>
+<h3>5c. Wabco / ZF</h3>
+<p><strong>Who.</strong> ZF Commercial Vehicle Solutions warranty rep (Wabco was acquired by ZF in 2020; warranty is administered under ZF CVS now), or Hawkins' authorized-dealer contact.</p>
+<p><strong>Exact ask to ZF.</strong></p>
+<blockquote>As an authorized ZF / Wabco service dealer under our Peterbilt platform, we'd like read-only access under our existing dealer authorization.</blockquote>
+<p><strong>ZF Item 1 — Wabco Toolbox session log archive.</strong> The ability to submit and retrieve Toolbox session data against warranty claims we're preparing.</p>
+<p><strong>ZF Item 2 — ZF / Wabco warranty portal.</strong> Service-account read access to warranty transaction history for Wabco air-system components we service, tied to Hawkins' authorized-dealer ID, plus campaign eligibility.</p>
+<p><strong>ZF Item 3 — ZF / Wabco dealer bulletin library.</strong> Service-account read to warranty policy circulars, campaign notices, and TSBs.</p>
+<h3>5d. Dana (Spicer)</h3>
+<p><strong>Who.</strong> Dana warranty rep for the Atlantic Canada territory, or Hawkins' authorized-dealer contact through the Spicer dealer channel.</p>
+<p><strong>Exact ask to Dana.</strong></p>
+<blockquote>As an authorized Dana service dealer under our Peterbilt platform, we'd like read-only access under our existing dealer authorization.</blockquote>
+<p><strong>Dana Item 1 — Dana Expert System / SpicerParts warranty lookup.</strong> Read credentials for driveline coverage lookup by component serial number, and campaign eligibility.</p>
+<p><strong>Dana Item 2 — Dana warranty portal.</strong> Service-account read access to warranty transaction history for Dana driveline components (driveshafts, universal joints, PTOs) we service, tied to Hawkins' authorized-dealer ID.</p>
+<p><strong>Dana Item 3 — Dana dealer bulletin library.</strong> Service-account read to warranty policy circulars, campaign notices, and TSBs.</p>
+<p><strong>Language to avoid across Counterparty 5.</strong></p>
+<ul>
+<li>Do not describe Hawkins as "building an integration" with any of these suppliers. Same reason as Counterparty 4 — supplier integration goes through their partner-network track, not their dealer-service track.</li>
+<li>Do not name a competing supplier inside another supplier's ask. If Meritor sees us naming Dana, or Bendix sees us naming ZF, we get a marketing conversation instead of a warranty conversation.</li>
+</ul>
+<p><strong>What "good" looks like leaving the room, across all four chassis suppliers.</strong> Four separate warranty-rep-owned responses, each covering read credentials for the warranty portal, session-log archive access where applicable, and bulletin-library read.</p>
 <hr>
 <h2>The three things Luke keeps off every conversation</h2>
 <ol>
@@ -153,11 +200,12 @@
 <li><strong>CDK message (Counterparty 1) same day as the Luke-and-Dany sit-down.</strong> Get Luke to send it to his CDK account manager while Dany is with him, so the language is right on the first send. Three ticket IDs come back over the next several days.</li>
 <li><strong>PACCAR PDM message (Counterparty 2), 24 hours after CDK.</strong> Not the same day. CDK and PACCAR should each see a message that is clearly theirs alone, not one that arrives in tandem with the other's — which would make both counterparties assume this is a coordinated procurement event rather than a dealer due-diligence review.</li>
 <li><strong>Powertrain manufacturers (Counterparty 4a, 4b, 4c) in parallel, one week after Counterparties 1 and 2.</strong> By that point, CDK has confirmed PRWS provisioning and PACCAR has confirmed MX engine warranty scope, which gives Luke the "as an authorized service dealer of our tenure" credibility line on the manufacturer asks.</li>
+<li><strong>Chassis and air-system suppliers (Counterparty 5a, 5b, 5c, 5d) in parallel, same week as Counterparty 4.</strong> Same framing, same tenure line. These four move in parallel with the powertrain asks because they're independent counterparties — no one waits on another. The staggered send day-to-day is fine; the requirement is that all eight supplier messages (three powertrain plus four chassis) are out within the same week.</li>
 </ol>
 <hr>
 <h2>Provenance</h2>
 <ul>
-<li><strong>Revision.</strong> This is EgD-WGB-003 revision 2. Revision 1 (five surfaces) is superseded but referenced in the boot-contract defect register for the pattern it exposed — asking by surface name rather than by counterparty produced a five-message plan where a four-counterparty plan does the same work with less suspicion.</li>
+<li><strong>Revision.</strong> This is EgD-WGB-003 revision 3. Revision 1 (five surfaces) is superseded. Revision 2 (four counterparties, three powertrain suppliers) is superseded by this revision, which restores the full chassis-supplier sweep so the proof-of-concept has a representative sample across every major warranty-data repository a Peterbilt Atlantic VIN touches. The trimmed revision-2 scope is preserved in git history at commit <code>bd2240d</code> on the source repository for the record.</li>
 <li>Canonical surface map: <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/warranty-gene/registration/registration-and-terms.json"><code>warranty-gene/registration/registration-and-terms.json</code></a></li>
 <li>Registration & Terms narrative: <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/registration/">Warranty GENE Registration & Terms</a></li>
 <li>Warranty Procedure Manual v2026.7 (§1.18, §7.52, §7.53) — uploaded to the project workspace</li>
