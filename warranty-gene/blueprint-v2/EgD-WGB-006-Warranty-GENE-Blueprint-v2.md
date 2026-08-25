@@ -4,7 +4,7 @@
 **Document ID:** EgD-WGB-006 · **Key ID:** EgD-KEY-2026-07
 **Status:** For Tobias review, v0.2
 **Posture:** Modular sidecar to the Hawkins Twin. Business data lives in the client-owned Azure server. Public replica of record lives in the [Hawkins Twin GitHub repository](https://github.com/EVEglyphDesign/hawkins-twin-platform). **EVE holds custody of nothing at rest.**
-**Operating model:** Warranty GENE runs as a **two-step process on every VIN, every visit** — step 1 is an automated OEM coverage check from the DMS record, step 2 is a human-driven third-party check by the customer and the Hawkins service writer. Integrations tighten step 2 over time; they do not gate it.
+**Operating model:** Warranty GENE runs as a **two-step process on every VIN, every visit** — step 1 is an automated OEM coverage check from the DMS record (session-based read using Luke's existing CDK Drive and Lightspeed EVO logins; **no Fortellis, no Client Portal API subscription**), step 2 is a human-driven third-party check by the customer and the Hawkins service writer. Integrations tighten step 2 over time; they do not gate it.
 **Supersedes:** [EgD-WGB-001](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/blueprint/EgD-WGB-001-Warranty-GENE-Blueprint.pdf) — same architectural spine, retargeted to two rooftops (Peterbilt Atlantic + Torque Motorsports), custody split made explicit, AI surface made interchangeable, **two-step operating model made primary**.
 **Companions:** [Wireframe v0](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/wireframe/) · [Schema v1](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/schema/) · [Luke access prep (Peterbilt)](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep/EgD-WGB-003-Luke-Access-Prep.pdf) · [Luke access prep (BRP)](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep-brp/EgD-WGB-004-Luke-Access-Prep-BRP.pdf) · [Luke contact table](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-contacts/EgD-WGB-005-Luke-Contact-Table.pdf)
 
@@ -16,7 +16,7 @@
 
 ### 1.1 The two steps
 
-**Step 1 — automated OEM coverage check.** For every VIN with an active work order at either rooftop, the engine reads what CDK Drive already carries on the Peterbilt Atlantic side and what Lightspeed EVO already carries on the Torque Motorsports side, joins it against the public OEM coverage references, and returns which OEM warranty buckets are still active on that VIN. On the Peterbilt side that is PACCAR base and extended warranty windows and the CE033 federal emissions extension. On the Torque Motorsports side that is BRP base warranty and any B.E.S.T. extended coverage the DMS record already reflects. **This step touches no third party, requires no new credential, and needs no integration built.** It uses the DMS logins Luke has today and the public references already committed to the repository. It runs on every VIN, every visit, forever — not just during the POC.
+**Step 1 — automated OEM coverage check.** For every VIN with an active work order at either rooftop, the engine reads what CDK Drive already carries on the Peterbilt Atlantic side and what Lightspeed EVO already carries on the Torque Motorsports side, joins it against the public OEM coverage references, and returns which OEM warranty buckets are still active on that VIN. On the Peterbilt side that is PACCAR base and extended warranty windows and the CE033 federal emissions extension. On the Torque Motorsports side that is BRP base warranty and any B.E.S.T. extended coverage the DMS record already reflects. **This step touches no third party, requires no new credential, and needs no integration built.** The engine authenticates as Luke against CDK Drive and Lightspeed EVO — same URL, same credential, same screens Luke uses today — and pulls the data automatically on the schedule the operation needs (nightly, hourly, or on-demand per VIN). Luke's credential is vaulted in Azure; Luke enters it once. **Luke never opens the DMS to service the engine — he opens it for his own work.** No Fortellis subscription. No Lightspeed Client Portal API subscription. No per-call fees. It runs on every VIN, every visit, forever — not just during the POC.
 
 **Step 2 — human-driven third-party check.** Everything the DMS record does not know about is surfaced by the humans in the loop. The service writer asks the customer whether they hold any extended warranty, service contract, or VSC on the unit — the customer knows what they bought, they usually have the paperwork with them, and if they do not know we can rely on them to check. Hawkins staff then verify against whichever administrator the customer names, using whatever channel is fastest at that moment (customer-provided paperwork, a phone call to the administrator, a portal login if Hawkins already has one). The engine records what the customer surfaced, what Hawkins verified, and against which administrator, so the sovereign replica grows one VIN at a time — tier-3 (unknown) moves to tier-1/2 (known) for that VIN's next visit. **Step 2 runs on every VIN, every visit, forever — even after every third-party integration is wired up, because the customer's knowledge is upstream of every portal.**
 
@@ -142,7 +142,7 @@ Four parts, each replaceable on its own — identical to the v1 spine, wired thr
 | Browser wizard (three modes) | **Live** | **Live** | Same page, same flow |
 | Public coverage ledger | **Live** | Configured | Truck: NHTSA CE033, MX 2025 Extended, WPM v2026.7. Powersports: BRP B.E.S.T., third-party VSC references |
 | Provenance / audit ledger | **Live** | **Live** | Same stamp taxonomy |
-| Source adapter | Configured (CDK Drive) | Configured (Lightspeed EVO) | Point at rooftop DMS export path |
+| Source adapter | Configured (CDK Drive, session-based, no Fortellis) | Configured (Lightspeed EVO, session-based, no API sub) | Authenticated session using Luke's dealer credential, vaulted in Azure |
 | Dealer credential set | Pending Luke | Pending Luke | Twenty-one counterparties from [EgD-WGB-005](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-contacts/EgD-WGB-005-Luke-Contact-Table.pdf) |
 | Rooftop map | Peterbilt Atlantic rooftops | Torque Motorsports rooftops | Configured per engagement |
 
@@ -240,10 +240,10 @@ The adapter reads live. Everything read is written back to Azure and mirrored to
 | **PRWS** — retail-sale, coverage codes | Peterbilt | Invitation-only | Azure only; non-PII summary to GitHub |
 | **PACCAR Solutions / SmartLINQ** — telemetry, DTCs | Peterbilt | Invitation-only | Azure only; non-PII summary to GitHub |
 | **PSSM Decisiv** — point-of-service coverage | Peterbilt | Invitation-only | Azure only; non-PII summary to GitHub |
-| **CDK Drive / Fortellis** — DMS | Peterbilt | Booking calendar, RO, service history | Azure only; non-PII summary to GitHub |
+| **CDK Drive** — DMS (authenticated session as Luke, credential vaulted in Azure; **no Fortellis subscription**) | Peterbilt | Booking calendar, RO, service history | Azure only; non-PII summary to GitHub |
 | **Big-5 truck component portals** — Cummins QuickServe, Eaton my.eaton.com, Allison HUB, Cummins-Meritor OnTrac, Bendix, ZF, Dana RTW | Peterbilt | Component-level coverage and warranty claim | Azure only; non-PII summary to GitHub |
 | **BRP VIN decoder / B.E.S.T. lookup** | BRP | Identity + extended plan status | GitHub (public), Azure (audit copy) |
-| **Lightspeed EVO** — DMS | BRP | Booking calendar, RO, deal, customer | Azure only; non-PII summary to GitHub |
+| **Lightspeed EVO** — DMS (authenticated session as Luke, credential vaulted in Azure; **no Client Portal API subscription**) | BRP | Booking calendar, RO, deal, customer | Azure only; non-PII summary to GitHub |
 | **BOSSWeb** — BRP dealer portal, warranty | BRP | Warranty claim entry, B.E.S.T. status | Azure only; non-PII summary to GitHub |
 | **Assurant, Portfolio, EasyCare, Zurich** — wave-one VSC administrators | BRP | Contract lookup by VIN, claim status | Azure only; non-PII summary to GitHub |
 | **Protective/ProGuard, GWC/CornerStone** — wave-two VSC administrators | BRP | Contract lookup by VIN, claim status | Azure only; non-PII summary to GitHub |
@@ -275,7 +275,8 @@ Configuration, not build. Reusing the v1 pattern (§6 of EgD-WGB-001) applied to
 | Item | Who provisions | Cost | Blocker? |
 |------|---------------|------|----------|
 | Rooftop list and BRP-line map | Dealer operations | Free | No |
-| Lightspeed EVO export path (or Client Portal API) | Dealer service manager | Contract-dependent | No — paste-in fallback |
+| CDK Drive read (session-based, Luke's credential vaulted) | Luke (credential); Hawkins IT (vault) | **Free — no Fortellis, no API subscription** | No |
+| Lightspeed EVO read (session-based, Luke's credential vaulted) | Luke (credential); Hawkins IT (vault) | **Free — no Client Portal API subscription** | No |
 | BRP VIN decode / public B.E.S.T. references | Public | Free | No |
 | BOSSWeb dealer portal (BRP corporate) | Luke via BRP corporate | Free | **Yes — commercial** |
 | Wave-one VSC administrators (Assurant, Portfolio, EasyCare, Zurich) | Luke | Free | **Yes — commercial** |
@@ -355,8 +356,8 @@ Every integration is named against which step it feeds and what it adds to Hawki
 
 | Integration | Feeds which step | Adds to Hawkins's dataset | Compounds because |
 |-------------|------------------|--------------------------|-------------------|
-| **CDK Drive (Peterbilt)** | Step 1 (already in hand) | Live booking calendar, RO history, current mileage — the substrate step 1 joins against | Same substrate feeds recall recovery, resale valuation, PM planning tomorrow — one integration, many services |
-| **Lightspeed EVO (BRP)** | Step 1 (already in hand) | Live booking calendar, RO history, deal + customer records — the substrate step 1 joins against | Same substrate feeds seasonality-aware bookings, cross-line customer profiles, third-party VSC reconciliation tomorrow |
+| **CDK Drive (Peterbilt)** — session-based read using Luke's existing login, **no Fortellis subscription** | Step 1 (already in hand) | Live booking calendar, RO history, current mileage — the substrate step 1 joins against | Same substrate feeds recall recovery, resale valuation, PM planning tomorrow — one integration, many services |
+| **Lightspeed EVO (BRP)** — session-based read using Luke's existing login, **no Client Portal API subscription** | Step 1 (already in hand) | Live booking calendar, RO history, deal + customer records — the substrate step 1 joins against | Same substrate feeds seasonality-aware bookings, cross-line customer profiles, third-party VSC reconciliation tomorrow |
 | **PRWS + PACCAR Solutions + PSSM Decisiv** | Step 1 (adds depth) | Truck-side coverage windows, telemetry, point-of-service coverage — fields step 1 needs that CDK does not carry | Turns every service event on a Peterbilt VIN into a payer-first write-up instead of a customer-pay-by-default one |
 | **Big-5 truck component portals** (Cummins, Eaton, Allison, Cummins-Meritor, Bendix, ZF, Dana) | Step 1 (adds depth) | Component-level coverage — Cummins engine block covered separately from the Peterbilt chassis, etc. | Answers component-level "who pays" questions the OEM portal cannot; produces the choice records that grade component-level coverage recommendations |
 | **BOSSWeb + BRP B.E.S.T.** | Step 1 (adds depth) | Powersports coverage windows and extended plan status — the analog of PRWS on the BRP side | Turns every service event on a BRP VIN into a payer-first write-up |
@@ -374,6 +375,8 @@ Called out so nothing is presumed:
 
 - **Cross-brand support beyond Peterbilt and BRP.** Cummins-powered non-Peterbilt chassis, DTNA, Volvo, Kenworth on the truck side; Polaris, Yamaha, Honda on the powersports side. Not on the Hawkins critical path.
 - **Write-back to PRWS or BOSSWeb.** Read-only in this design. A warranty administrator files the claim through the OEM portal the normal way, using the twin card as the write-up input.
+- **DMS API subscriptions.** Fortellis (CDK's API marketplace) and Lightspeed's Client Portal API are **explicitly not part of this design**. The engine reads both DMSes through Luke's existing dealer login as an authenticated session, with the credential vaulted in Azure. Every warranty field the engine needs is already visible to Luke on the DMS screens; the automation reads the same screens on Luke's behalf on a schedule.
+- **DMS terms-of-service note.** Both CDK and Lightspeed have terms that treat automated session-based reads differently from human reads. CDK in particular has historically pushed customers toward Fortellis for automation. The mitigation is standard: rate-limit the adapter to human-plausible cadence, run it from Hawkins-owned Azure infrastructure using Hawkins's own dealer credential, and have Hawkins name the adapter in the master service agreement with CDK as authorised access on their behalf. Dealers run automation of this shape every day; the credential is the dealer's own.
 - **Warranty claim submission automation.** Out of scope; regulated by each OEM and administrator.
 - **Customer PII.** Full PII lives in Azure only; the GitHub replica carries non-PII derived rows. The rendering rule for owner names on the delivery surfaces is set by the dealer principal per rooftop.
 - **EVE holding any data at rest.** Not in scope. Not in this design. Not in any future revision of this design.
