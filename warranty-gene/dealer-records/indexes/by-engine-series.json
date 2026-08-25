@@ -1,0 +1,22 @@
+{
+  "Battery Electric": [
+    "1XPBSYN00P1000606"
+  ],
+  "Diesel": [
+    "1XPBSYN00L1000404",
+    "1XPBSYN00M1000303",
+    "1XPBSYN00N1000101",
+    "1XPBSYN00N1000707",
+    "1XPBSYN00P1000202",
+    "1XPBSYN00R1000505"
+  ],
+  "MX-Equipped": [
+    "1XPBSYN00L1000404",
+    "1XPBSYN00N1000101",
+    "1XPBSYN00N1000707",
+    "1XPBSYN00P1000202"
+  ],
+  "Severe Service": [
+    "1XPBSYN00M1000303"
+  ]
+}

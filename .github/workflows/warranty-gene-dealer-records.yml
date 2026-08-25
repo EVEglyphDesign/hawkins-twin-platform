@@ -1,0 +1,31 @@
+name: warranty-gene dealer-records
+
+on:
+  push:
+    paths:
+      - "warranty-gene/dealer-records/**"
+      - "warranty-gene/schema/**"
+  pull_request:
+    paths:
+      - "warranty-gene/dealer-records/**"
+      - "warranty-gene/schema/**"
+  workflow_dispatch: {}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install jsonschema
+      - name: Validate every VIN record
+        run: python warranty-gene/dealer-records/scripts/validate_records.py
+      - name: Rebuild indexes
+        run: python warranty-gene/dealer-records/scripts/build_indexes.py
+      - name: Round-trip test — every primary VIN appears in the indexes
+        run: python warranty-gene/dealer-records/scripts/test_indexing.py
+      - name: Measure repo footprint
+        run: python warranty-gene/dealer-records/scripts/measure_repo_size.py

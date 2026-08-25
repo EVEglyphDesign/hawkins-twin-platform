@@ -1,0 +1,86 @@
+{
+  "base_emissions_epa_eccc": [
+    {
+      "ata_code": "3251.E",
+      "customer_pay_at_risk_cad": 780.0,
+      "job_id": "FLT-3251E",
+      "status": "Open",
+      "type": "Aftertreatment",
+      "vin": "1XPBSYN00L1000404"
+    },
+    {
+      "ata_code": "SPN-4334",
+      "customer_pay_at_risk_cad": 1450.0,
+      "job_id": "E312-2025",
+      "status": "Open",
+      "type": "Aftertreatment",
+      "vin": "1XPBSYN00N1000101"
+    }
+  ],
+  "bev_ess": [
+    {
+      "ata_code": null,
+      "customer_pay_at_risk_cad": 8900.0,
+      "job_id": "BEV-CAMP-2026-04",
+      "status": "Open",
+      "type": "BEV Powertrain",
+      "vin": "1XPBSYN00P1000606"
+    }
+  ],
+  "engine_major_components": [
+    {
+      "ata_code": null,
+      "customer_pay_at_risk_cad": 0.0,
+      "job_id": "ESA-9485634-CORE",
+      "status": "Open",
+      "type": "Powertrain",
+      "vin": "1XPBSYN00M1000303"
+    }
+  ],
+  "none": [
+    {
+      "ata_code": null,
+      "customer_pay_at_risk_cad": 0.0,
+      "job_id": "INFO-SW-2026-11",
+      "status": "Open",
+      "type": "Powertrain",
+      "vin": "1XPBSYN00N1000707"
+    }
+  ],
+  "standard_mx_engine": [
+    {
+      "ata_code": "1569.C",
+      "customer_pay_at_risk_cad": 6400.0,
+      "job_id": "FLT-1569C",
+      "status": "Open",
+      "type": "Powertrain",
+      "vin": "1XPBSYN00M1000303"
+    },
+    {
+      "ata_code": null,
+      "customer_pay_at_risk_cad": 2180.0,
+      "job_id": "PROG-EGR-COOLER-018",
+      "status": "Open",
+      "type": "Powertrain",
+      "vin": "1XPBSYN00N1000101"
+    }
+  ],
+  "standard_vehicle": [
+    {
+      "ata_code": "SPN-91",
+      "customer_pay_at_risk_cad": 0.0,
+      "job_id": "R2026-014",
+      "status": "Open",
+      "type": "Safety",
+      "vin": "1XPBSYN00P1000202"
+    },
+    {
+      "ata_code": "SPN-91",
+      "customer_pay_at_risk_cad": 0.0,
+      "job_id": "R2026-021",
+      "status": "Open",
+      "type": "Electrical",
+      "vin": "1XPBSYN00R1000505"
+    }
+  ]
+}

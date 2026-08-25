@@ -1,0 +1,165 @@
+{
+  "record_id": "6800b501cf95eb6f87d2bf44afd85591fa844078",
+  "vin": "1XPBSYN00P1000202",
+  "as_of": "2026-08-24T12:00:00+00:00",
+  "chassis": {
+    "model": "579",
+    "class": "Class 8",
+    "series": [
+      "Diesel",
+      "MX-Equipped"
+    ],
+    "in_service_date": "2024-11-02",
+    "vocational_use": "Regional Haul"
+  },
+  "usage": {
+    "odometer_km": 118000,
+    "engine_hours": 1450,
+    "as_of": "2026-08-24T12:00:00+00:00",
+    "source": "SmartLINQ"
+  },
+  "owner": {
+    "customer_id": "CDK-CUST-000202",
+    "customer_type": "Owner-Operator",
+    "fleet_id": null,
+    "home_rooftop": "PA-FREDERICTON"
+  },
+  "coverage": {
+    "base_emissions_carb": {
+      "applies": true,
+      "months_remaining": 39,
+      "distance_remaining_km": null,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "base_emissions_epa_eccc": {
+      "applies": true,
+      "months_remaining": 39,
+      "distance_remaining_km": 42000,
+      "hours_remaining": null,
+      "expiry_reason": "distance"
+    },
+    "standard_vehicle": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": 42000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "standard_mx_engine": {
+      "applies": true,
+      "months_remaining": 3,
+      "distance_remaining_km": 282000,
+      "hours_remaining": 4800,
+      "expiry_reason": "months"
+    },
+    "engine_major_components": {
+      "applies": true,
+      "months_remaining": 39,
+      "distance_remaining_km": 682000,
+      "hours_remaining": 11050,
+      "expiry_reason": "hours"
+    },
+    "vehicle_major_components": {
+      "applies": true,
+      "months_remaining": 15,
+      "distance_remaining_km": 362000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "severe_service": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": 0,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "paccar_alternator_starter": {
+      "applies": true,
+      "months_remaining": 15,
+      "distance_remaining_km": 442000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "paccar_front_axles": {
+      "applies": true,
+      "months_remaining": 39,
+      "distance_remaining_km": 1082000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "non_paccar_front_axles": {
+      "applies": true,
+      "months_remaining": 15,
+      "distance_remaining_km": 362000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    }
+  },
+  "open_jobs": [
+    {
+      "job_id": "R2026-014",
+      "authority": "Federal Safety Recall",
+      "type": "Safety",
+      "component": "Brake Pedal Position Switch",
+      "ata_code": "SPN-91",
+      "coverage_bucket": "standard_vehicle",
+      "estimated_srt_hours": 0.9,
+      "parts_on_hand": true,
+      "customer_pay_at_risk_cad": 0.0,
+      "status": "Open",
+      "source_bulletin_url": "https://paccar.example/recalls/R2026-014"
+    }
+  ],
+  "score": {
+    "margin_estimate_cad": 241.92,
+    "time_to_expiry_days": 0,
+    "booking_urgency": "inbound-this-week",
+    "total": 43.2
+  },
+  "compliance": {
+    "clean": true,
+    "flags": {
+      "missing_technician_id": false,
+      "rmi_undocumented": false,
+      "labor_time_unsupported": false,
+      "repeat_ineffective_repair": false,
+      "prior_approval_required_and_missing": false
+    }
+  },
+  "telemetry": {
+    "last_ping": "2026-08-24T12:00:00+00:00",
+    "in_hawkins_region": false,
+    "projected_overnight_region": "Hawkins-NB",
+    "geofence_confidence": 0.71
+  },
+  "source_provenance": [
+    {
+      "source": "SIR",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "SmartLINQ Service Management",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "PACCAR Solutions Telematics",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "Warranty Quick Reference Guide 2025.4",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Coverage buckets, months, and distance caps."
+    },
+    {
+      "source": "CARB/EPA/ECCC Emission Component Coverage",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Emissions-family tagging for aftertreatment jobs."
+    },
+    {
+      "source": "Warranty Procedure Manual v2026.7",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Authority hierarchy, Prior Approval and audit rules."
+    }
+  ]
+}

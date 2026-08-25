@@ -1,0 +1,164 @@
+{
+  "record_id": "4e5465b9e63e0f247e979827a1c6878809778a37",
+  "vin": "1XPBSYN00M1000303",
+  "as_of": "2026-08-24T12:00:00+00:00",
+  "chassis": {
+    "model": "567",
+    "class": "Class 8",
+    "series": [
+      "Diesel",
+      "Severe Service"
+    ],
+    "in_service_date": "2022-06-18",
+    "vocational_use": "Logger"
+  },
+  "usage": {
+    "odometer_km": 258000,
+    "engine_hours": 3600,
+    "as_of": "2026-08-24T12:00:00+00:00",
+    "source": "SmartLINQ"
+  },
+  "owner": {
+    "customer_id": "CDK-CUST-000303",
+    "customer_type": "DSFW Fleet",
+    "fleet_id": "FLEET-ATLANTIC-LOG-002",
+    "home_rooftop": "PA-BATHURST"
+  },
+  "coverage": {
+    "base_emissions_carb": {
+      "applies": true,
+      "months_remaining": 10,
+      "distance_remaining_km": null,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "base_emissions_epa_eccc": {
+      "applies": true,
+      "months_remaining": 10,
+      "distance_remaining_km": 0,
+      "hours_remaining": null,
+      "expiry_reason": "distance"
+    },
+    "standard_vehicle": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": 0,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "vehicle_major_components": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": 222000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "severe_service": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": 0,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "paccar_alternator_starter": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": 302000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "paccar_front_axles": {
+      "applies": true,
+      "months_remaining": 10,
+      "distance_remaining_km": 942000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "non_paccar_front_axles": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": 222000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    }
+  },
+  "open_jobs": [
+    {
+      "job_id": "FLT-1569C",
+      "authority": "Live Fault Code",
+      "type": "Powertrain",
+      "component": "Turbocharger \u2014 Variable Geometry (VGT) Assembly",
+      "ata_code": "1569.C",
+      "coverage_bucket": "standard_mx_engine",
+      "estimated_srt_hours": 4.8,
+      "parts_on_hand": false,
+      "customer_pay_at_risk_cad": 6400.0,
+      "status": "Open",
+      "source_bulletin_url": null
+    },
+    {
+      "job_id": "ESA-9485634-CORE",
+      "authority": "Extended Service Agreement",
+      "type": "Powertrain",
+      "component": "MX-13 Major Component Coverage \u2014 7/700 ESA",
+      "ata_code": null,
+      "coverage_bucket": "engine_major_components",
+      "estimated_srt_hours": 0.0,
+      "parts_on_hand": true,
+      "customer_pay_at_risk_cad": 0.0,
+      "status": "Open",
+      "source_bulletin_url": "https://paccar.example/esa/9485634"
+    }
+  ],
+  "score": {
+    "margin_estimate_cad": 1435.39,
+    "time_to_expiry_days": 9999,
+    "booking_urgency": "in-region",
+    "total": 25.2
+  },
+  "compliance": {
+    "clean": false,
+    "flags": {
+      "missing_technician_id": false,
+      "rmi_undocumented": false,
+      "labor_time_unsupported": false,
+      "repeat_ineffective_repair": false,
+      "prior_approval_required_and_missing": true
+    }
+  },
+  "telemetry": {
+    "last_ping": "2026-08-24T12:00:00+00:00",
+    "in_hawkins_region": true,
+    "projected_overnight_region": "Adjacent-QC",
+    "geofence_confidence": 0.55
+  },
+  "source_provenance": [
+    {
+      "source": "SIR",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "SmartLINQ Service Management",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "PACCAR Solutions Telematics",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "Warranty Quick Reference Guide 2025.4",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Coverage buckets, months, and distance caps."
+    },
+    {
+      "source": "CARB/EPA/ECCC Emission Component Coverage",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Emissions-family tagging for aftertreatment jobs."
+    },
+    {
+      "source": "Warranty Procedure Manual v2026.7",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Authority hierarchy, Prior Approval and audit rules."
+    }
+  ]
+}

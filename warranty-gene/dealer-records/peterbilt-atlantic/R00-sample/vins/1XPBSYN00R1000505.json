@@ -1,0 +1,143 @@
+{
+  "record_id": "320b93e7a507c7b6ec988784486092c683cce0f8",
+  "vin": "1XPBSYN00R1000505",
+  "as_of": "2026-08-24T12:00:00+00:00",
+  "chassis": {
+    "model": "537",
+    "class": "Class 6/7",
+    "series": [
+      "Diesel"
+    ],
+    "in_service_date": "2025-01-22",
+    "vocational_use": "Pickup Delivery"
+  },
+  "usage": {
+    "odometer_km": 42000,
+    "engine_hours": 620,
+    "as_of": "2026-08-24T12:00:00+00:00",
+    "source": "SmartLINQ"
+  },
+  "owner": {
+    "customer_id": "CDK-CUST-000505",
+    "customer_type": "Owner-Operator",
+    "fleet_id": null,
+    "home_rooftop": "PA-DIEPPE"
+  },
+  "coverage": {
+    "base_emissions_carb": {
+      "applies": true,
+      "months_remaining": 41,
+      "distance_remaining_km": null,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "base_emissions_epa_eccc": {
+      "applies": true,
+      "months_remaining": 41,
+      "distance_remaining_km": 118000,
+      "hours_remaining": null,
+      "expiry_reason": "distance"
+    },
+    "standard_vehicle": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": null,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "vehicle_major_components": {
+      "applies": true,
+      "months_remaining": 5,
+      "distance_remaining_km": null,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "severe_service": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": 38000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "paccar_front_axles": {
+      "applies": true,
+      "months_remaining": 41,
+      "distance_remaining_km": 1158000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "non_paccar_front_axles": {
+      "applies": true,
+      "months_remaining": 29,
+      "distance_remaining_km": null,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    }
+  },
+  "open_jobs": [
+    {
+      "job_id": "R2026-021",
+      "authority": "Federal Safety Recall",
+      "type": "Electrical",
+      "component": "Accelerator Pedal (Lever Position) Sensor",
+      "ata_code": "SPN-91",
+      "coverage_bucket": "standard_vehicle",
+      "estimated_srt_hours": 0.8,
+      "parts_on_hand": true,
+      "customer_pay_at_risk_cad": 0.0,
+      "status": "Open",
+      "source_bulletin_url": "https://paccar.example/recalls/R2026-021"
+    }
+  ],
+  "score": {
+    "margin_estimate_cad": 215.04,
+    "time_to_expiry_days": 0,
+    "booking_urgency": "inbound-tonight",
+    "total": 51.1
+  },
+  "compliance": {
+    "clean": true,
+    "flags": {
+      "missing_technician_id": false,
+      "rmi_undocumented": false,
+      "labor_time_unsupported": false,
+      "repeat_ineffective_repair": false,
+      "prior_approval_required_and_missing": false
+    }
+  },
+  "telemetry": {
+    "last_ping": "2026-08-24T12:00:00+00:00",
+    "in_hawkins_region": true,
+    "projected_overnight_region": "Hawkins-NB",
+    "geofence_confidence": 0.94
+  },
+  "source_provenance": [
+    {
+      "source": "SIR",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "SmartLINQ Service Management",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "PACCAR Solutions Telematics",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "Warranty Quick Reference Guide 2025.4",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Coverage buckets, months, and distance caps."
+    },
+    {
+      "source": "CARB/EPA/ECCC Emission Component Coverage",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Emissions-family tagging for aftertreatment jobs."
+    },
+    {
+      "source": "Warranty Procedure Manual v2026.7",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Authority hierarchy, Prior Approval and audit rules."
+    }
+  ]
+}

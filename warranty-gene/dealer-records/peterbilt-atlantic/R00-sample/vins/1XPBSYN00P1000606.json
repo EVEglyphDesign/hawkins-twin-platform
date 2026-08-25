@@ -1,0 +1,114 @@
+{
+  "record_id": "fc643dd58dfa1857390b52ed5250017f9f75bdad",
+  "vin": "1XPBSYN00P1000606",
+  "as_of": "2026-08-24T12:00:00+00:00",
+  "chassis": {
+    "model": "220EV",
+    "class": "Class 6/7",
+    "series": [
+      "Battery Electric"
+    ],
+    "in_service_date": "2024-09-14",
+    "vocational_use": "Pickup Delivery"
+  },
+  "usage": {
+    "odometer_km": 27500,
+    "as_of": "2026-08-24T12:00:00+00:00",
+    "source": "SmartLINQ"
+  },
+  "owner": {
+    "customer_id": "CDK-CUST-000606",
+    "customer_type": "Small Fleet",
+    "fleet_id": null,
+    "home_rooftop": "PA-MONCTON"
+  },
+  "coverage": {
+    "standard_vehicle": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": null,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "vehicle_major_components": {
+      "applies": true,
+      "months_remaining": 1,
+      "distance_remaining_km": null,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "bev_ess": {
+      "applies": true,
+      "months_remaining": 49,
+      "distance_remaining_km": 172500,
+      "hours_remaining": null,
+      "expiry_reason": "distance"
+    }
+  },
+  "open_jobs": [
+    {
+      "job_id": "BEV-CAMP-2026-04",
+      "authority": "Field Repair Campaign",
+      "type": "BEV Powertrain",
+      "component": "High Voltage Battery Junction Box (S-Box)",
+      "ata_code": null,
+      "coverage_bucket": "bev_ess",
+      "estimated_srt_hours": 3.5,
+      "parts_on_hand": false,
+      "customer_pay_at_risk_cad": 8900.0,
+      "status": "Open",
+      "source_bulletin_url": "https://paccar.example/bev/CAMP-2026-04"
+    }
+  ],
+  "score": {
+    "margin_estimate_cad": 1046.64,
+    "time_to_expiry_days": 345,
+    "booking_urgency": "inbound-tonight",
+    "total": 43.2
+  },
+  "compliance": {
+    "clean": true,
+    "flags": {
+      "missing_technician_id": false,
+      "rmi_undocumented": false,
+      "labor_time_unsupported": false,
+      "repeat_ineffective_repair": false,
+      "prior_approval_required_and_missing": false
+    }
+  },
+  "telemetry": {
+    "last_ping": "2026-08-24T12:00:00+00:00",
+    "in_hawkins_region": true,
+    "projected_overnight_region": "Hawkins-NB",
+    "geofence_confidence": 0.9
+  },
+  "source_provenance": [
+    {
+      "source": "SIR",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "SmartLINQ Service Management",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "PACCAR Solutions Telematics",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "Warranty Quick Reference Guide 2025.4",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Coverage buckets, months, and distance caps."
+    },
+    {
+      "source": "CARB/EPA/ECCC Emission Component Coverage",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Emissions-family tagging for aftertreatment jobs."
+    },
+    {
+      "source": "Warranty Procedure Manual v2026.7",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Authority hierarchy, Prior Approval and audit rules."
+    }
+  ]
+}

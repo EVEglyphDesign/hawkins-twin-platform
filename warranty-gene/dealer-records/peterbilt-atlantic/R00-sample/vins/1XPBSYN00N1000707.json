@@ -1,0 +1,165 @@
+{
+  "record_id": "b81ca1ca33c2d6def658117e1c81917942763467",
+  "vin": "1XPBSYN00N1000707",
+  "as_of": "2026-08-24T12:00:00+00:00",
+  "chassis": {
+    "model": "579",
+    "class": "Class 8",
+    "series": [
+      "Diesel",
+      "MX-Equipped"
+    ],
+    "in_service_date": "2023-08-30",
+    "vocational_use": "Regional Haul"
+  },
+  "usage": {
+    "odometer_km": 385000,
+    "engine_hours": 4200,
+    "as_of": "2026-08-24T12:00:00+00:00",
+    "source": "SmartLINQ"
+  },
+  "owner": {
+    "customer_id": "CDK-CUST-000707",
+    "customer_type": "Small Fleet",
+    "fleet_id": null,
+    "home_rooftop": "PA-EDMUNDSTON"
+  },
+  "coverage": {
+    "base_emissions_carb": {
+      "applies": true,
+      "months_remaining": 24,
+      "distance_remaining_km": null,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "base_emissions_epa_eccc": {
+      "applies": true,
+      "months_remaining": 24,
+      "distance_remaining_km": 0,
+      "hours_remaining": null,
+      "expiry_reason": "distance"
+    },
+    "standard_vehicle": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": 0,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "standard_mx_engine": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": 15000,
+      "hours_remaining": 2050,
+      "expiry_reason": "months"
+    },
+    "engine_major_components": {
+      "applies": true,
+      "months_remaining": 24,
+      "distance_remaining_km": 415000,
+      "hours_remaining": 8300,
+      "expiry_reason": "months"
+    },
+    "vehicle_major_components": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": 95000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "severe_service": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": 0,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "paccar_alternator_starter": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": 175000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "paccar_front_axles": {
+      "applies": true,
+      "months_remaining": 24,
+      "distance_remaining_km": 815000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    },
+    "non_paccar_front_axles": {
+      "applies": true,
+      "months_remaining": 0,
+      "distance_remaining_km": 95000,
+      "hours_remaining": null,
+      "expiry_reason": "months"
+    }
+  },
+  "open_jobs": [
+    {
+      "job_id": "INFO-SW-2026-11",
+      "authority": "Information Only",
+      "type": "Powertrain",
+      "component": "Engine Control Module (ECM) Software",
+      "ata_code": null,
+      "coverage_bucket": "none",
+      "estimated_srt_hours": 0.6,
+      "parts_on_hand": true,
+      "customer_pay_at_risk_cad": 0.0,
+      "status": "Open",
+      "source_bulletin_url": "https://paccar.example/info/SW-2026-11"
+    }
+  ],
+  "score": {
+    "margin_estimate_cad": 0,
+    "time_to_expiry_days": 9999,
+    "booking_urgency": "out-of-region",
+    "total": 3.0
+  },
+  "compliance": {
+    "clean": true,
+    "flags": {
+      "missing_technician_id": false,
+      "rmi_undocumented": false,
+      "labor_time_unsupported": false,
+      "repeat_ineffective_repair": false,
+      "prior_approval_required_and_missing": false
+    }
+  },
+  "telemetry": {
+    "last_ping": "2026-08-24T12:00:00+00:00",
+    "in_hawkins_region": false,
+    "projected_overnight_region": "Unknown",
+    "geofence_confidence": 0.1
+  },
+  "source_provenance": [
+    {
+      "source": "SIR",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "SmartLINQ Service Management",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "PACCAR Solutions Telematics",
+      "captured_at": "2026-08-24T12:00:00+00:00"
+    },
+    {
+      "source": "Warranty Quick Reference Guide 2025.4",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Coverage buckets, months, and distance caps."
+    },
+    {
+      "source": "CARB/EPA/ECCC Emission Component Coverage",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Emissions-family tagging for aftertreatment jobs."
+    },
+    {
+      "source": "Warranty Procedure Manual v2026.7",
+      "captured_at": "2026-08-24T12:00:00+00:00",
+      "note": "Authority hierarchy, Prior Approval and audit rules."
+    }
+  ]
+}

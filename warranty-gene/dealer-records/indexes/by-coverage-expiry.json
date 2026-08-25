@@ -1,0 +1,130 @@
+{
+  "base_emissions_carb": {
+    "expired": [
+      "1XPBSYN00L1000404"
+    ],
+    "healthy": [
+      "1XPBSYN00N1000101",
+      "1XPBSYN00N1000707",
+      "1XPBSYN00P1000202",
+      "1XPBSYN00R1000505"
+    ],
+    "soon": [
+      "1XPBSYN00M1000303"
+    ]
+  },
+  "base_emissions_epa_eccc": {
+    "expired": [
+      "1XPBSYN00L1000404"
+    ],
+    "healthy": [
+      "1XPBSYN00N1000101",
+      "1XPBSYN00N1000707",
+      "1XPBSYN00P1000202",
+      "1XPBSYN00R1000505"
+    ],
+    "soon": [
+      "1XPBSYN00M1000303"
+    ]
+  },
+  "bev_ess": {
+    "healthy": [
+      "1XPBSYN00P1000606"
+    ]
+  },
+  "engine_major_components": {
+    "expired": [
+      "1XPBSYN00L1000404"
+    ],
+    "healthy": [
+      "1XPBSYN00N1000101",
+      "1XPBSYN00N1000707",
+      "1XPBSYN00P1000202"
+    ]
+  },
+  "non_paccar_front_axles": {
+    "expired": [
+      "1XPBSYN00L1000404",
+      "1XPBSYN00M1000303",
+      "1XPBSYN00N1000101",
+      "1XPBSYN00N1000707"
+    ],
+    "healthy": [
+      "1XPBSYN00P1000202",
+      "1XPBSYN00R1000505"
+    ]
+  },
+  "paccar_alternator_starter": {
+    "expired": [
+      "1XPBSYN00L1000404",
+      "1XPBSYN00M1000303",
+      "1XPBSYN00N1000101",
+      "1XPBSYN00N1000707"
+    ],
+    "healthy": [
+      "1XPBSYN00P1000202"
+    ]
+  },
+  "paccar_front_axles": {
+    "expired": [
+      "1XPBSYN00L1000404"
+    ],
+    "healthy": [
+      "1XPBSYN00N1000101",
+      "1XPBSYN00N1000707",
+      "1XPBSYN00P1000202",
+      "1XPBSYN00R1000505"
+    ],
+    "soon": [
+      "1XPBSYN00M1000303"
+    ]
+  },
+  "severe_service": {
+    "expired": [
+      "1XPBSYN00L1000404",
+      "1XPBSYN00M1000303",
+      "1XPBSYN00N1000101",
+      "1XPBSYN00N1000707",
+      "1XPBSYN00P1000202",
+      "1XPBSYN00R1000505"
+    ]
+  },
+  "standard_mx_engine": {
+    "critical": [
+      "1XPBSYN00P1000202"
+    ],
+    "expired": [
+      "1XPBSYN00L1000404",
+      "1XPBSYN00N1000101",
+      "1XPBSYN00N1000707"
+    ]
+  },
+  "standard_vehicle": {
+    "expired": [
+      "1XPBSYN00L1000404",
+      "1XPBSYN00M1000303",
+      "1XPBSYN00N1000101",
+      "1XPBSYN00N1000707",
+      "1XPBSYN00P1000202",
+      "1XPBSYN00P1000606",
+      "1XPBSYN00R1000505"
+    ]
+  },
+  "vehicle_major_components": {
+    "critical": [
+      "1XPBSYN00P1000606"
+    ],
+    "expired": [
+      "1XPBSYN00L1000404",
+      "1XPBSYN00M1000303",
+      "1XPBSYN00N1000101",
+      "1XPBSYN00N1000707"
+    ],
+    "healthy": [
+      "1XPBSYN00P1000202"
+    ],
+    "soon": [
+      "1XPBSYN00R1000505"
+    ]
+  }
+}
