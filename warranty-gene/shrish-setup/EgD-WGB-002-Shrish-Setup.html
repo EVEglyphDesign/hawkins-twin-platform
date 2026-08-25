@@ -1,0 +1,180 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Warranty GENE — Shrish Setup (EgD-WGB-002)</title></head>
+<body><h1>Warranty GENE — Shrish task list</h1>
+<p><strong>Scope of this document.</strong> Shrish provisions the Azure database that will hold the Warranty GENE dealer records, loads the JSON records we hand him, runs the tests we wrote, and reports pass or fail. That is the entire scope. Shrish does not design the schema, does not write scripts, does not rename fields, does not enrich records, does not decide indexing strategy, and does not modify anything under <code>warranty-gene/</code> in the source repository. Everything creative stays in the <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform">EVEglyphDesign/hawkins-twin-platform</a> repository so Dany can read every change on the surface it was made.</p>
+<p>If a task in this document produces a question that is not answered by the document itself, Shrish stops and messages Dany. Improvising is out of scope, even when it looks helpful.</p>
+<h2>Canon rule (given, not to be re-decided)</h2>
+<ul>
+<li>The <strong>VIN is the base code</strong> for every equipment record. Every table's primary anchor column is <code>vin</code>. Every filename in the source is <code>{VIN}.json</code>. Every index is keyed by VIN. This is fixed. Do not propose a surrogate key, do not add an internal id column as the primary key, do not "normalise" the VIN into a lookup table.</li>
+<li>The record shape is fixed and lives at <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/warranty-gene/schema/rich-target.schema.json"><code>warranty-gene/schema/rich-target.schema.json</code></a>. The sample records at <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins"><code>warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins/</code></a> are canonical shape. Shrish loads them as they are.</li>
+</ul>
+<h2>What Shrish does</h2>
+<ol>
+<li>Provision the Azure resources listed in Task 1 with the sizing listed in Task 2.</li>
+<li>Load the seven sample VIN records from the source repository into the database, unchanged, as Task 3.</li>
+<li>Run the four verification queries in Task 4 and record pass or fail against the expected values Task 4 states.</li>
+<li>Repeat Task 3 and Task 4 exactly when the first real dealer extract lands from PACCAR (arriving after the credentials in <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep/">EgD-WGB-003</a>).</li>
+<li>Report back with the four rows Task 5 asks for. Nothing else.</li>
+</ol>
+<h2>What Shrish does not do</h2>
+<ul>
+<li>Does not fork or modify the source repository. All source code and all schema authority is in <code>EVEglyphDesign/hawkins-twin-platform</code> and stays there.</li>
+<li>Does not write Python, does not write validators, does not write index builders. Those exist and are canonical: <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene/dealer-records/scripts"><code>warranty-gene/dealer-records/scripts/</code></a>.</li>
+<li>Does not add columns, rename fields, or reshape records to match a preferred normal form. The JSON shape is the shape. Store JSONB in Postgres or the native JSON column type in SQL Server; do not decompose.</li>
+<li>Does not choose which fields to index beyond the four Task 2 names. If a query looks slow, message Dany, do not add indexes.</li>
+<li>Does not build a UI, an API surface, or a dashboard. That belongs to a later ring and to a different lane.</li>
+<li>Does not run any generative or interpretive step: no LLM enrichment, no synthetic record fill-in, no coverage-logic derivations, no VIN decoding. Records are stored as delivered.</li>
+</ul>
+<hr>
+<h2>Task 1 · Provision the Azure database</h2>
+<p><strong>Choice.</strong> Azure Database for PostgreSQL Flexible Server, or Azure SQL Database. Shrish picks one and does not switch after Task 3.</p>
+<p><strong>Provision, exactly.</strong></p>
+<ul>
+<li>One database named <code>warranty_gene</code>.</li>
+<li>One schema named <code>dealer_records</code>.</li>
+<li>One service-account login named <code>warranty_gene_loader</code>, password stored in Azure Key Vault, no personal Azure AD account attached to the database.</li>
+<li>Firewall: allow Shrish's workstation IP only, until Dany hands over a second IP.</li>
+<li>Backup: default point-in-time restore, 7 days, no custom retention policy.</li>
+</ul>
+<p><strong>Gate.</strong> <code>SELECT 1;</code> returns from <code>warranty_gene_loader</code> against the <code>warranty_gene</code> database, over TLS, from Shrish's workstation. Send Dany the resource id (the full <code>/subscriptions/.../databases/warranty_gene</code> path) and nothing else.</p>
+<hr>
+<h2>Task 2 · Create the one table and the four indexes</h2>
+<p>Use exactly this DDL. Do not change column names. Do not change indexes. Do not add columns. If it does not run, the driver or the permissions are wrong — fix those, not the DDL.</p>
+<h3>If Postgres</h3>
+<pre><code>CREATE TABLE dealer_records.vin_record (
+    vin           TEXT PRIMARY KEY,
+    as_of         TIMESTAMPTZ NOT NULL,
+    rooftop_code  TEXT NOT NULL,
+    payload       JSONB NOT NULL,
+    ingested_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX ix_vin_record_rooftop        ON dealer_records.vin_record (rooftop_code);
+CREATE INDEX ix_vin_record_model          ON dealer_records.vin_record ((payload -&gt; 'chassis' -&gt;&gt; 'model'));
+CREATE INDEX ix_vin_record_in_service     ON dealer_records.vin_record ((payload -&gt; 'chassis' -&gt;&gt; 'in_service_date'));
+CREATE INDEX ix_vin_record_score_total    ON dealer_records.vin_record (((payload -&gt; 'score' -&gt;&gt; 'total')::numeric));</code></pre>
+<h3>If Azure SQL</h3>
+<pre><code>CREATE TABLE dealer_records.vin_record (
+    vin           NVARCHAR(17) NOT NULL PRIMARY KEY,
+    as_of         DATETIME2 NOT NULL,
+    rooftop_code  NVARCHAR(16) NOT NULL,
+    payload       NVARCHAR(MAX) NOT NULL CHECK (ISJSON(payload) = 1),
+    ingested_at   DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+CREATE INDEX ix_vin_record_rooftop     ON dealer_records.vin_record (rooftop_code);
+CREATE INDEX ix_vin_record_model       ON dealer_records.vin_record
+    (CAST(JSON_VALUE(payload, '$.chassis.model') AS NVARCHAR(32)));
+CREATE INDEX ix_vin_record_in_service  ON dealer_records.vin_record
+    (CAST(JSON_VALUE(payload, '$.chassis.in_service_date') AS DATE));
+CREATE INDEX ix_vin_record_score_total ON dealer_records.vin_record
+    (CAST(JSON_VALUE(payload, '$.score.total') AS DECIMAL(9,2)));</code></pre>
+<p><strong>Gate.</strong> All four <code>CREATE INDEX</code> statements succeed. <code>SELECT COUNT(*) FROM dealer_records.vin_record;</code> returns <code>0</code>. Send Dany the two lines: engine name (Postgres or SQL) and the count.</p>
+<hr>
+<h2>Task 3 · Load the seven sample VIN records, unchanged</h2>
+<p><strong>Source.</strong> Every <code>*.json</code> file under <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins"><code>warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins/</code></a> on <code>main</code>. Download via the GitHub raw URL for each file. Do not clone the whole repository. Do not read from a local copy; read the raw files from <code>main</code> at the time of load.</p>
+<p><strong>Method.</strong> For each file, read the JSON, and insert one row: <code>vin</code> from the JSON's <code>vin</code> field, <code>as_of</code> from <code>as_of</code>, <code>rooftop_code</code> set to <code>R00-sample</code> (Shrish does not derive this from the record; it comes from the source directory name, which is why the loader is a single line, not a rule engine), <code>payload</code> set to the entire JSON document unchanged.</p>
+<p><strong>Rule.</strong> The record on disk is the record in the database. Byte for byte, key order preserved to the extent the target's JSON type preserves it. Do not <code>SELECT</code> a nested field to "validate" it and then rewrite the record. Do not lowercase the VIN. Do not add a field.</p>
+<p><strong>Gate.</strong></p>
+<pre><code>SELECT COUNT(*) FROM dealer_records.vin_record;
+-- expected: 7</code></pre>
+<p>Send Dany the exact number returned.</p>
+<hr>
+<h2>Task 4 · Run the four verification queries</h2>
+<p>Each query has an expected answer produced from the source records. If the returned value does not match, the load in Task 3 is wrong — fix Task 3 and re-run, do not "adjust" the query.</p>
+<h3>4.1 · Every VIN loaded</h3>
+<pre><code>SELECT vin FROM dealer_records.vin_record ORDER BY vin;</code></pre>
+<p><strong>Expected, exactly.</strong></p>
+<pre><code>1XPBSYN00L1000404
+1XPBSYN00M1000303
+1XPBSYN00N1000101
+1XPBSYN00N1000707
+1XPBSYN00P1000202
+1XPBSYN00P1000606
+1XPBSYN00R1000505</code></pre>
+<h3>4.2 · Model breakdown</h3>
+<p>Postgres:</p>
+<pre><code>SELECT payload -&gt; 'chassis' -&gt;&gt; 'model' AS model, COUNT(*) AS n
+FROM dealer_records.vin_record
+GROUP BY 1 ORDER BY 1;</code></pre>
+<p>Azure SQL:</p>
+<pre><code>SELECT JSON_VALUE(payload, '$.chassis.model') AS model, COUNT(*) AS n
+FROM dealer_records.vin_record
+GROUP BY JSON_VALUE(payload, '$.chassis.model')
+ORDER BY 1;</code></pre>
+<p><strong>Expected, exactly.</strong></p>
+<table class="data"><thead><tr>
+<th>model</th>
+<th>n</th>
+</tr></thead><tbody>
+<tr>
+<td>220EV</td>
+<td>1</td>
+</tr>
+<tr>
+<td>537</td>
+<td>1</td>
+</tr>
+<tr>
+<td>567</td>
+<td>1</td>
+</tr>
+<tr>
+<td>579</td>
+<td>4</td>
+</tr>
+</tbody></table>
+<h3>4.3 · Coverage-bucket key count on record <code>1XPBSYN00N1000101</code></h3>
+<p>Postgres:</p>
+<pre><code>SELECT jsonb_object_keys(payload -&gt; 'coverage')
+FROM dealer_records.vin_record
+WHERE vin = '1XPBSYN00N1000101';</code></pre>
+<p>Azure SQL:</p>
+<pre><code>SELECT [key]
+FROM dealer_records.vin_record
+CROSS APPLY OPENJSON(JSON_QUERY(payload, '$.coverage'))
+WHERE vin = '1XPBSYN00N1000101';</code></pre>
+<p><strong>Expected.</strong> Ten rows, with these keys, in any order: <code>base_emissions_carb</code>, <code>base_emissions_epa_eccc</code>, <code>standard_vehicle</code>, <code>standard_mx_engine</code>, <code>engine_major_components</code>, <code>vehicle_major_components</code>, <code>severe_service</code>, <code>paccar_alternator_starter</code>, <code>paccar_front_axles</code>, <code>non_paccar_front_axles</code>.</p>
+<h3>4.4 · Highest score total</h3>
+<p>Postgres:</p>
+<pre><code>SELECT vin, (payload -&gt; 'score' -&gt;&gt; 'total')::numeric AS total
+FROM dealer_records.vin_record
+ORDER BY total DESC
+LIMIT 1;</code></pre>
+<p>Azure SQL:</p>
+<pre><code>SELECT TOP 1 vin, CAST(JSON_VALUE(payload, '$.score.total') AS DECIMAL(9,2)) AS total
+FROM dealer_records.vin_record
+ORDER BY 2 DESC;</code></pre>
+<p><strong>Expected.</strong> Exactly one row. Send Dany the VIN and the number. Dany will verify against the source; Shrish does not need to know the expected value in advance.</p>
+<hr>
+<h2>Task 5 · Report back, four rows</h2>
+<p>Message Dany with these four rows, in this order, and nothing else:</p>
+<ol>
+<li><strong>Engine.</strong> <code>Postgres flexible server</code> or <code>Azure SQL</code>, plus the region.</li>
+<li><strong>Row count.</strong> The single number from Task 3's gate.</li>
+<li><strong>Model breakdown match.</strong> <code>pass</code> or <code>fail</code> for Task 4.2 against the expected table. If <code>fail</code>, include the actual table.</li>
+<li><strong>Top-score row.</strong> VIN and total from Task 4.4.</li>
+</ol>
+<p>Do not include narrative. Do not include screenshots. Do not include the DDL you ran. Do not include how long it took. Four rows, that's it.</p>
+<hr>
+<h2>Task 6 · Repeat for the real dealer extract when it arrives</h2>
+<p>Once Dany hands over the first real extract from PACCAR (after the credentials in <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep/">EgD-WGB-003</a> are provisioned), the extract will land in the source repository at <code>warranty-gene/dealer-records/peterbilt-atlantic/R01-halifax/vins/{VIN}.json</code> (and progressively R02 through R08). Repeat Task 3 with <code>rooftop_code</code> set to the source directory name. Repeat Task 4. Report the same four rows.</p>
+<p>At that point Task 4.2's expected values will change — Dany will send the new expected values with the extract. Do not compute them yourself.</p>
+<hr>
+<h2>Questions register</h2>
+<p>Only three questions are in scope for Shrish. If any of them fires, stop and message Dany:</p>
+<ol>
+<li><strong>Task 1 access blocker.</strong> The Azure subscription, resource group, or Key Vault is not accessible under Shrish's tenant.</li>
+<li><strong>Task 3 schema mismatch.</strong> A source record's JSON has a field type that the target's JSON column rejects (rare; both Postgres JSONB and SQL Server NVARCHAR(MAX) with ISJSON accept every shape in the sample).</li>
+<li><strong>Task 6 record collision.</strong> A real-extract record arrives with a VIN already loaded from the sample. This is a Dany-side call, not a Shrish-side merge.</li>
+</ol>
+<p>Everything else is either answered by this document or it is a design decision — which means it is Dany's, not Shrish's.</p>
+<hr>
+<h2>Provenance</h2>
+<ul>
+<li>Source repository (all source authority): <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform">EVEglyphDesign/hawkins-twin-platform</a></li>
+<li>Schema (authoritative): <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/warranty-gene/schema/rich-target.schema.json">warranty-gene/schema/rich-target.schema.json</a></li>
+<li>Canonical sample records: <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins">warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins/</a></li>
+<li>Validation + indexing scripts (source-side, do not port): <a href="https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene/dealer-records/scripts">warranty-gene/dealer-records/scripts/</a></li>
+<li>Access map for real-data lane: <a href="https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep/">Warranty GENE Luke Access Prep (EgD-WGB-003)</a></li>
+</ul></body></html>

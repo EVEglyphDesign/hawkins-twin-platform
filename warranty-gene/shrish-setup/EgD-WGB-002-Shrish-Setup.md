@@ -1,436 +1,245 @@
 # Warranty GENE — Shrish task list
 
-**Programme:** EVEglyphDesign — Warranty GENE
-**Document ID:** EgD-WGB-002 · **Key ID:** EgD-KEY-2026-07
-**For:** Shrish · **From:** Dany
-**Repository you will work in:** [EVEglyphDesign/hawkins-twin-platform](https://github.com/EVEglyphDesign/hawkins-twin-platform), specifically the `warranty-gene/` subtree.
-**Companion:** [Warranty GENE Sidecar Blueprint (EgD-WGB-001)](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/blueprint/).
+**Scope of this document.** Shrish provisions the Azure database that will hold the Warranty GENE dealer records, loads the JSON records we hand him, runs the tests we wrote, and reports pass or fail. That is the entire scope. Shrish does not design the schema, does not write scripts, does not rename fields, does not enrich records, does not decide indexing strategy, and does not modify anything under `warranty-gene/` in the source repository. Everything creative stays in the [EVEglyphDesign/hawkins-twin-platform](https://github.com/EVEglyphDesign/hawkins-twin-platform) repository so Dany can read every change on the surface it was made.
 
-Execute the tasks in order. Each task has a command block and a gate. Do not proceed to the next task until the gate passes. If a gate fails and it is not one of the three questions in Task 12, keep trying — the answer is on the previous task.
+If a task in this document produces a question that is not answered by the document itself, Shrish stops and messages Dany. Improvising is out of scope, even when it looks helpful.
 
----
+## Canon rule (given, not to be re-decided)
 
-## Canon rule — VIN is the equipment record number
+- The **VIN is the base code** for every equipment record. Every table's primary anchor column is `vin`. Every filename in the source is `{VIN}.json`. Every index is keyed by VIN. This is fixed. Do not propose a surrogate key, do not add an internal id column as the primary key, do not "normalise" the VIN into a lookup table.
+- The record shape is fixed and lives at [`warranty-gene/schema/rich-target.schema.json`](https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/warranty-gene/schema/rich-target.schema.json). The sample records at [`warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins/`](https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins) are canonical shape. Shrish loads them as they are.
 
-The **VIN is the base code for every equipment record** in this system and every downstream ring. It is the primary key, the filename, the directory anchor when a record has children, and the identifier that survives every ring boundary (Ring 2 → Ring 3 hashes it, but the hash is deterministic on the VIN — no other identifier is used).
+## What Shrish does
 
-Consequences you enforce in the tasks below:
+1. Provision the Azure resources listed in Task 1 with the sizing listed in Task 2.
+2. Load the seven sample VIN records from the source repository into the database, unchanged, as Task 3.
+3. Run the four verification queries in Task 4 and record pass or fail against the expected values Task 4 states.
+4. Repeat Task 3 and Task 4 exactly when the first real dealer extract lands from PACCAR (arriving after the credentials in [EgD-WGB-003](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep/)).
+5. Report back with the four rows Task 5 asks for. Nothing else.
 
-- Filenames under `vins/` are exactly `{VIN}.json` — the VIN itself as the filename. No prefix, no suffix, no dashes of your own making.
-- Work-order and booking records carry the VIN in a `vin` field and are joined to the equipment record by VIN, never by an internal DMS id.
-- The equipment record schema treats `identity.vin` as required and immutable. A VIN correction is a delete-and-add, not an in-place edit.
-- Indexes always emit VIN lists (or objects whose primary key is `vin`). Never a DMS record number, never a dealer-internal serial.
-- When PACCAR / SIR / SmartLINQ records arrive with their own identifiers (SIR ID, unit number, stock number), those become `identity.aliases[]` — the VIN stays the base code.
+## What Shrish does not do
 
-This is the load-bearing decision behind the equipment-record data standard. Get it wrong once and the industry-wide repository will not merge.
-
----
-
-## Task 1 · Get access
-
-```bash
-gh auth login              # use your own GitHub account, SSO into EVEglyphDesign if prompted
-gh auth status             # confirms who you are authenticated as
-gh repo view EVEglyphDesign/hawkins-twin-platform --json name,visibility,pushedAt
-```
-
-**Gate:** `gh repo view` returns JSON with `"visibility": "PUBLIC"` and a recent `pushedAt`. If it 404s, message Dany with the exact error — this is a Task 12 blocker, not a task-level failure.
+- Does not fork or modify the source repository. All source code and all schema authority is in `EVEglyphDesign/hawkins-twin-platform` and stays there.
+- Does not write Python, does not write validators, does not write index builders. Those exist and are canonical: [`warranty-gene/dealer-records/scripts/`](https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene/dealer-records/scripts).
+- Does not add columns, rename fields, or reshape records to match a preferred normal form. The JSON shape is the shape. Store JSONB in Postgres or the native JSON column type in SQL Server; do not decompose.
+- Does not choose which fields to index beyond the four Task 2 names. If a query looks slow, message Dany, do not add indexes.
+- Does not build a UI, an API surface, or a dashboard. That belongs to a later ring and to a different lane.
+- Does not run any generative or interpretive step: no LLM enrichment, no synthetic record fill-in, no coverage-logic derivations, no VIN decoding. Records are stored as delivered.
 
 ---
 
-## Task 2 · Fork the repository into your account
+## Task 1 · Provision the Azure database
 
-```bash
-gh repo fork EVEglyphDesign/hawkins-twin-platform --clone --remote
-cd hawkins-twin-platform
-git remote -v
-```
+**Choice.** Azure Database for PostgreSQL Flexible Server, or Azure SQL Database. Shrish picks one and does not switch after Task 3.
 
-**Gate:** `git remote -v` shows `origin` pointing at your fork (`<your-user>/hawkins-twin-platform`) and `upstream` pointing at `EVEglyphDesign/hawkins-twin-platform`.
+**Provision, exactly.**
 
----
+- One database named `warranty_gene`.
+- One schema named `dealer_records`.
+- One service-account login named `warranty_gene_loader`, password stored in Azure Key Vault, no personal Azure AD account attached to the database.
+- Firewall: allow Shrish's workstation IP only, until Dany hands over a second IP.
+- Backup: default point-in-time restore, 7 days, no custom retention policy.
 
-## Task 3 · Confirm the Warranty GENE subtree is intact in your fork
-
-```bash
-ls warranty-gene/
-ls warranty-gene/schema/ warranty-gene/samples/ warranty-gene/mappings/ warranty-gene/wireframe/ warranty-gene/blueprint/
-cat warranty-gene/schema/rich-target.schema.json | python -m json.tool > /dev/null && echo "schema parses"
-cat warranty-gene/samples/rich-targets.sample.json | python -m json.tool > /dev/null && echo "samples parse"
-```
-
-**Gate:** every `ls` prints a non-empty listing and both parse checks print their success line. If any file is missing, you cloned wrong — delete and redo Task 2.
-
-Confirm the schema treats VIN as the base code:
-
-```bash
-python -c "import json; s=json.load(open('warranty-gene/schema/rich-target.schema.json')); print('vin required:', 'vin' in s.get('required', []) or 'vin' in s.get('properties', {}).get('identity', {}).get('required', []))"
-```
-
-If this prints `vin required: False`, message Dany — Task 12 question #2. The schema must anchor on VIN before you add any records.
+**Gate.** `SELECT 1;` returns from `warranty_gene_loader` against the `warranty_gene` database, over TLS, from Shrish's workstation. Send Dany the resource id (the full `/subscriptions/.../databases/warranty_gene` path) and nothing else.
 
 ---
 
-## Task 4 · Create the dealer-records subtree
+## Task 2 · Create the one table and the four indexes
 
-You are adding a **new** subtree, `warranty-gene/dealer-records/`, that holds one file per VIN. Nothing in the existing `warranty-gene/` files gets touched.
+Use exactly this DDL. Do not change column names. Do not change indexes. Do not add columns. If it does not run, the driver or the permissions are wrong — fix those, not the DDL.
 
-```bash
-mkdir -p warranty-gene/dealer-records/peterbilt-atlantic/{R01-halifax,R02-moncton,R03-saint-john,R04-dartmouth,R05-truro,R06-sydney,R07-fredericton,R08-yarmouth}/vins
-mkdir -p warranty-gene/dealer-records/peterbilt-atlantic/{R01-halifax,R02-moncton,R03-saint-john,R04-dartmouth,R05-truro,R06-sydney,R07-fredericton,R08-yarmouth}/work-orders
-mkdir -p warranty-gene/dealer-records/indexes
-mkdir -p warranty-gene/dealer-records/scripts
-touch warranty-gene/dealer-records/peterbilt-atlantic/R01-halifax/.gitkeep   # repeat for each rooftop
-find warranty-gene/dealer-records -type d
+### If Postgres
+
+```sql
+CREATE TABLE dealer_records.vin_record (
+    vin           TEXT PRIMARY KEY,
+    as_of         TIMESTAMPTZ NOT NULL,
+    rooftop_code  TEXT NOT NULL,
+    payload       JSONB NOT NULL,
+    ingested_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX ix_vin_record_rooftop        ON dealer_records.vin_record (rooftop_code);
+CREATE INDEX ix_vin_record_model          ON dealer_records.vin_record ((payload -> 'chassis' ->> 'model'));
+CREATE INDEX ix_vin_record_in_service     ON dealer_records.vin_record ((payload -> 'chassis' ->> 'in_service_date'));
+CREATE INDEX ix_vin_record_score_total    ON dealer_records.vin_record (((payload -> 'score' ->> 'total')::numeric));
 ```
 
-**Gate:** `find` prints the eight rooftop directories, `indexes/`, and `scripts/`. Commit and push:
+### If Azure SQL
 
-```bash
-git add warranty-gene/dealer-records/
-git commit -m "warranty-gene: seed dealer-records subtree with eight Peterbilt Atlantic rooftops"
-git push origin main
+```sql
+CREATE TABLE dealer_records.vin_record (
+    vin           NVARCHAR(17) NOT NULL PRIMARY KEY,
+    as_of         DATETIME2 NOT NULL,
+    rooftop_code  NVARCHAR(16) NOT NULL,
+    payload       NVARCHAR(MAX) NOT NULL CHECK (ISJSON(payload) = 1),
+    ingested_at   DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME()
+);
+
+CREATE INDEX ix_vin_record_rooftop     ON dealer_records.vin_record (rooftop_code);
+CREATE INDEX ix_vin_record_model       ON dealer_records.vin_record
+    (CAST(JSON_VALUE(payload, '$.chassis.model') AS NVARCHAR(32)));
+CREATE INDEX ix_vin_record_in_service  ON dealer_records.vin_record
+    (CAST(JSON_VALUE(payload, '$.chassis.in_service_date') AS DATE));
+CREATE INDEX ix_vin_record_score_total ON dealer_records.vin_record
+    (CAST(JSON_VALUE(payload, '$.score.total') AS DECIMAL(9,2)));
 ```
+
+**Gate.** All four `CREATE INDEX` statements succeed. `SELECT COUNT(*) FROM dealer_records.vin_record;` returns `0`. Send Dany the two lines: engine name (Postgres or SQL) and the count.
 
 ---
 
-## Task 5 · Copy the two committed sample records into the sample rooftop
+## Task 3 · Load the seven sample VIN records, unchanged
 
-The repo already ships two records at `warranty-gene/samples/`. Copy them into a sample rooftop so the indexer has something to walk that matches the eventual real layout.
+**Source.** Every `*.json` file under
+[`warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins/`](https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins) on `main`. Download via the GitHub raw URL for each file. Do not clone the whole repository. Do not read from a local copy; read the raw files from `main` at the time of load.
 
-```bash
-mkdir -p warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins
-python <<'PY'
-import json, pathlib
-src = json.loads(pathlib.Path("warranty-gene/samples/rich-targets.sample.json").read_text())
-out = pathlib.Path("warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins")
-recs = src if isinstance(src, list) else src.get("records", [src])
-for r in recs:
-    vin = r.get("vin") or r.get("identity", {}).get("vin")
-    if not vin: continue
-    (out / f"{vin}.json").write_text(json.dumps(r, indent=2))
-print("wrote", len(list(out.glob('*.json'))), "records")
-PY
-ls warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins/
+**Method.** For each file, read the JSON, and insert one row: `vin` from the JSON's `vin` field, `as_of` from `as_of`, `rooftop_code` set to `R00-sample` (Shrish does not derive this from the record; it comes from the source directory name, which is why the loader is a single line, not a rule engine), `payload` set to the entire JSON document unchanged.
+
+**Rule.** The record on disk is the record in the database. Byte for byte, key order preserved to the extent the target's JSON type preserves it. Do not `SELECT` a nested field to "validate" it and then rewrite the record. Do not lowercase the VIN. Do not add a field.
+
+**Gate.**
+
+```sql
+SELECT COUNT(*) FROM dealer_records.vin_record;
+-- expected: 7
 ```
 
-**Gate:** the `ls` prints at least two files named `{VIN}.json` (the VIN as filename). Commit:
-
-```bash
-git add warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/
-git commit -m "warranty-gene/dealer-records: seed R00-sample from warranty-gene/samples/"
-git push
-```
+Send Dany the exact number returned.
 
 ---
 
-## Task 6 · Write the record validator
+## Task 4 · Run the four verification queries
 
-Create `warranty-gene/dealer-records/scripts/validate_records.py`. It walks every `*.json` file under `warranty-gene/dealer-records/peterbilt-atlantic/*/vins/` and validates each against `warranty-gene/schema/rich-target.schema.json`. Red exit on any failure.
+Each query has an expected answer produced from the source records. If the returned value does not match, the load in Task 3 is wrong — fix Task 3 and re-run, do not "adjust" the query.
 
-```python
-#!/usr/bin/env python3
-"""Validate every VIN record under dealer-records/ against the canon schema."""
-import json, sys, pathlib
-from jsonschema import Draft202012Validator
+### 4.1 · Every VIN loaded
 
-ROOT = pathlib.Path(__file__).resolve().parents[3]
-SCHEMA = json.loads((ROOT / "warranty-gene/schema/rich-target.schema.json").read_text())
-VINS = list((ROOT / "warranty-gene/dealer-records/peterbilt-atlantic").glob("*/vins/*.json"))
-v = Draft202012Validator(SCHEMA)
-errors = 0
-for f in VINS:
-    rec = json.loads(f.read_text())
-    for e in v.iter_errors(rec):
-        errors += 1
-        print(f"FAIL {f.relative_to(ROOT)}: {e.message}")
-    if f.stem != (rec.get("vin") or rec.get("identity", {}).get("vin")):
-        errors += 1
-        print(f"FAIL {f.relative_to(ROOT)}: filename does not match record VIN")
-print(f"checked {len(VINS)} records, {errors} errors")
-sys.exit(1 if errors else 0)
+```sql
+SELECT vin FROM dealer_records.vin_record ORDER BY vin;
 ```
 
-Run it:
+**Expected, exactly.**
 
-```bash
-pip install jsonschema
-python warranty-gene/dealer-records/scripts/validate_records.py
+```
+1XPBSYN00L1000404
+1XPBSYN00M1000303
+1XPBSYN00N1000101
+1XPBSYN00N1000707
+1XPBSYN00P1000202
+1XPBSYN00P1000606
+1XPBSYN00R1000505
 ```
 
-**Gate:** the script prints `checked N records, 0 errors` and exits 0. If it errors, either the sample record is missing a required field (fix the sample in Task 5) or the schema is stricter than the sample (message Dany — this is Task 12 question #2).
+### 4.2 · Model breakdown
 
-Commit:
+Postgres:
 
-```bash
-git add warranty-gene/dealer-records/scripts/validate_records.py
-git commit -m "warranty-gene/dealer-records: add record validator"
-git push
+```sql
+SELECT payload -> 'chassis' ->> 'model' AS model, COUNT(*) AS n
+FROM dealer_records.vin_record
+GROUP BY 1 ORDER BY 1;
 ```
+
+Azure SQL:
+
+```sql
+SELECT JSON_VALUE(payload, '$.chassis.model') AS model, COUNT(*) AS n
+FROM dealer_records.vin_record
+GROUP BY JSON_VALUE(payload, '$.chassis.model')
+ORDER BY 1;
+```
+
+**Expected, exactly.**
+
+| model | n |
+| --- | --- |
+| 220EV | 1 |
+| 537 | 1 |
+| 567 | 1 |
+| 579 | 4 |
+
+### 4.3 · Coverage-bucket key count on record `1XPBSYN00N1000101`
+
+Postgres:
+
+```sql
+SELECT jsonb_object_keys(payload -> 'coverage')
+FROM dealer_records.vin_record
+WHERE vin = '1XPBSYN00N1000101';
+```
+
+Azure SQL:
+
+```sql
+SELECT [key]
+FROM dealer_records.vin_record
+CROSS APPLY OPENJSON(JSON_QUERY(payload, '$.coverage'))
+WHERE vin = '1XPBSYN00N1000101';
+```
+
+**Expected.** Ten rows, with these keys, in any order: `base_emissions_carb`, `base_emissions_epa_eccc`, `standard_vehicle`, `standard_mx_engine`, `engine_major_components`, `vehicle_major_components`, `severe_service`, `paccar_alternator_starter`, `paccar_front_axles`, `non_paccar_front_axles`.
+
+### 4.4 · Highest score total
+
+Postgres:
+
+```sql
+SELECT vin, (payload -> 'score' ->> 'total')::numeric AS total
+FROM dealer_records.vin_record
+ORDER BY total DESC
+LIMIT 1;
+```
+
+Azure SQL:
+
+```sql
+SELECT TOP 1 vin, CAST(JSON_VALUE(payload, '$.score.total') AS DECIMAL(9,2)) AS total
+FROM dealer_records.vin_record
+ORDER BY 2 DESC;
+```
+
+**Expected.** Exactly one row. Send Dany the VIN and the number. Dany will verify against the source; Shrish does not need to know the expected value in advance.
 
 ---
 
-## Task 7 · Write the index builder
+## Task 5 · Report back, four rows
 
-Create `warranty-gene/dealer-records/scripts/build_indexes.py`. It walks every VIN record and emits five index files under `warranty-gene/dealer-records/indexes/`.
+Message Dany with these four rows, in this order, and nothing else:
 
-```python
-#!/usr/bin/env python3
-"""Rebuild the five indexes from the primary records."""
-import json, pathlib
-from collections import defaultdict
+1. **Engine.** `Postgres flexible server` or `Azure SQL`, plus the region.
+2. **Row count.** The single number from Task 3's gate.
+3. **Model breakdown match.** `pass` or `fail` for Task 4.2 against the expected table. If `fail`, include the actual table.
+4. **Top-score row.** VIN and total from Task 4.4.
 
-ROOT = pathlib.Path(__file__).resolve().parents[3]
-BASE = ROOT / "warranty-gene/dealer-records"
-IDX  = BASE / "indexes"
-IDX.mkdir(exist_ok=True)
-
-by_family  = defaultdict(list)
-by_coverage = defaultdict(list)
-by_service  = defaultdict(list)
-open_recalls = defaultdict(list)
-uplift     = defaultdict(list)
-
-for f in (BASE / "peterbilt-atlantic").glob("*/vins/*.json"):
-    r = json.loads(f.read_text())
-    vin = r.get("vin") or r.get("identity", {}).get("vin")
-    fam = r.get("identity", {}).get("engine_family", "unknown")
-    by_family[fam].append(vin)
-    for c in r.get("coverage", []):
-        by_coverage[f"{c.get('bucket','?')}::{c.get('status','?')}"].append(vin)
-    ins = r.get("identity", {}).get("in_service_date", "")[:7]
-    if ins: by_service[ins].append(vin)
-    for rc in r.get("recalls_and_campaigns", []):
-        if rc.get("status") == "open":
-            open_recalls[rc.get("campaign","?")].append(vin)
-    for u in r.get("uplift_candidates", []):
-        uplift[u.get("tier","low")].append({
-            "vin": vin, "wo_id": u.get("wo_id"),
-            "line_item": u.get("line_item"), "bucket": u.get("bucket"),
-        })
-
-for name, data in [
-    ("by-engine-family.json", by_family),
-    ("by-coverage-status.json", by_coverage),
-    ("by-in-service-date.json", by_service),
-    ("open-recalls.json", open_recalls),
-    ("uplift-candidates.json", uplift),
-]:
-    (IDX / name).write_text(json.dumps(data, indent=2, sort_keys=True))
-    print(f"wrote {name} — {len(data)} keys")
-```
-
-Run it:
-
-```bash
-python warranty-gene/dealer-records/scripts/build_indexes.py
-ls warranty-gene/dealer-records/indexes/
-```
-
-**Gate:** all five index files exist and each is valid JSON:
-
-```bash
-for f in warranty-gene/dealer-records/indexes/*.json; do python -m json.tool "$f" > /dev/null && echo "$f ok"; done
-```
-
-Every line prints `ok`. Commit:
-
-```bash
-git add warranty-gene/dealer-records/scripts/build_indexes.py warranty-gene/dealer-records/indexes/
-git commit -m "warranty-gene/dealer-records: add index builder and initial indexes"
-git push
-```
+Do not include narrative. Do not include screenshots. Do not include the DDL you ran. Do not include how long it took. Four rows, that's it.
 
 ---
 
-## Task 8 · Test the indexing round-trip
+## Task 6 · Repeat for the real dealer extract when it arrives
 
-Prove that every VIN in the primary records appears in every index it should. Create `warranty-gene/dealer-records/scripts/test_indexing.py`:
+Once Dany hands over the first real extract from PACCAR (after the credentials in [EgD-WGB-003](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep/) are provisioned), the extract will land in the source repository at `warranty-gene/dealer-records/peterbilt-atlantic/R01-halifax/vins/{VIN}.json` (and progressively R02 through R08). Repeat Task 3 with `rooftop_code` set to the source directory name. Repeat Task 4. Report the same four rows.
 
-```python
-#!/usr/bin/env python3
-"""Round-trip test: every primary VIN appears in the indexes it should."""
-import json, pathlib, sys
-
-ROOT = pathlib.Path(__file__).resolve().parents[3]
-BASE = ROOT / "warranty-gene/dealer-records"
-IDX  = BASE / "indexes"
-idx = {p.name: json.loads(p.read_text()) for p in IDX.glob("*.json")}
-errors = 0
-
-def has(index_name, key, vin):
-    entries = idx[index_name].get(key, [])
-    return any((e == vin) or (isinstance(e, dict) and e.get("vin") == vin) for e in entries)
-
-for f in (BASE / "peterbilt-atlantic").glob("*/vins/*.json"):
-    r = json.loads(f.read_text())
-    vin = r.get("vin") or r.get("identity", {}).get("vin")
-    fam = r.get("identity", {}).get("engine_family", "unknown")
-    if not has("by-engine-family.json", fam, vin):
-        errors += 1; print(f"FAIL {vin} missing from by-engine-family[{fam}]")
-    ins = r.get("identity", {}).get("in_service_date", "")[:7]
-    if ins and not has("by-in-service-date.json", ins, vin):
-        errors += 1; print(f"FAIL {vin} missing from by-in-service-date[{ins}]")
-
-print(f"round-trip errors: {errors}")
-sys.exit(1 if errors else 0)
-```
-
-```bash
-python warranty-gene/dealer-records/scripts/test_indexing.py
-```
-
-**Gate:** prints `round-trip errors: 0` and exits 0.
-
-Commit:
-
-```bash
-git add warranty-gene/dealer-records/scripts/test_indexing.py
-git commit -m "warranty-gene/dealer-records: add round-trip indexing test"
-git push
-```
+At that point Task 4.2's expected values will change — Dany will send the new expected values with the extract. Do not compute them yourself.
 
 ---
 
-## Task 9 · Wire the validate + test workflow
+## Questions register
 
-Create `.github/workflows/warranty-gene-dealer-records.yml` at the repo root of your fork:
+Only three questions are in scope for Shrish. If any of them fires, stop and message Dany:
 
-```yaml
-name: warranty-gene dealer-records
-on:
-  push:
-    paths:
-      - "warranty-gene/dealer-records/**"
-      - "warranty-gene/schema/**"
-  pull_request:
-    paths:
-      - "warranty-gene/dealer-records/**"
-      - "warranty-gene/schema/**"
-jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: "3.12" }
-      - run: pip install jsonschema
-      - run: python warranty-gene/dealer-records/scripts/validate_records.py
-      - run: python warranty-gene/dealer-records/scripts/build_indexes.py
-      - run: python warranty-gene/dealer-records/scripts/test_indexing.py
-```
+1. **Task 1 access blocker.** The Azure subscription, resource group, or Key Vault is not accessible under Shrish's tenant.
+2. **Task 3 schema mismatch.** A source record's JSON has a field type that the target's JSON column rejects (rare; both Postgres JSONB and SQL Server NVARCHAR(MAX) with ISJSON accept every shape in the sample).
+3. **Task 6 record collision.** A real-extract record arrives with a VIN already loaded from the sample. This is a Dany-side call, not a Shrish-side merge.
 
-Commit and push:
-
-```bash
-git add .github/workflows/warranty-gene-dealer-records.yml
-git commit -m "warranty-gene: CI validates records, builds indexes, tests round-trip"
-git push
-gh run watch
-```
-
-**Gate:** `gh run watch` finishes with a green check.
-
----
-
-## Task 10 · Measure repo size and project growth
-
-Create `warranty-gene/dealer-records/scripts/measure_repo_size.py`:
-
-```python
-#!/usr/bin/env python3
-"""Measure current record footprint and project to 5k / 25k VINs."""
-import pathlib, json
-
-ROOT = pathlib.Path(__file__).resolve().parents[3]
-FILES = list((ROOT / "warranty-gene/dealer-records/peterbilt-atlantic").glob("*/vins/*.json"))
-sizes = [f.stat().st_size for f in FILES]
-n = len(sizes); total = sum(sizes); avg = total / n if n else 0
-
-print(f"# MEASURED-SIZE.md")
-print(f"- VIN records: **{n}**")
-print(f"- Total bytes: **{total:,}**")
-print(f"- Average bytes per record: **{avg:,.0f}**")
-print(f"- Largest record: **{max(sizes) if sizes else 0:,}** bytes")
-print(f"- Projected at 5,000 VINs: **{5000*avg/1024/1024:,.1f} MB**")
-print(f"- Projected at 25,000 VINs: **{25000*avg/1024/1024:,.1f} MB**")
-```
-
-```bash
-python warranty-gene/dealer-records/scripts/measure_repo_size.py > warranty-gene/dealer-records/MEASURED-SIZE.md
-cat warranty-gene/dealer-records/MEASURED-SIZE.md
-```
-
-**Gate:** the file contains all six lines with real numbers, not zeros. Commit:
-
-```bash
-git add warranty-gene/dealer-records/scripts/measure_repo_size.py warranty-gene/dealer-records/MEASURED-SIZE.md
-git commit -m "warranty-gene/dealer-records: initial size measurement and projection"
-git push
-```
-
----
-
-## Task 11 · Prove upstream sync works — the whole point of the fork model
-
-Canon updates on `EVEglyphDesign/hawkins-twin-platform` must flow into your fork by a plain merge. Test it now on an empty upstream:
-
-```bash
-git fetch upstream
-git merge upstream/main --no-edit
-git push
-```
-
-**Gate:** merge succeeds with `Already up to date.` or a fast-forward. If it produces a conflict on any file you did not create, message Dany — this is Task 12 question #3.
-
-Record the upstream URL in the dealer-records README so it is durable. Write this file at `warranty-gene/dealer-records/README.md`:
-
-```
-# Warranty GENE — dealer records subtree
-
-Forked from EVEglyphDesign/hawkins-twin-platform.
-Pull canon updates with `git fetch upstream && git merge upstream/main`.
-
-Every VIN is one file, filename is the VIN, one commit per change.
-See EgD-WGB-002 — Shrish task list on GitHub Pages under
-warranty-gene/shrish-setup/EgD-WGB-002-Shrish-Setup.pdf.
-```
-
-Then commit:
-
-```bash
-git add warranty-gene/dealer-records/README.md
-git commit -m "warranty-gene/dealer-records: document upstream sync"
-git push
-```
-
----
-
-## Task 12 · Report back with one line and one URL
-
-Message Dany with the URL of `warranty-gene/dealer-records/MEASURED-SIZE.md` on your fork and the workflow-run URL from Task 9. Nothing else.
-
-If you got stuck, message Dany with one of these three, verbatim:
-
-1. `Task N gate failed. Command: {command}. Output: {exact error}.`
-2. `Task 6 or 8 schema mismatch. Field: {name}. Sample record: {path}. Schema requires: {shape}.`
-3. `Task 1, 2, or 11 access blocker. Error: {exact error}. Next step if resolved: {what you would run}.`
-
-If your question is not one of these three, keep working. Everything you need is already in the repo.
+Everything else is either answered by this document or it is a design decision — which means it is Dany's, not Shrish's.
 
 ---
 
 ## Provenance
 
-- [EVEglyphDesign/hawkins-twin-platform](https://github.com/EVEglyphDesign/hawkins-twin-platform) — the working repository
-- [Warranty GENE Sidecar Blueprint (EgD-WGB-001)](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/blueprint/) — architecture
-- [Warranty GENE schema v1](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/schema/) — record shape
-- [Warranty GENE coverage tables](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/coverage-tables/)
-- [Warranty GENE field mappings](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/mappings/)
-- [GitHub docs — forking a repository](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo)
-- [GitHub docs — syncing a fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork)
-
----
-
-© 2026 EVEglyphDesign. All rights reserved. Controlled copy.
-*Pour le bien-être du peuple.*
+- Source repository (all source authority): [EVEglyphDesign/hawkins-twin-platform](https://github.com/EVEglyphDesign/hawkins-twin-platform)
+- Schema (authoritative): [warranty-gene/schema/rich-target.schema.json](https://github.com/EVEglyphDesign/hawkins-twin-platform/blob/main/warranty-gene/schema/rich-target.schema.json)
+- Canonical sample records: [warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins/](https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene/dealer-records/peterbilt-atlantic/R00-sample/vins)
+- Validation + indexing scripts (source-side, do not port): [warranty-gene/dealer-records/scripts/](https://github.com/EVEglyphDesign/hawkins-twin-platform/tree/main/warranty-gene/dealer-records/scripts)
+- Access map for real-data lane: [Warranty GENE Luke Access Prep (EgD-WGB-003)](https://eveglyphdesign.github.io/hawkins-twin-platform/warranty-gene/luke-prep/)
