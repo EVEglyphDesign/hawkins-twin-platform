@@ -1,0 +1,150 @@
+{
+  "_about": {
+    "what": "Machine-readable map of the Hawkins Twin lane: every repository, workstream, controlled document and gate, with state and location. Point any AI surface here first.",
+    "for": "Luke Weatherbie (Peterbilt Atlantic) and his Claude; also Dany (Perplexity, Claude) and Tobias (Claude)",
+    "as_of": "2026-10-05",
+    "verified_by": "Claude (chat), against GitHub on 2026-10-05: visibility and last commit read from the API for every EVEglyphDesign repository listed",
+    "public_file": "This file sits in a public repository. It holds names, states, dates and paths only: no dealer figures, customer names, VINs, hostnames, addresses, credentials or commercial terms.",
+    "states": {
+      "built": "exists and can be shown today",
+      "stubbed": "partly there; the gap is named",
+      "designed": "thought through; no code yet",
+      "not_recorded": "work exists outside GitHub or outside this organisation; not yet written down here"
+    }
+  },
+
+  "client": {
+    "dealer_group": "Peterbilt Atlantic",
+    "principal": "Tim Hawkins",
+    "technical_lead": "Luke Weatherbie",
+    "scope_of_this_lane": "truck business only (Peterbilt units on PACCAR coverage); powersports is a separate lane and is never blended"
+  },
+
+  "people_and_surfaces": [
+    { "who": "Dany Theriault", "role": "EVEglyph Design lead", "surfaces": ["Perplexity", "Claude"] },
+    { "who": "Tobias Polly", "role": "Azure build and PACCAR API pull", "surfaces": ["Claude"], "github_org": "origin-labs-co" },
+    { "who": "Luke Weatherbie", "role": "client technical lead", "surfaces": ["Claude"], "github": "LukeW-L" }
+  ],
+
+  "blueprint_in_three": [
+    "Record: Peterbilt Atlantic's customer, vehicle, service, warranty and interaction history reassembled into one dealer-owned record in Hawkins Azure, joined on the VIN.",
+    "Decide: WarrantyGENE, the Owner Console and the Customer Sphere read only that record.",
+    "Act: one surface, one question panel, one human release point; PACCAR systems decide claims."
+  ],
+  "blueprint_source": "EgD-BP-HAWKINS-TWIN-001 (see documents)",
+
+  "repositories": [
+    { "name": "hawkins-twin-platform", "org": "EVEglyphDesign", "visibility": "public", "layer": "program surface", "holds": "WarrantyGENE program docs, Owner Console map, Customer Sphere design and demos, handoff notes, this lane map", "state": "built", "last_commit": "2026-10-05 (lane map); program docs 2026-08-25" },
+    { "name": "eve-hawkins-paccar-smartlinq", "org": "EVEglyphDesign", "visibility": "private", "layer": "build: telemetry + integration point", "holds": "SmartLINQ ingest, VIN8 crosswalk, Integrated Blueprint draft, Hawkins Twin surfaces v1/v2, canonical aggregates, Perplexity project mirror", "state": "built (open draft PR #1)", "last_commit": "2026-10-04", "luke_access": "write" },
+    { "name": "eve-hawkins-cdk-twin", "org": "EVEglyphDesign", "visibility": "public", "layer": "build: dealer DMS model", "holds": "CDK Drive data model, warehouse star schema, eleven marts, data-quality register, promotion gates; commits no dealer rows", "state": "built on the 2026-09-17 extract", "last_commit": "2026-09-17" },
+    { "name": "eve-dealer-parts-twin", "org": "EVEglyphDesign", "visibility": "public", "layer": "build: parts", "holds": "SAP-shape parts inventory schema, location topology, PACCAR/CDK adapters", "state": "stubbed (synthetic seed; blocked on PACCAR EDI and Fortellis credentials)", "last_commit": "2026-08-30" },
+    { "name": "eve-hawkins-sovereign-enterprise", "org": "EVEglyphDesign", "visibility": "public", "layer": "pitch", "holds": "The Sovereign Enterprise strategy paper (GitHub Pages)", "state": "built", "last_commit": "2026-08-30" },
+    { "name": "eve-hawkins-truck-mart", "org": "EVEglyphDesign", "visibility": "private", "layer": "deal / narrative", "holds": "Commercial note, blueprint prose, vendor contract economics", "state": "built (prose)", "last_commit": "2026-08-14" },
+    { "name": "hawkins-twin-compliance-vault", "org": "EVEglyphDesign", "visibility": "private", "layer": "gate", "holds": "Signed agreements, vendor terms, written sign-offs per person", "state": "process built; sign-offs open", "last_commit": "2026-07-29" },
+    { "name": "eve-hawkins-telus-twin", "org": "origin-labs-co", "visibility": "private", "layer": "build: calls and mail", "holds": "TELUS call and mail ingestion; Customer Sphere wireframe", "state": "built per the Integrated Blueprint", "last_commit": "not readable from EVEglyphDesign", "note": "Tobias's organisation; not visible to EVEglyphDesign's GitHub connection" }
+  ],
+
+  "workstreams": [
+    {
+      "id": "design",
+      "name": "Front-end design",
+      "what": "How Tim and his team see and use the twin",
+      "items": [
+        { "item": "Owner Console (executive dashboard: 7 ATD tiles, 60 COVs, 5 drills)", "state": "designed; one tile measured", "where": "hawkins-twin-platform/owner-console/" },
+        { "item": "Customer Sphere design and clickable demo (synthetic data)", "state": "built", "where": "hawkins-twin-platform/customer-sphere/" },
+        { "item": "Sample-data sandbox demo (synthetic data)", "state": "built", "where": "hawkins-twin-platform/demo/" },
+        { "item": "Outline and functional map", "state": "built", "where": "hawkins-twin-platform/outline/" },
+        { "item": "WarrantyGENE wireframe v0 (boxes only)", "state": "built", "where": "hawkins-twin-platform/warranty-gene/wireframe/" },
+        { "item": "Hawkins Twin surface v1 (Owner Console, WarrantyGENE, Data & gates) on real aggregates", "state": "built, private", "where": "eve-hawkins-paccar-smartlinq/surface/hawkins-twin/ (PR #1)" },
+        { "item": "Hawkins Twin wireframe v2 (Today, Trucks, Data & gates, Ask)", "state": "built, private; awaiting v1/v2 choice", "where": "eve-hawkins-paccar-smartlinq/surface/hawkins-twin/v2/ (PR #1)" }
+      ]
+    },
+    {
+      "id": "outreach",
+      "name": "Outreach and engagement",
+      "what": "How the work was presented to Peterbilt Atlantic, and how the twin reaches truck owners",
+      "items": [
+        { "item": "Tim VIP entry page", "state": "built", "where": "hawkins-twin-platform/tim-vip.html" },
+        { "item": "Handoff notes to Tim and Luke; 'How to work with the repo' for Luke", "state": "built", "where": "hawkins-twin-platform/handoff/" },
+        { "item": "Strategic-direction interaction records", "state": "built", "where": "hawkins-twin-platform/interactions/" },
+        { "item": "Sovereign Enterprise strategy paper", "state": "built", "where": "eve-hawkins-sovereign-enterprise" },
+        { "item": "P1-P4 truck-owner outreach workbook (telemetry uplift, km to mi)", "state": "built, private", "where": "eve-hawkins-paccar-smartlinq/build/ and eve-hawkins-cdk-twin warehouse" },
+        { "item": "WarrantyGENE Notify queues (six, in urgency order)", "state": "built as counts; scoring stubbed", "where": "eve-hawkins-paccar-smartlinq/surface/hawkins-twin/data/aggregates.json" },
+        { "item": "Calls and mail: who called, who was quoted, who went quiet", "state": "built per blueprint (separate lane)", "where": "origin-labs-co/eve-hawkins-telus-twin" }
+      ]
+    },
+    {
+      "id": "data",
+      "name": "Data model and build",
+      "what": "Turning dealer and manufacturer extracts into one VIN-keyed record",
+      "items": [
+        { "item": "CDK warehouse: star schema, eleven marts, quarantine register, six promotion gates", "state": "built on 2026-09-17 extract", "where": "eve-hawkins-cdk-twin/warehouse/" },
+        { "item": "SmartLINQ ingest and VIN8 crosswalk", "state": "built on 2026-09-18 export", "where": "eve-hawkins-paccar-smartlinq/curated/, linkage/" },
+        { "item": "PostgreSQL DDL for staging and curated objects (Azure target)", "state": "built", "where": "eve-hawkins-paccar-smartlinq/schema/ddl/smartlinq.sql" },
+        { "item": "DMS pull (session-based readers, age-encrypted credential intake)", "state": "built as wireframe; contract posture open", "where": "hawkins-twin-platform/warranty-gene/" },
+        { "item": "CDK Data Export Tool feed", "state": "stubbed (blocked at CDK's SFTP edge)", "where": "eve-hawkins-cdk-twin" },
+        { "item": "Parts twin", "state": "stubbed", "where": "eve-dealer-parts-twin" }
+      ]
+    },
+    {
+      "id": "azure",
+      "name": "Azure build (Tobias)",
+      "what": "The dealer-owned home for the record: where the payload lives and what reads it",
+      "items": [
+        { "item": "Hawkins-owned Azure PostgreSQL as the custody point for dealer rows", "state": "designed in blueprint; build status not recorded", "where": "lane/AZURE-WORKSTREAM.md" },
+        { "item": "B1 delivery: PostgreSQL, Key Vault, GitHub Actions with OIDC, no stored secrets", "state": "designed", "where": "EgD-BP-HAWKINS-TWIN-001 §7" },
+        { "item": "Loaders for CDK, registration, SmartLINQ and PACCAR API pull, each with a SHA-256 manifest", "state": "designed", "where": "EgD-BP-HAWKINS-TWIN-001 §7 (B2)" },
+        { "item": "PACCAR API pull (larger connected-truck data set)", "state": "not_recorded (field list not in any EVEglyphDesign repository)", "where": "lane/AZURE-WORKSTREAM.md §3" },
+        { "item": "Twin MCP server (read-only, explicit rooftop scope)", "state": "not_recorded (server name and tool list outside GitHub)", "where": "lane/AZURE-WORKSTREAM.md §3" }
+      ]
+    }
+  ],
+
+  "documents": [
+    { "id": "EgD-BP-HAWKINS-TWIN-001", "title": "Hawkins Twin Integrated Blueprint 1.0 DRAFT", "date": "2026-10-04", "status": "draft, not approved", "where": "eve-hawkins-paccar-smartlinq/BLUEPRINT.md (PR #1)" },
+    { "id": "EgD-HAWKINS-CONSOLE-001", "title": "Owner Console conceptual map", "date": "2026-08-14", "status": "controlled copy", "where": "hawkins-twin-platform/owner-console/" },
+    { "id": "EgD-WGB-001", "title": "WarrantyGENE Blueprint v1", "date": "2026-08-25", "status": "folded into EgD-BP-HAWKINS-TWIN-001", "where": "hawkins-twin-platform/warranty-gene/" },
+    { "id": "EgD-WGB-006", "title": "WarrantyGENE Blueprint v2 (two-step operating model; POC = first four weeks)", "date": "2026-08-25", "status": "folded into EgD-BP-HAWKINS-TWIN-001", "where": "hawkins-twin-platform/warranty-gene/" },
+    { "id": "EgD-WGB-007", "title": "Luke Live Brief (one-hour demo plan)", "date": "2026-08-25", "status": "reference", "where": "hawkins-twin-platform/warranty-gene/" },
+    { "id": "EgD-HAW-SLQ-001", "title": "SmartLINQ ingest note", "date": "2026-09-18", "status": "controlled copy", "where": "eve-hawkins-paccar-smartlinq/docs/" },
+    { "id": "(no id)", "title": "Customer Sphere Design", "date": "2026-08", "status": "controlled copy", "where": "hawkins-twin-platform/customer-sphere/" },
+    { "id": "(no id)", "title": "CDK warehouse wireframe r3", "date": "2026-09-17", "status": "controlled copy", "where": "eve-hawkins-cdk-twin/warehouse/ (commit b94175d)" }
+  ],
+
+  "timeline": [
+    { "date": "2026-07-01", "event": "Lane opened: truck-mart and platform repositories created" },
+    { "date": "2026-07-20", "event": "Compliance vault created (Step 0 rule)" },
+    { "date": "2026-07-28", "event": "Discovery 1 with Tim and Luke" },
+    { "date": "2026-07-29", "event": "CDK twin created; export route and signer gates recorded in the vault" },
+    { "date": "2026-08-14", "event": "Owner Console conceptual map" },
+    { "date": "2026-08-25", "event": "WarrantyGENE blueprints v1, v2 and DMS pull wireframe" },
+    { "date": "2026-09-17", "event": "CDK warehouse built on Luke's manual extract" },
+    { "date": "2026-09-18", "event": "SmartLINQ export ingested and linked" },
+    { "date": "2026-10-03", "event": "Hawkins Twin surface v1, spec and canonical aggregates (Claude)" },
+    { "date": "2026-10-04", "event": "Integrated Blueprint 1.0 DRAFT and wireframe v2 (Perplexity)" },
+    { "date": "2026-10-05", "event": "This lane map and Luke's start-here (Claude)" }
+  ],
+
+  "gates": [
+    { "gate": "Step 0 compliance intake", "rule": "No teammate moves into technical work until their agreements are in the compliance vault and a written sign-off from Dany and Tim names them and what they may commit", "where": "hawkins-twin-compliance-vault (private)", "status": "ask Dany" },
+    { "gate": "Data-use authorisation", "rule": "Precedes any promotion of dealer data into production", "where": "EgD-BP-HAWKINS-TWIN-001 §9", "status": "ask Dany" },
+    { "gate": "Six promotion gates", "rule": "Data checks that must pass before any Azure PostgreSQL load", "where": "eve-hawkins-cdk-twin/warehouse/DATA-QUALITY.md", "status": "defined" }
+  ],
+
+  "open_items": [
+    { "item": "Tobias's Azure inventory and PACCAR API field list (names only)", "owner": "Tobias", "where_to_record": "lane/AZURE-WORKSTREAM.md" },
+    { "item": "Twin MCP paragraph (server name, tools, scope)", "owner": "Dany / Tobias", "where_to_record": "lane/AZURE-WORKSTREAM.md §3 and EgD-BP-HAWKINS-TWIN-001 §8" },
+    { "item": "Which DMS each site runs (CDK Drive, Procede Excede, Karmak)", "owner": "Luke", "where_to_record": "lane/LANE-MAP.json client section" },
+    { "item": "Pick surface v1 or v2", "owner": "Dany", "where_to_record": "eve-hawkins-paccar-smartlinq PR #1" },
+    { "item": "What Tim and Luke asked to see, in their words", "owner": "Luke", "where_to_record": "EgD-BP-HAWKINS-TWIN-001 §10" }
+  ],
+
+  "working_rules": [
+    "Branch, then pull request. Never push to main.",
+    "A change is done when GitHub shows the commit, not when an AI says so.",
+    "Leave a trail: commit message and PR description say what changed and why.",
+    "Public repositories hold schema, rules, names and states. Dealer rows and figures stay private or in Hawkins Azure.",
+    "One rooftop group per surface. Every twin MCP call names its scope.",
+    "Humans decide bookings; PACCAR systems decide claims."
+  ]
+}

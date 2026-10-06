@@ -1,5 +1,10 @@
 # Hawkins Twin Platform — Peterbilt Atlantic
 
+> **New here, or pointing an AI surface at this repo?** Start at [`00-START-HERE.md`](00-START-HERE.md).
+> The machine-readable map of the whole Hawkins Twin lane (repositories, workstreams, documents,
+> gates, open items) is [`lane/LANE-MAP.json`](lane/LANE-MAP.json); the Azure build is tracked in
+> [`lane/AZURE-WORKSTREAM.md`](lane/AZURE-WORKSTREAM.md).
+
 Public surface: [hawkins-twin-platform.html](https://eveglyphdesign.github.io/hawkins-twin-platform/hawkins-twin-platform.html)
 
 Tim VIP: [tim-vip.html](https://eveglyphdesign.github.io/hawkins-twin-platform/tim-vip.html)
@@ -18,6 +23,10 @@ Dealer-grade digital twin platform aligned to Peterbilt, PACCAR, warranty, maint
 ## Layout
 
 ```
+├── 00-START-HERE.md                Front door for Luke and any AI surface
+├── lane/
+│   ├── LANE-MAP.json               Machine-readable map: repos, workstreams, documents, gates, open items
+│   └── AZURE-WORKSTREAM.md         Azure build: design on record + fill-in for Tobias
 ├── hawkins-twin-platform.html      Main public landing page
 ├── index.html                      Same content as landing page (GitHub Pages default)
 ├── tim-vip.html                    Second-level entry point for Tim
@@ -33,6 +42,8 @@ Dealer-grade digital twin platform aligned to Peterbilt, PACCAR, warranty, maint
 │   ├── CUSTOMER-SPHERE-DESIGN.md   Customer 360 combined schema, identity, metadata/data split
 │   ├── EVEglyphDesign_Hawkins_Twin_Customer_Sphere_Design.pdf   Controlled copy for Tim & Luke
 │   └── build_pdf.py                Two-pass canon PDF builder for the above
+├── owner-console/                  Owner Console conceptual map (EgD-HAWKINS-CONSOLE-001)
+├── warranty-gene/                  WarrantyGENE blueprints, schema, mappings, DMS pull, wireframe v0
 ├── interactions/
 │   ├── README.md                   Strategic-direction interaction records
 │   └── 2026-08-01-customer-360-and-reference-model.md
